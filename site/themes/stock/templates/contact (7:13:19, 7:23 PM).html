@@ -1,0 +1,74 @@
+  <header>
+  	<div class="logo-row">
+  		<div class="row">
+  			<a href="{{ _site_url }}"><img src="{{ theme:img src='logo.svg' }}" class="logo"></a>
+   		</div>
+  	</div>
+  	<div class="row">
+  			<div class="small-12 columns">
+  			<h1>{{ title }}</h1>
+  		</div>
+  	</div>
+  </header>
+  
+  <div class="row">
+  		<div class="small-12 columns">
+  			{{ content }}
+  		</div>
+  </div>
+  
+  <div class="row">
+  		<div class="small-12 columns">
+  <!--		
+  {{ if {raven:success} }}
+    <h2 class="text-center">Thanks for contacting us!</h2>
+  {{ else }}
+  
+    <h1>{{ title }}</h1>
+    {{ content }}
+  
+    {{ raven:errors }}
+  
+      {{ if missing }}
+      <div class="error-block">
+        <h2>Missing fields:</h2>
+        <ul>
+          {{ missing }}
+            <li><strong>{{ field }}</strong></li>
+          {{ /missing }}
+        </ul>
+      </div>
+      {{ endif }}
+  
+      {{ if invalid }}
+      <div class="error-block">
+        <h2>Invalid fields:</h2>
+        <ul>
+          {{ invalid }}
+            <li><strong>{{ field }}</strong>: {{ message }}</li>
+          {{ /invalid }}
+        </ul>
+      </div>
+      {{ endif }}
+  
+    {{ /raven:errors }}
+  
+    {{ raven:form formset="contact" }}
+  
+      <label for="name">Your name</label>
+      <input type="text" name="name" value="" /><br>
+  
+      <label for="email">Your email address</label>
+      <input type="email" name="email" value="" /><br>
+  
+      <label for="message">Your message</label>
+      <textarea name="message" cols="40" rows="5"></textarea><br>
+  
+      <input type="submit" class="button radius" value="Send" />
+  
+    {{ /raven:form }}
+  
+  {{ endif }}
+  -->
+  </div>
+  </div>

@@ -1,0 +1,35 @@
+{{ nav from="/" max_depth="3" exclude="404|photos|categories|results" }}
+ 	<url>
+    	<loc>{{ _site_url }}{{ url }}</loc>
+    	<lastmod>{{ last_modified format="Y-m-d" }}</lastmod>
+    	<changefreq>monthly</changefreq>
+    	<priority>0.8</priority>
+  	</url>
+{{ /nav }}
+	
+{{ entries:listing folder="blog" }}
+	<url>
+		<loc>{{ _site_url }}{{ url }}</loc>
+		<lastmod>{{ last_modified format="Y-m-d" }}</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+{{ /entries:listing }}
+	
+{{ entries:listing folder="photos" }}
+	<url>
+		<loc>{{ _site_url }}{{ url }}</loc>
+		<lastmod>{{ last_modified format="Y-m-d" }}</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+{{ /entries:listing }}
+ 
+{{# 
+====================================
+  NOTES
+====================================
+
+This template generates a site map which includes your main blog articles and any links generated from your navigation. If your content folder is not called blog change the folder parameter to whatever you have named the folder in the theme.yaml file.
+  
+#}}

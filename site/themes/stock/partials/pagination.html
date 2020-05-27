@@ -1,0 +1,45 @@
+{{ entries:pagination }}
+    <div class="page_controls">
+
+        <a href="{{ URL }}?page=1">first</a>
+
+        {{ if previous_page }}
+        <a href="{{ previous_page }}"><</a>
+        {{ endif }}
+
+        {{ if (current_page - 3) > 0 }}
+        <a href="{{ URL }}?page={{ current_page|-:3 }}">{{ current_page|-:3 }}</a>
+        {{ endif  }}
+
+        {{ if (current_page - 2) > 0 }}
+        <a href="{{ URL }}?page={{ current_page|-:2 }}">{{ current_page|-:2 }}</a>
+        {{ endif  }}
+
+        {{ if (current_page - 1) > 0 }}
+        <a href="{{ URL }}?page={{ current_page|-:1 }}">{{ current_page|-:1 }}</a>
+        {{ endif  }}
+
+        [{{ current_page }}]
+
+        {{ if (total_pages - current_page) > 0 }}
+        <a href="{{ URL }}?page={{ current_page|+:1 }}">{{ current_page|+:1 }}</a>
+        {{ endif  }}
+
+        {{ if (total_pages - current_page) > 1 }}
+        <a href="{{ URL }}?page={{ current_page|+:2 }}">{{ current_page|+:2 }}</a>
+        {{ endif  }}
+
+        {{ if (total_pages - current_page) > 2 }}
+        <a href="{{ URL }}?page={{ current_page|+:3 }}">{{ current_page|+:3 }}</a>
+        {{ endif  }}
+
+        {{ if next_page }}
+        <a href="{{ next_page }}">></a>
+        {{ endif }}
+
+        <a href="{{ URL }}?page={{ total_pages }}">last</a>
+
+        <span class="total_pages">:: {{ total_pages }} pages total</span>
+
+  </div>
+{{ /entries:pagination }}

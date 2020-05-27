@@ -1,0 +1,78 @@
+<header>
+	<div class="logo-row">
+		<div class="row">
+			<a href="{{ site_url }}"><img src="{{ theme:img src='logo.svg' }}" class="logo"></a>
+ 		</div>
+	</div>
+	<div class="row">
+		<div class="small-12 columns text-center">
+  		<h1>{{ title }}</h1>
+  	</div>
+  </div>
+</header>
+
+<div class="row">
+	<div class="small-12 columns text-center">
+		<h1>{{ taxonomy_slug|deslugify|title }}</h2>
+	</div>
+</div>
+<div class="view">
+{{ collection:photos limit="10" taxonomy="true" paginate="true" as="posts" }}
+	{{ if no_results }}
+		<p class="text-center">Sorry. No results for this category.</p>
+	{{ else }}
+	{{ posts }}
+	<div class="row">
+		<div class="small-12 small-centered columns imageWrapper">
+			<a href="{{ url }}?tags={{ tags }}{{ name }}{{ if ! last }}|{{ endif }}{{ /tags }}">
+				{{ assets:upload }}
+ 					<img src="{{ glide:url width="970" fit="crop" }}" alt="{{ title }}">
+ 				{{ /assets:upload }}
+			</a>
+			
+			<div class="metaWrapper">
+				<div class="medium-6 columns hide-for-small">
+					Added  {{ datestamp format="F, Y" }}
+				</div>
+				<div class="small-12 medium-6 columns tags text-right">
+					{{ tags_url_list }}
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	{{ /posts }}
+{{ endif }}
+{{ /collection:photos }}
+
+<footer>
+	{{ entries:pagination folder="photos" limit="10" taxonomy="true" }}
+	  {{ if total_pages > 1 }}
+	
+	  <div class="row">
+	  	<div class="medium-12 columns text-center">
+	    	<ul class="pagination">
+	
+	    		{{ if previous_page }}
+	      			<li><a href="{{ previous_page }}">Prev</span></a></li>
+	    		{{ else }}
+	      			<li class="disabled"><span>Prev</span></li>
+	    		{{ endif }}
+	
+	    		{{ listpages current_page="{current_page}" total_pages="{total_pages}" pages_to_show="5" }}
+	
+	    		{{ if next_page }}
+	      			<li><a href="{{ next_page }}">Next</a></li>
+	    		{{ else }}
+	      			<li class="disabled"><span>Next</span></li>
+	    		{{ endif }}
+	
+	    	</ul>
+	  	</div>
+	  </div>
+	
+	  {{ endif }}
+	{{ /entries:pagination }}
+</footer>
+</div>
+<div id="in"><canvas class="sonic" height="70" width="120"></canvas></div>

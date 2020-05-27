@@ -1,0 +1,81 @@
+  	<header>
+  		<div class="logo-row">
+			<div class="row">
+				<a href="{{ site_url }}"><img src="{{ theme:img src='logo.svg' }}" class="logo"></a>
+			</div>
+		</div>
+	</header>
+		<div id="in"><canvas class="sonic" height="70" width="120"></canvas></div>
+			<div id="list" class="view">
+				<div id="container-two" class="large-centered clearfix">
+				
+				<div itemscope itemtype="http://schema.org/ImageObject">
+					<div class="row">
+						<div class="small-12 small-centered columns main-image">
+							<a href="{{ url }}">
+								<img id="singleImg" src="{{ transform src="{{ upload }}" width="970" }}" itemprop="contentUrl"/>
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="small-12 columns">
+							<h1 itemprop="name">{{ title }}</h2>
+						</div>
+					</div>
+					
+					<div class="row about">
+						<div class="small-12 columns description" itemprop="description">
+							{{ content|smartypants|widont }}
+						</div>
+					</div>
+
+					<div class="row author-info">
+						<div class="medium-6 columns meta">
+							<a href="{{ upload }}" class="button medium radius" target="_blank">Download Image</a>
+							<p>Image Size: {{ size }}</p>
+							<p>Location: <span itemprop="contentLocation">{{ if location }}{{ location }}{{ else }}Unknown{{ endif }}</span></p>
+							<p>Published: <span itemprop="datePublished" content="{{ datestamp format="Y-m-d" }}">{{ datestamp format="F jS, Y" }}</span>
+							<p>License: <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">Attribution 4.0</a>
+							<p>Category: {{ categories_url_list }}
+							<p class="tags">
+							{{ tags }}
+							    <a href="/photos/tags/{{ name|slugify|lower }}">{{ name }}</a>
+							{{ /tags }}
+							</p>
+						</div>
+						<div id="tape" class="medium-6 columns profile">
+							{{ member:profile username="{author}" }}
+							<div class="medium-3 columns hide-for-small">
+								<img src="{{ transform src="{{ author_bio }}" width="85" }}" alt="{{ first_name }} {{ last_name }}">
+								<a href="../../{{ author }}" class="button radius tiny" style="margin-top: 10px; width: 100%;">Follow</a>
+							</div>
+							<div class="medium-9 small-12 columns">
+								<h3 itemprop="author">{{ first_name }} {{ last_name }}</h3>
+								<p>{{ biography }}</p>
+								<p>{{ member_links }}</p>
+								
+							</div>
+							{{ /member:profile }}
+						</div>
+					</div>
+				</div><!--/schema -->
+				
+				</div><!--/container-two -->
+			</div><!--/list -->
+		
+		<div class="panel single">
+			<div class="row related">
+				<div class="small-12 columns">
+					<h2>more like this</h2>
+				</div>
+					{{ entries:listing folder="photos" conditions="tags:{get:tags}" limit="6" offset="1" }}
+						{{ if no_results }}
+					        <p>Sorry, no matching images.</p>
+					    {{ else }}
+						<div class="small-4 medium-2 columns img-contain {{ if last }}end{{ endif }}">
+							<a href="{{ url }}?tags={{ tags }}{{ name }}{{ if ! last }}|{{ endif }}{{ /tags }}"><img src="{{ transform src="{{ upload }}" width="137" height="137" action="smart" }}" alt="{{ title }}"></a>
+						</div>
+						{{ /if }}
+					{{ /entries:listing }}
+			</div><!-- close row -->
+		</div><!-- close panel -->

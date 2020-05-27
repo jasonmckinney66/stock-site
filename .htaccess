@@ -1,0 +1,109 @@
+# ------------------------------------------------------------------------------
+# COMMON PHP OVERRIDES
+#
+# Sometimes editing your php.ini file is impossible or even just annoying.
+# Here are some of the most common settings that can (sometimes) be overridden.
+# ------------------------------------------------------------------------------
+
+# php_value memory_limit 256M
+# php_value post_max_size 16M
+# php_value max_execution_time 90
+# php_value max_input_time 120
+# php_value upload_max_filesize 16M
+
+# ------------------------------------------------------------------------------
+# BASE APACHE RULES
+#
+# When running in a subdirectory, you should uncomment and adjust the
+# RewriteBase rule to point to your directory, eg. RewriteBase /directory/
+# ------------------------------------------------------------------------------
+
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+
+# ------------------------------------------------------------------------------
+# REMOVE TRAILING SLASHES
+# ------------------------------------------------------------------------------
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+
+# ------------------------------------------------------------------------------
+# STATIC CACHING PROXY
+#
+# Enable these rules when using static html caching
+# to bypass Statamic when a given URL has a cached copy.
+# ------------------------------------------------------------------------------
+
+# RewriteCond %{REQUEST_FILENAME}   !-f
+# RewriteCond %{REQUEST_METHOD} GET
+# RewriteRule ^(.*) static/$1/index.html
+
+
+# ------------------------------------------------------------------------------
+# PROTECT SYSTEM FILES AND DIRECTORIES
+#
+# Not necessary when running above webroot.
+# ------------------------------------------------------------------------------
+
+RewriteRule ^site/(?!themes) - [F,L]
+RewriteRule ^local - [F,L]
+RewriteRule ^statamic - [F,L]
+
+# Prevent .git/, .env, etc from being served
+RedirectMatch 404 /\.
+
+
+# ------------------------------------------------------------------------------
+# ROUTE THROUGH INDEX.PHP
+# ------------------------------------------------------------------------------
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+
+
+# ------------------------------------------------------------------------------
+# Dreamhost
+# ------------------------------------------------------------------------------
+
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php71” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php71 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+   php_flag display_errors Off
+   php_value max_execution_time 90
+   php_value max_input_time 120
+   php_value max_input_vars 1000
+   php_value memory_limit 500M
+   php_value post_max_size 16M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php72"
+   php_value upload_max_filesize 16M
+   php_flag zlib.output_compression On
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_value max_execution_time 90
+   php_value max_input_time 120
+   php_value max_input_vars 1000
+   php_value memory_limit 500M
+   php_value post_max_size 16M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php72"
+   php_value upload_max_filesize 16M
+   php_flag zlib.output_compression On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit

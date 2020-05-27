@@ -1,0 +1,45 @@
+<header>
+	<div class="logo-row">
+		<div class="row">
+			<a href="{{ site_url }}"><img src="{{ theme:img src='logo.svg' }}" class="logo"></a>
+ 		</div>
+	</div>
+	<div class="row">
+		<div class="small-12 columns">
+  		<h1>{{ title }}</h1>
+  	</div>
+  </div>
+</header>
+
+{{ entries:listing folder="blog" limit="8" }}
+<div class="preview">
+	<div class="row">
+		<a href="{{ url }}">
+			<div class="medium-3 columns blog-image hide-for-small">
+				{{ assets:supporting_thumbnail }}
+					<img src="{{ glide:url width="220" height="150" fit="crop" }}" alt="{{ title }}">
+				{{ /assets:supporting_thumbnail }}
+			</div>
+			<div class="small-12 medium-9 columns">
+				<p>{{ date }}</p>
+				<h2>{{ title }}</h3>
+				{{ excerpt }}
+			</div>
+		</a>
+	</div>
+</div>
+{{ /entries:listing }}
+
+<footer>
+	{{ entries:pagination folder="blog" limit="8" }}
+	<ul class="pagination">
+	    {{ loop times="{ total_pages }" }}
+	        {{ if index == current_page }}
+	            {{ index }}
+	        {{ else }}
+	            <li {{ if index == current_page }}class="current"{{ endif }}><a href="{{ url }}?page={{ index }}">{{ index }}</a></li>
+	        {{ endif }}
+	    {{ /loop }}
+	</ul>
+	{{ /entries:pagination }}
+</footer>

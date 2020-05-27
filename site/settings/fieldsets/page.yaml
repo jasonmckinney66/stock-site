@@ -1,0 +1,32 @@
+title: Standard Page
+hide: false
+taxonomies: false
+fields:
+  template:
+    display: Template
+    type: template
+
+  upload:
+    type: assets
+    container: assets/img/
+    allowed: ['jpg']
+
+  content:
+    display: Page Content
+    required: false
+    default:
+    type: redactor
+    
+  seo_grid:
+    display: SEO Fields
+    type: grid
+    starting_rows: 1
+    min_rows: 1
+    max_rows: 1
+    fields:
+      title_tag:
+        type: text
+        width: 50%
+      meta_description:
+        type: textarea
+        width: 50%
