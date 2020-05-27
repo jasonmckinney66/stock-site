@@ -1,6 +1,3 @@
-start_page: dashboard
+start_page: pages
 date_format: Y/n/d
 pagination_size: 50
-widgets:
-  widgets:
-    - updater
