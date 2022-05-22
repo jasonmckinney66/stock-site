@@ -1,0 +1,12 @@
+defaultPlacement: end
+enableVersioning: true
+handle: promos
+name: Promos
+propagationMethod: all
+siteSettings:
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: channel

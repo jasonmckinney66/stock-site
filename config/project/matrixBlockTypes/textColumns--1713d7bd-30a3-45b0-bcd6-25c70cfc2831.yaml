@@ -1,0 +1,568 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  aebb9191-32c7-4669-9c6c-992c6d702df0:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 06be63fb-65c7-44e0-b5b2-52e2b07acfe0 # Intro Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 0c72bf50-fad2-49f6-927d-0155daea22d1 # Column 1 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: b531b623-9a40-4bc9-8910-9a892c062776 # Column 1 Icon
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 5c21f7be-f859-4d15-aefb-ec8f617758b1 # Column 2 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: 155b6135-8497-4387-9b61-25a35a9c4c02 # Column 2 Icon
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: bda72045-9e27-492a-8d05-5a5c125ef3b6 # Column 3 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: a68d7846-d99e-45e5-86ee-64296a7bfc47 # Column 3 Icon
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 24b2e617-952c-40fb-94f5-b59dab00c75b # Column 4 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: 927a9feb-f377-4a76-b416-aa82b78de8ae # Column 4 Icon
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: a174c093-4c3c-4522-9d84-0aae87eb5ed4 # Closing Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: aee3c18f-bbf9-4f43-a7e5-0785a193b2f2 # CTA Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f8384681-60b1-4531-a82c-7eee846d7acd # CTA Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 3bb190fc-b7b7-44d8-8fe5-ad91490b4127 # In Panel
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: c8958809-9802-4317-b13e-5349d11e253e # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: eecf68ee-3d44-4575-83d3-2e19a9db4439 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  0c72bf50-fad2-49f6-927d-0155daea22d1: # Column 1 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column1Text
+    instructions: ''
+    name: 'Column 1 Text'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  3bb190fc-b7b7-44d8-8fe5-ad91490b4127: # In Panel
+    columnSuffix: null
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: inPanel
+    instructions: ''
+    name: 'In Panel'
+    searchable: false
+    settings:
+      default: false
+      offLabel: null
+      onLabel: null
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+  5c21f7be-f859-4d15-aefb-ec8f617758b1: # Column 2 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column2Text
+    instructions: ''
+    name: 'Column 2 Text'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  06be63fb-65c7-44e0-b5b2-52e2b07acfe0: # Intro Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: introText
+    instructions: ''
+    name: 'Intro Text'
+    searchable: false
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  24b2e617-952c-40fb-94f5-b59dab00c75b: # Column 4 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column4Text
+    instructions: Optional.
+    name: 'Column 4 Text'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  155b6135-8497-4387-9b61-25a35a9c4c02: # Column 2 Icon
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column2Icon
+    instructions: ''
+    name: 'Column 2 Icon'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: 'MD Icon handle'
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  927a9feb-f377-4a76-b416-aa82b78de8ae: # Column 4 Icon
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column4Icon
+    instructions: ''
+    name: 'Column 4 Icon'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: 'MD Icon handle'
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  a68d7846-d99e-45e5-86ee-64296a7bfc47: # Column 3 Icon
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column3Icon
+    instructions: ''
+    name: 'Column 3 Icon'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: 'MD Icon handle'
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  a174c093-4c3c-4522-9d84-0aae87eb5ed4: # Closing Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: closingText
+    instructions: ''
+    name: 'Closing Text'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  aee3c18f-bbf9-4f43-a7e5-0785a193b2f2: # CTA Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: ctaText
+    instructions: ''
+    name: 'CTA Text'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  b531b623-9a40-4bc9-8910-9a892c062776: # Column 1 Icon
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column1Icon
+    instructions: ''
+    name: 'Column 1 Icon'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: 'MD Icon handle'
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  bda72045-9e27-492a-8d05-5a5c125ef3b6: # Column 3 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: column3Text
+    instructions: ''
+    name: 'Column 3 Text'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  c8958809-9802-4317-b13e-5349d11e253e: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  eecf68ee-3d44-4575-83d3-2e19a9db4439: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  f8384681-60b1-4531-a82c-7eee846d7acd: # CTA Link
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: ctaLink
+    instructions: ''
+    name: 'CTA Link'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: ''
+      showSiteMenu: true
+      source: null
+      sources: '*'
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+handle: textColumns
+name: 'Text Columns'
+sortOrder: 12

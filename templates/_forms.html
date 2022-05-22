@@ -1,0 +1,25 @@
+{% set entries = entry.forms.one() %}
+
+{% if entry.formPosition|length %}
+  <div class="text-center">
+    <p class="h3 mt-20">{% if entries.customTitle|length %}{{ entries.customTitle|raw }}{% else %}{{ entries.title }}{% endif %}</p>
+    {{ entries.formText }}
+  </div>
+  <div>
+    {{ entries.embedCode|raw }}
+  </div>
+{% else %}
+  <section id="form" class="py-5 bg-white">
+    <div class="container">
+      <div class="row gx-5">
+        <div class="col-sm-12 col-lg-6 mt-3">
+          {{ entries.formText }}
+        </div>
+        <div class="col-sm-12 col-lg-6">
+          <p class="h3">{% if entries.customTitle|length %}{{ entries.customTitle|raw }}{% else %}{{ entries.title }}{% endif %}</p>
+          {{ entries.embedCode|raw }}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}

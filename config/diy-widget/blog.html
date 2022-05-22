@@ -1,0 +1,24 @@
+{% set total = craft.entries().section('blog').count() %}
+{% set expired = craft.entries().section('blog').status('expired').count() %}
+{% set draft = craft.entries().section('blog').status('disabled').count() %}
+{% set pending = craft.entries().section('blog').status('pending').count() %}
+<table class="data fullwidth fixed-layout">
+  <tr>
+    <td colspan="2" style="padding: 0;"><center><h1 style="font-size: 3rem; padding: 0;">{{ total }}</h1></center></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border-bottom: 1px solid #cdd8e4; padding: 0;"><center><strong>Blog Entries</strong></center><br></td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #cdd8e4;">&#x25C9; Drafts</td>
+    <td style="border-bottom: 1px solid #cdd8e4;"><center>{{ draft }}</center></td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #cdd8e4;"><span style="color:#E12D39">&#x25C9;</span> Expired</td>
+    <td style="border-bottom: 1px solid #cdd8e4;"><center>{{ expired }}</center></td>
+  </tr>
+  <tr>
+    <td><span style="color:orange">&#x25C9;</span> Scheduled</td>
+    <td><center>{{ pending }}</center></td>
+  </tr>
+</table>

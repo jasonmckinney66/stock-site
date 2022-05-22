@@ -1,0 +1,239 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  08de526b-dceb-4cb4-bbeb-c7dc67360356:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 970cc2a8-c94b-4cd9-b7f2-7d22b77b85ac # Content
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 36877bb4-9e0b-4a5e-b1d3-6d677b9ab04d # Trackable CTA
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: d5ec454e-0fc9-48eb-98cf-bad6323e4b7d # In Panel
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 841b6a39-814f-4093-a68a-7f0a286d85d9 # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 6b1ecb87-a89e-4de5-9708-769d22c5d507 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  6b1ecb87-a89e-4de5-9708-769d22c5d507: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  841b6a39-814f-4093-a68a-7f0a286d85d9: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  970cc2a8-c94b-4cd9-b7f2-7d22b77b85ac: # Content
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: blockText
+    instructions: ''
+    name: Content
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: ''
+      removeInlineStyles: ''
+      removeNbsp: ''
+      showHtmlButtonForNonAdmins: '1'
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  36877bb4-9e0b-4a5e-b1d3-6d677b9ab04d: # Trackable CTA
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: trackableCta
+    instructions: ''
+    name: 'Trackable CTA'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Add a CTA'
+      showSiteMenu: false
+      source: null
+      sources:
+        - 'section:008d2483-e256-408b-918a-76ec4bee99a4' # CTAs
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  d5ec454e-0fc9-48eb-98cf-bad6323e4b7d: # In Panel
+    columnSuffix: null
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: inPanel
+    instructions: ''
+    name: 'In Panel'
+    searchable: false
+    settings:
+      default: false
+      offLabel: null
+      onLabel: null
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+handle: fullWidthText
+name: 'Full Width Text'
+sortOrder: 1

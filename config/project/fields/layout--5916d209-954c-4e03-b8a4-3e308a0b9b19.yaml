@@ -1,0 +1,35 @@
+columnSuffix: bfvtohem
+contentColumnType: string
+fieldGroup: 5229f0c3-3d12-4545-95d0-5c1954e5f155 # Promos
+handle: layout
+instructions: '12 column grid'
+name: Layout
+searchable: false
+settings:
+  optgroups: true
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - '4 and 8'
+        -
+          - value
+          - and8
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - '6 and 6'
+        -
+          - value
+          - and6
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

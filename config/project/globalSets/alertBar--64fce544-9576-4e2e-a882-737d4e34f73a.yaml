@@ -1,0 +1,77 @@
+fieldLayouts:
+  c29eade1-4291-4997-a039-791a84a0afd5:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 4a97e59e-89ae-4305-b57a-028c97bc3d15 # Alert Bar
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 3c80e529-0f7e-4286-b28d-6ee46a9c1b22 # Alert Start
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 7f16639b-4961-49ce-a314-d697f254194d # Alert End
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 306e040a-7b1f-4bcd-ab51-0843db8b0253 # Alert Bar Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 02395d9b-319e-46d0-a165-b9d6c6256276 # Alert Bar CTA
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 643c4a20-f0ea-43bb-8b56-c0ba952a00f8 # Alert Bar Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f32fa4dc-49c0-48f5-be04-d38ff597657f # Alert Bar External
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Settings
+        sortOrder: 1
+handle: alertBar
+name: 'Alert Bar'
+sortOrder: 1

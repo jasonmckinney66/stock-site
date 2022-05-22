@@ -1,0 +1,367 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  3add00f5-299f-43e5-8e4b-66490a45ba45:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: dbb019bb-4c1a-4d35-95e4-cb37d1a942ed # Title
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 9a4852c8-3c33-4744-af41-6986194209de # Subtitle
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: a3145890-ef5f-411b-9ca8-0819396889fa # Video Placeholder Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: e8d5d790-b511-4ac0-9b7e-0ae47121be06 # Video
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: 9d353464-d61d-4d35-972d-a8a74bba699c # Asset Caption
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 14a15fb0-7c0b-4bba-a4c1-d519ffd44c1d # Call to Action
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 3943b2e0-f196-4332-afaa-3df80b854b65 # Call to Action Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: efe0df4a-f295-4411-8aec-3257b3ea64ed # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 8d130fa8-1fce-4ac7-a84e-fd76ab7134b6 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  8d130fa8-1fce-4ac7-a84e-fd76ab7134b6: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  9a4852c8-3c33-4744-af41-6986194209de: # Subtitle
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: assetSubtitle
+    instructions: ''
+    name: Subtitle
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  9d353464-d61d-4d35-972d-a8a74bba699c: # Asset Caption
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: assetCaption
+    instructions: ''
+    name: 'Asset Caption'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  14a15fb0-7c0b-4bba-a4c1-d519ffd44c1d: # Call to Action
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: callToAction
+    instructions: Optional
+    name: 'Call to Action'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  3943b2e0-f196-4332-afaa-3df80b854b65: # Call to Action Link
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: callToActionLink
+    instructions: Optional
+    name: 'Call to Action Link'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Link to a Page'
+      showSiteMenu: true
+      source: null
+      sources: '*'
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  a3145890-ef5f-411b-9ca8-0819396889fa: # Video Placeholder Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: fullImage
+    instructions: 'At least 1240 × 654'
+    name: 'Video Placeholder Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds:
+        - image
+        - video
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: ''
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: large
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  dbb019bb-4c1a-4d35-95e4-cb37d1a942ed: # Title
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: assetTitle
+    instructions: ''
+    name: Title
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  e8d5d790-b511-4ac0-9b7e-0ae47121be06: # Video
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: fullVideo
+    instructions: 'Direct link.'
+    name: Video
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '1'
+      multiline: '1'
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  efe0df4a-f295-4411-8aec-3257b3ea64ed: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+handle: fullWidthVideo
+name: 'Full Width Video'
+sortOrder: 6

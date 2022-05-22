@@ -1,0 +1,21 @@
+{% set start = alertBar.alertStart|atom %}
+{% set end = alertBar.alertEnd|atom %}
+{% set now = now|atom %}
+{% if alertBar.alertBar and now >= start and now <= end %}
+	<!-- alert Bar -->
+	<div class="alert alert-primary alert-dismissible fade show" role="alert" style="display: none;>
+		<div class="container mx-auto">
+			<div class="row">
+				<div class="col d-flex justify-content-center">
+					
+					<span class="align-self-center">{{ alertBar.alertBarText|striptags('<strong>, <em>')|raw }}</span>
+					<a href="{% if alertBar.alertBarExternal|length%}{{ alertBar.alertBarExternal }}{% else %}{% set alertEntry = alertBar.alertBarLink.all() %}{% if alertEntry|length %}{% for alertEntries in alertEntry %}{{ alertEntries.url }}{% endfor %}{% endif %}{% endif %}" class="btn btn-outline-primary align-self-center btn-sm ms-2" {% if alertBar.alertBarExternal|length%}target="_blank"{% endif %}>
+						{{ alertBar.alertBarCta }}
+					</a>
+					<button type="button" class="btn-close js-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}

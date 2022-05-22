@@ -1,0 +1,34 @@
+{% set section = craft.app.request.param('section') %}
+{% set offset  = craft.app.request.param('offset')|default(0) %}
+{% set limit   = craft.app.request.param('limit')|default(9) %}
+
+{% set params = {section: section, offset: offset, limit: limit} %}
+
+{% set orderBy  = craft.app.request.param('orderBy') %}
+{% if orderBy|length %}
+  {% set params = params|merge({orderBy: orderBy}) %}
+{% endif %}
+
+{% set where = craft.app.request.param('where') %}
+{% if where|length %}
+  {% set key = where|split(' ')|first %}
+  {% set val = where|split(' ')|slice(1,2)|join(' ') %}
+  {% set params = params|merge({(key): val}) %}
+{% endif %}
+
+{% set category = craft.app.request.param('category') %}
+
+{% if category|length %}
+  {% set group    = section %}
+  {% set category = craft.categories.group(group).slug(category).one %}
+
+  {% if category|length %}
+    {% set params = params|merge({relatedTo: category}) %}
+  {% endif %}
+{% endif %}
+
+{% set entries = craft.entries(params) %}
+
+{{ include('blog/_entries.html') }}
+
+<span class="total-count" style="display:none">{{ entries.limit(null).count }}</span>

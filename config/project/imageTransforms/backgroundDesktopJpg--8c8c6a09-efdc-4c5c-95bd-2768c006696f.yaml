@@ -1,0 +1,9 @@
+format: jpg
+handle: backgroundDesktopJpg
+height: null
+interlace: none
+mode: fit
+name: 'Background Desktop JPG'
+position: center-center
+quality: 60
+width: 1440

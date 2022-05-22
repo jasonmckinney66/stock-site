@@ -1,0 +1,24 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 470429c0-2630-4570-9480-15b56af93199 # Unique
+handle: staffCategory
+instructions: ''
+name: 'Staff Category'
+searchable: false
+settings:
+  allowLimit: false
+  allowMultipleSources: false
+  allowSelfRelations: false
+  branchLimit: ''
+  limit: null
+  localizeRelations: false
+  selectionLabel: 'Choose a Staff Group'
+  showSiteMenu: false
+  source: 'group:f4343539-914e-4f2b-89b5-a34c032c2cea' # Staff
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Categories

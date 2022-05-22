@@ -1,0 +1,44 @@
+{% import '_macros' as m %}
+{% set promo = entry.promos.one() %}
+{% if promo|length %}
+  <section class="container-fluid {% if entry.inPanel|length %}bg-light py-5 mb-0{% else %}my-5{% endif %}">
+    <div class="container d-flex">
+      <div class="row align-items-center g-lg-5 gy-4">
+        <div class="col-12 {% if promo.layout.value == 'and8' %}col-md-3{% else %}col-md-6{% endif %}">
+
+          {% set image = promo.promoImage.one() %}
+          {% if image and image.extension == 'jpg' %}
+            {% set outputWidths = [375, 680] %}
+            {% if promo.layout.value == 'and8' %}
+              {% set aspectRatio = (1/1) %}
+            {% else %}
+              {% set aspectRatio = (2/3) %}
+            {% endif %}
+            <picture>
+            {% if craft.app.images.supportsWebP %}
+              <source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+            {% endif %}
+              <source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg">
+              <img src="{{ image.getUrl('fullWidthImages') }}" class="w-100" alt="{{ image.title }}" sizes="100vw" loading="lazy">
+            </picture>
+          {% elseif image and image.extension == 'svg' %}
+            {{ svg(image)|attr({style: 'width: 100%'}) }}
+          {% elseif image and image.extension == 'png' %}
+            <img width="100%" src="{{ image.getUrl('fullWidthImages') }}" alt="{{ image.title }}" loading="lazy">
+          {% endif %}
+
+        </div>
+        <div class="col-12 {% if promo.layout.value == 'and8' %}col-md-9{% else %}col-md-6{% endif %}">
+
+          <p class="h3">{{ promo.headline }}</p>
+          {{ promo.promoText }}
+          {% set link = promo.ctaLink.one %}
+          {% if link %}
+            <a href="{{ link.getUrl() }}" class="btn btn-outline-primary">{{ promo.ctaText }}</a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

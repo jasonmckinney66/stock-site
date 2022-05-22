@@ -1,0 +1,15 @@
+defaultPlacement: end
+enableVersioning: true
+handle: staff
+name: Staff
+propagationMethod: all
+siteSettings:
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+    enabledByDefault: true
+    hasUrls: true
+    template: staff/_entry.html
+    uriFormat: 'staff/{slug}'
+structure:
+  maxLevels: 1
+  uid: 69955a9e-8fcd-4cf7-bc12-7fd135e6d153
+type: structure

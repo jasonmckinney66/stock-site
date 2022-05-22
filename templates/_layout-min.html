@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js">
+	<head> 
+		{% set expiry = now|date_modify('+30 days') %}
+		{% header "Cache-Control: max-age=" ~ expiry.timestamp %}
+		{% header "Pragma: cache" %}
+		{% header "Expires: " ~ expiry|date('D, d M Y H:i:s', 'GMT') ~ " GMT" %}
+		{% header "X-Frame-Options: SAMEORIGIN" %}
+		{% header "X-Content-Type-Options: nosniff" %}
+		
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		{% set env = craft.app.config.env %}
+		{% if env == 'dev' or  env == 'staging' %}
+			<link rel="stylesheet" href="/assets/src/style/main.css">
+		{% else %}
+			<link rel="stylesheet" href="/{{ rev('main.min.css') }}">
+		{% endif %}
+
+		<link rel="home" href="{{ siteUrl }}" />
+
+		{% block headExtras %}{% endblock %}
+		
+		{{ head() }}
+
+		{# SEOMatic #}
+		<!-- Add SEOmatic and remove this to deploy -->
+		<meta name="robots" content="noindex, nofollow">
+
+	</head>
+
+	<body class="{% block bodyClass %}{% endblock %}">
+		
+		{{ beginBody() }}
+		
+		<nav class="navbar navbar-expand-lg navbar-light bg-secondary sticky-top shadow-sm p-3">
+      <a href="#content" class="skip">Skip to Main Content</a>
+      <div class="container-fluid justify-content-center">
+        <a class="navbar-brand text-white" href="/">LOGO</a>
+      </div>
+    </nav>
+
+		<!-- BEGIN content -->
+		<div id="content" class="main" role="main">
+			{% block content %}{% endblock %}
+		</div>
+		<!-- END content -->
+		
+		<footer>
+      <div class="container-fluid bg-light p-5">
+        <div class="row">
+          <div class="col text-center">
+            <span>Copyright ©{{ "now"|date('Y') }} Company, Inc.</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		{% set env = craft.app.config.env %}
+		{% if env == 'dev' or  env == 'staging' %}
+			<script src="/assets/src/js/vendor/bootstrap.js"></script>
+			<script src="/assets/src/js/vendor/jquery.navpoints.js"></script>
+			<script src="/assets/src/js/app.js"></script>
+		{% else %}
+			<script src="/assets/js/app.min.js"></script>
+		{% endif %}
+		<!-- End Scripts -->
+
+		{{ endBody() }}	
+
+		{% block footerExtras %}{% endblock %}	
+
+	</body>
+</html>

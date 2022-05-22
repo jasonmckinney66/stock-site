@@ -1,0 +1,212 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  1bb311ba-5655-4cff-9f8b-bdacd2f8e30a:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 2136c67b-cb54-4444-8dd8-77d380e918e9 # Header
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: ff1d1c65-0c80-4280-b146-fadb372bb823 # Block Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 08183fd0-718b-4456-a877-797e28e7ec98 # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 86555421-b1de-4edd-a88a-164edd0f7a15 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  2136c67b-cb54-4444-8dd8-77d380e918e9: # Header
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: header
+    instructions: ''
+    name: Header
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  08183fd0-718b-4456-a877-797e28e7ec98: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  86555421-b1de-4edd-a88a-164edd0f7a15: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  ff1d1c65-0c80-4280-b146-fadb372bb823: # Block Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: blockText
+    instructions: ''
+    name: 'Block Text'
+    searchable: false
+    settings:
+      availableTransforms: ''
+      availableVolumes: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+handle: callout
+name: Callout
+sortOrder: 5

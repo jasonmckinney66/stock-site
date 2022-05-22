@@ -1,0 +1,12 @@
+defaultPlacement: end
+enableVersioning: true
+handle: standAlonePages
+name: 'Stand Alone Pages'
+propagationMethod: all
+siteSettings:
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+    enabledByDefault: true
+    hasUrls: true
+    template: stand-alone/_entry
+    uriFormat: '{slug}'
+type: channel

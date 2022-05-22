@@ -1,8 +1,0 @@
-driver: log
-host: null
-port: 587
-from_email: admin@example.com
-from_name: Website Administrator
-encryption: tls
-username:
-password:

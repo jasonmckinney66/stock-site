@@ -1,0 +1,95 @@
+fieldLayouts:
+  1b61e8da-87f8-49ce-b196-f62ad12806ff:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 50
+          -
+            fieldUid: 5916d209-954c-4e03-b8a4-3e308a0b9b19 # Layout
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            heading: Content
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: dbd7a87f-ff77-40cb-a4de-ad5967c7e697 # Headline
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 72bb6701-438f-43c6-b7e5-6a6429d78390 # Promo Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 2fb4c94a-f4ab-4db3-87ea-074356206b8e # Promo Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: bbf819b3-26c8-4ada-a420-9b5c4c255d45 # CTA Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 62039500-9aa4-41b2-a37c-91e2e7c177cb # CTA link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Content
+        sortOrder: 1
+handle: promos
+hasTitleField: true
+name: Promos
+section: 36b668a9-6175-43e2-bb9a-226e5064717c # Promos
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

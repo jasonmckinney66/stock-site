@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js">
+	<head> 
+		{% set expiry = now|date_modify('+30 days') %}
+		{% header "Cache-Control: max-age=" ~ expiry.timestamp %}
+		{% header "Pragma: cache" %}
+		{% header "Expires: " ~ expiry|date('D, d M Y H:i:s', 'GMT') ~ " GMT" %}
+		{% header "X-Frame-Options: SAMEORIGIN" %}
+		{% header "X-Content-Type-Options: nosniff" %}
+		{% header "Expect-CT: report-uri=" ~ siteUrl ~ ", max-age=" ~ expiry.timestamp %}
+		{% header "Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()" %}
+		{% header "Strict-Transport-Security: max-age=" ~ expiry.timestamp %}
+		{% if csp.cspEnable %}
+			{% set cspArray = [] %}
+			{% set blocks = csp.contentSecurityPolicy.all() %}
+			{% for block in blocks %}
+				{% set name = block.type.name %}
+				{% set cspArray = cspArray|merge([name, block.sources ~ ";"]) %}
+			{% endfor %}
+				{% header "Content-Security-Policy: " ~ cspArray|join(' ') %}
+		{% endif %}
+		
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		{% if csp.cspEnable %}
+			<meta http-equiv="Content-Security-Policy" content="{% set blocks = contentSecurityPolicy.contentSecurityPolicy.all() %}{% for block in blocks %}{% set name = block.type.name %}{{ name }} {{ block.sources }}; {% endfor %}">
+		{% endif %}
+
+		{% set env = craft.app.config.env %}
+		{% if env == 'dev' or  env == 'staging' %}
+			<link rel="stylesheet" href="/assets/src/style/main.css">
+		{% else %}
+			<link rel="stylesheet" href="/{{ rev('main.min.css') }}">
+		{% endif %}
+
+		<link rel="home" href="{{ siteUrl }}" />
+		<!-- Replace before launch -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png">
+		<link rel="manifest" href="/assets/images/favicons/site.webmanifest">
+		<link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+		<link rel="shortcut icon" href="/assets/images/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+
+		{% block headExtras %}{% endblock %}
+		
+		{{ head() }}
+
+		{# SEOMatic #}
+		<!-- Add SEOmatic and remove this to deploy -->
+		<meta name="robots" content="noindex, nofollow">
+
+	</head>
+
+	<body class="{% block bodyClass %}{% endblock %}">
+		
+		{{ beginBody() }}
+		
+		{% include "_navigation-lt" %}
+
+		<!-- BEGIN content -->
+		<div id="content" class="main" role="main">
+			{% block content %}{% endblock %}
+		</div>
+		<!-- END content -->
+		
+		{% include "_footer" %}
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		{% set env = craft.app.config.env %}
+		{% if env == 'dev' or  env == 'staging' %}
+			<script src="/assets/src/js/vendor/bootstrap/bootstrap.min.js"></script>
+			<script src="/assets/src/js/vendor/jquery.navpoints.js"></script>
+			<script src="/assets/src/js/vendor/tweet-highlighted.js"></script>
+			<script src="/assets/src/js/app.js"></script>
+		{% else %}
+			<script src="/assets/src/js/vendor/bootstrap/bootstrap.min.js"></script>
+			<script src="/assets/js/app.min.js"></script>
+		{% endif %}
+		<script>
+			$('body').tweetHighlighted({											 
+				node: '<a href="javascript:;" class="btn btn-primary">Tweet</a>',
+				minLength: 6,
+				maxLength: 240 * 2,
+				extra: 'https://bluecoastweb.com',
+				via: 'bluecoastweb',
+				popupArgs: 'width=600,height=600,toolbar=0,location=0'
+			});
+		</script> 
+		<!-- End Scripts -->
+
+		{{ endBody() }}	
+
+		{% block footerExtras %}{% endblock %}	
+
+	</body>
+</html>

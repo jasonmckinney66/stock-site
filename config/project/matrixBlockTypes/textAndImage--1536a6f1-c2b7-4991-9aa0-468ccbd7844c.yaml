@@ -1,0 +1,377 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  651afef9-154b-41d7-99ea-b78dbb7ec56c:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: bef3d34e-58d2-42f1-bdd2-c75f9e9f967e # Meta Header
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: ab6ea18d-4a03-4c98-bf51-0bdfa50da5ee # Content
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            fieldUid: 7c1c92cb-582b-434b-be7c-8b5bd39d4fb0 # Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 1cda5366-543c-40ec-8204-8227dd3c3ad5 # Image Position
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f1f93f37-8573-4d0e-a1b6-20f99517dfd6 # Trackable CTA
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: cacb7793-1c82-41d3-b9bd-6e8e3a1dcfde # Proportion
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 7ef8a29d-bc73-4042-ba81-a29cbbe8a885 # In Panel
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: cb705579-42a6-441c-b537-813ca13848f8 # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: d50cff81-14c8-44c5-823c-4e0b0579da34 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  1cda5366-543c-40ec-8204-8227dd3c3ad5: # Image Position
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: imagePosition
+    instructions: ''
+    name: 'Image Position'
+    searchable: false
+    settings:
+      default: left
+      options:
+        __assoc__:
+          -
+            - left
+            - '1'
+          -
+            - center
+            - ''
+          -
+            - right
+            - '1'
+          -
+            - full
+            - ''
+          -
+            - drop-left
+            - ''
+          -
+            - drop-right
+            - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: rias\positionfieldtype\fields\Position
+  7c1c92cb-582b-434b-be7c-8b5bd39d4fb0: # Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: image
+    instructions: ''
+    name: Image
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: ''
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: large
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  7ef8a29d-bc73-4042-ba81-a29cbbe8a885: # In Panel
+    columnSuffix: null
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: inPanel
+    instructions: ''
+    name: 'In Panel'
+    searchable: false
+    settings:
+      default: false
+      offLabel: null
+      onLabel: null
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+  ab6ea18d-4a03-4c98-bf51-0bdfa50da5ee: # Content
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: blockText
+    instructions: ''
+    name: Content
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: ''
+      removeInlineStyles: ''
+      removeNbsp: ''
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  bef3d34e-58d2-42f1-bdd2-c75f9e9f967e: # Meta Header
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: blockHeader
+    instructions: ''
+    name: 'Meta Header'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  cacb7793-1c82-41d3-b9bd-6e8e3a1dcfde: # Proportion
+    columnSuffix: null
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: proportion
+    instructions: ''
+    name: Proportion
+    searchable: false
+    settings:
+      default: false
+      offLabel: 50/50
+      onLabel: 25/75
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+  cb705579-42a6-441c-b537-813ca13848f8: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  d50cff81-14c8-44c5-823c-4e0b0579da34: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  f1f93f37-8573-4d0e-a1b6-20f99517dfd6: # Trackable CTA
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: trackableCta
+    instructions: ''
+    name: 'Trackable CTA'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Add CTA'
+      showSiteMenu: true
+      source: null
+      sources:
+        - 'section:008d2483-e256-408b-918a-76ec4bee99a4' # CTAs
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+handle: textAndImage
+name: 'Text and Image'
+sortOrder: 2

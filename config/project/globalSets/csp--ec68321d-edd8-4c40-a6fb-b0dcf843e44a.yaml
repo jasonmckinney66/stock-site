@@ -1,0 +1,28 @@
+fieldLayouts:
+  93b03f6f-1714-4ecb-a41e-1a6c7835561e:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: d5b911c4-243c-453e-bd54-9a1072ed520c # CSP Enable
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: b67c56cb-a48e-4df0-bbc9-83ff07a03e55 # Content Security Policy
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Settings
+        sortOrder: 1
+handle: csp
+name: CSP
+sortOrder: 6

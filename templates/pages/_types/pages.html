@@ -1,0 +1,36 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}pages{% endblock %}
+{% block content %}
+{% include "_hero" %}
+
+<section class="container">
+    <div class="row justify-content-center">
+        <div class="col mb-3">
+            <h2>{{ entry.headline }}</h2>
+        </div>
+    </div>
+</section>
+
+{% include "_contentBlocks" %}
+
+{% if entry.promos|length %}
+    {% include "_promos" %}
+{% endif %}
+
+{% if entry.forms|length %}
+    {% include "_forms" %}
+{% endif %}
+
+{% if entry.customScripts|length %}
+    {% js %}
+        {{ entry.customScripts|raw }}
+    {% endjs %}
+{% endif %}
+{% if entry.customCss|length %}
+    {% css %}
+        {{ entry.customCss|raw }}
+    {% endcss %}
+{% endif %}
+
+{% endblock %}

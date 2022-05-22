@@ -1,0 +1,22 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 5229f0c3-3d12-4545-95d0-5c1954e5f155 # Promos
+handle: promos
+instructions: 'Add a promo to the bottom of the page. Optional.'
+name: Promos
+searchable: false
+settings:
+  allowSelfRelations: false
+  limit: '1'
+  localizeRelations: false
+  selectionLabel: 'Add a Promo'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:36b668a9-6175-43e2-bb9a-226e5064717c' # Promos
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

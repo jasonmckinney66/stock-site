@@ -1,0 +1,265 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  4118c875-bc01-4570-89bd-c8e631f35bff:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 773d35cf-07ed-406f-ab18-b636950e0eac # Title
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: f0711dd2-5f75-4fd4-b7a4-d38b216feacf # Entry Type
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 2b588056-fe3a-4dc1-8187-3b2c7cb3aedd # Display
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 402e1216-b232-44e1-b14c-14d9db1f1fbd # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: b0c46030-dbdc-4654-b80d-74d0a463931f # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  2b588056-fe3a-4dc1-8187-3b2c7cb3aedd: # Display
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: display
+    instructions: ''
+    name: Display
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - '1 Entry'
+            -
+              - value
+              - '1'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - '2 Entries'
+            -
+              - value
+              - '2'
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - '3 Entries'
+            -
+              - value
+              - '3'
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  402e1216-b232-44e1-b14c-14d9db1f1fbd: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  773d35cf-07ed-406f-ab18-b636950e0eac: # Title
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: blockTitle
+    instructions: ''
+    name: Title
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  b0c46030-dbdc-4654-b80d-74d0a463931f: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  f0711dd2-5f75-4fd4-b7a4-d38b216feacf: # Entry Type
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: entryType
+    instructions: ''
+    name: 'Entry Type'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - Blog
+            -
+              - value
+              - blog
+            -
+              - default
+              - '1'
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+handle: mostRecent
+name: 'Most Recent'
+sortOrder: 13

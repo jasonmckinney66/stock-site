@@ -1,0 +1,26 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: aba08ad6-6936-4899-8588-6b0268236dbf # Global
+handle: ctaLink
+instructions: ''
+name: 'CTA link'
+searchable: false
+settings:
+  allowSelfRelations: false
+  limit: '1'
+  localizeRelations: false
+  selectionLabel: 'Add a Page'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:90b1120e-dbfb-41e5-bb95-eb5fe25373b0' # Blog
+    - 'section:4c55d8cc-4357-4553-963c-4ebd6514e13f' # Landing Pages
+    - 'section:87e4bf44-2983-45e5-988f-95f2de2e7149' # Pages
+    - singles
+    - 'section:b1a0bc24-a457-4750-8bb3-5c717ab39319' # Stand Alone Pages
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

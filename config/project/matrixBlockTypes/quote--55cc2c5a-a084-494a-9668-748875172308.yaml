@@ -1,0 +1,271 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  762755e6-56d3-4626-97a9-250399d7fda9:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: f888a7ab-8b82-466f-9e50-be19ca1a5feb # Quote Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: d500cc47-b4fa-4b6e-9300-9a4694f0a478 # Citation
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 45f2d382-5c9a-4e1f-89a7-31d74536bb42 # Quote Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 15ff2ce0-259e-41ab-8035-f63b4ca0f249 # In Panel
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: eb392201-a98b-4795-a8ac-7af0963afe8c # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 2c11cc7d-86d7-4032-a7b5-c8e912cfce5a # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  2c11cc7d-86d7-4032-a7b5-c8e912cfce5a: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - none
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  15ff2ce0-259e-41ab-8035-f63b4ca0f249: # In Panel
+    columnSuffix: null
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: inPanel
+    instructions: ''
+    name: 'In Panel'
+    searchable: false
+    settings:
+      default: false
+      offLabel: null
+      onLabel: null
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+  45f2d382-5c9a-4e1f-89a7-31d74536bb42: # Quote Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: quoteImage
+    instructions: 'Company Logo'
+    name: 'Quote Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: ''
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: list
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  d500cc47-b4fa-4b6e-9300-9a4694f0a478: # Citation
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: citation
+    instructions: ''
+    name: Citation
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '1'
+      multiline: '1'
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  eb392201-a98b-4795-a8ac-7af0963afe8c: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6rem
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8rem
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  f888a7ab-8b82-466f-9e50-be19ca1a5feb: # Quote Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: quoteText
+    instructions: ''
+    name: 'Quote Text'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '2'
+      multiline: '1'
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: quote
+name: Quote
+sortOrder: 4

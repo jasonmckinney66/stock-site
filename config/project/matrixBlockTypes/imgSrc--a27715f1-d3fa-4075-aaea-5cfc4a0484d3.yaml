@@ -1,0 +1,41 @@
+field: b67c56cb-a48e-4df0-bbc9-83ff07a03e55 # Content Security Policy
+fieldLayouts:
+  53fc623d-59b8-4a63-8ecc-c2c75742afe6:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: f55a147e-280f-43d9-aec9-15d0d18f0e3e # Sources
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  f55a147e-280f-43d9-aec9-15d0d18f0e3e: # Sources
+    columnSuffix: uoywkptn
+    contentColumnType: text
+    fieldGroup: null
+    handle: sources
+    instructions: ''
+    name: Sources
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: imgSrc
+name: img-src
+sortOrder: 3

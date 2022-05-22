@@ -1,0 +1,41 @@
+defaultPlacement: end
+fieldLayouts:
+  b87850f0-8d3b-4bcc-a82f-026d90126da6:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: staff
+name: Staff
+siteSettings:
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+    hasUrls: true
+    template: null
+    uriFormat: 'staff-category/{slug}'
+structure:
+  maxLevels: null
+  uid: 47d55726-6c98-451a-9728-92b00b6a22d9

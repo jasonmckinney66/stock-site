@@ -1,0 +1,599 @@
+{% import '_macros' as m %}
+{% set handle = entry.section.handle %}
+<!-- Content Blocks -->
+{% for block in entry.contentBlocks.all %}
+  {% switch block.type %}
+
+		{% case "fullWidthText" %}
+
+			<section class="{% if block.inPanel|length %}bg-primary{% endif %}" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container{% if block.inPanel|length %} py-5 text-white{% endif %}">
+					{{ block.blockText }}
+					{% if block.trackableCta|length %}
+						{% include "_cta" %}
+					{% endif %}
+				</div>
+			</section>
+
+		{% case "fullWidthVideo" %}
+		
+			<section class="container" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="row justify-content-center">
+					<div class="col text-center">
+						{% if block.assetTitle | length %}
+							<p class="h3">{{ block.assetTitle }}</p>
+						{% endif %}
+						{% if block.assetSubtitle | length %}
+							<p>{{ block.assetSubtitle }}</p>
+						{% endif %}
+						<div class="mt-5">
+							<div class="embed-responsive embed-responsive-16by9">
+								<video class="lazy" controls disablepictureinpicture controlslist="nodownload" width="100%" data-src="{{ block.fullVideo | raw }}" data-poster="{% set poster = block.fullImage.one() %}{% if poster %}{{ poster.getUrl() }}{% endif %}">
+									<source type="video/mp4" data-src="{{ block.fullVideo | raw }}" />
+								</video>
+								<script>
+									window.lazyLoadOptions = {
+										elements_selector: ".lazy"
+									};
+								</script>
+								<script async src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js"></script>
+							</div>
+						</div>
+						{% if block.assetCaption | length %}
+							<div class="text-center mt-1 fst-italic">
+								{{ block.assetCaption }}
+							</div>
+						{% endif %}
+						{% set ctaLink = block.callToActionLink.all() ?? null %}
+						{% if ctaLink|length %}
+							<div class="text-center mt-5">
+								{% for cta in ctaLink %}
+								<a href="{{ cta.url }}" class="btn btn-outline-primary">{{ block.callToAction }}</a>
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</section>
+
+		{% case "fullWidthImage" %}
+		
+			<section class="container js-observe" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="row align-items-center gx-5 gy-5 {% if block.assetCaption|length %}pb-4{% else %}pb-3{% endif %}">
+					<div class="col">
+
+						{% set image = block.fullImage.one() %}
+						{% if image and image.extension == 'jpg' %}
+							{% set outputWidths = [375, 1024, 1200] %}
+							{% set aspectRatio = (9/21) %}
+							<picture>
+							{% if craft.app.images.supportsWebP %}
+								<source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+							{% endif %}
+								<source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg">
+								<img src="{{ image.getUrl('fullWidthImages') }}" class="w-100" alt="{{ image.title }}" sizes="100vw" loading="lazy">
+							</picture>
+						{% elseif image and image.extension == 'svg' %}
+							{{ svg(image)|attr({style: 'width: 100%'}) }}
+						{% elseif image and image.extension == 'png' %}
+							<img width="100%" src="{{ image.getUrl('fullWidthImages') }}" alt="{{ image.title }}" loading="lazy">
+						{% endif %}
+
+						{% if block.assetCaption | length %}
+							<div class="text-center mt-2 fst-italic">
+								{{ block.assetCaption }}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</section>
+
+		{% case "textAndImage" %}
+		
+			<section class="{% if block.inPanel|length %}bg-primary{% else %}js-observe{% endif %}" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container{% if block.inPanel|length %} py-5 text-white{% endif %}">
+					<div class="row row-cols-1 align-items-center {% if block.proportion is empty %}row-cols-lg-2{% endif %} gx-lg-5">
+
+						<div class="col{% if block.proportion|length %}-md-8{% endif %} {% if block.imagePosition == 'left' %}order-xl-2{% else %}order-xl-1{% endif %}">
+							<p class="text-meta">{{ block.blockHeader }}</p>
+							{{ block.blockText }}
+							{% if block.trackableCta|length %}
+								{% include "_cta" %}
+							{% endif %}
+						</div>
+					
+						<div class="col{% if block.proportion|length %}-md-4{% endif %} {% if block.imagePosition == 'left' %}order-xl-1{% else %}order-xl-2{% endif %}">
+							{% set image = block.image.one() %}
+							{% if image and image.extension == 'jpg' %}
+								{% set outputWidths = [375, 680] %}
+								<picture>
+								{% if craft.app.images.supportsWebP %}
+									<source srcset="{{ m.srcsetwebp(image, outputWidths) }}" type="image/webp">
+								{% endif %}
+									<source srcset="{{ m.srcset(image, outputWidths) }}" type="image/jpeg">
+									<img src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" class="w-100" sizes="100vw" loading="lazy">
+								</picture>
+							{% elseif image and image.extension == 'svg' %}
+								{{ svg(image)|attr({style: 'width: 100%'}) }}
+							{% elseif image and image.extension == 'png' %}
+								<img width="100%" src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" loading="lazy">
+							{% endif %}
+						</div>
+
+					</div>
+				</div>
+			</section>
+
+		{% case "textAndVideo" %}
+
+			<section style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">    
+				<div class="container{% if block.inPanel|length %} py-5 text-white{% endif %}">
+					<div class="row row-cols-1 align-items-center row-cols-lg-2 gx-lg-5">
+
+						<div class="col{% if block.videoPosition == 'left' %} order-xl-2{% else %} order-xl-1{% endif %}">
+							<p class="text-meta">{{ block.blockHeader }}</p>
+							{{ block.blockText }}
+						</div>
+
+						<div class="col {% if block.videoPosition == 'left' %}order-xl-1{% else %}order-xl-2{% endif %}">
+							<div class="embed-responsive embed-responsive-16by9">
+								<video class="lazy" controls disablepictureinpicture controlslist="nodownload" width="100%" data-src="{{ block.blockVideo | raw }}" data-poster="{% set poster = block.videoPlaceholderImage.one %}{% if poster %}{{ poster.getUrl() }}{% endif %}">
+									<source type="video/mp4" data-src="{{ block.blockVideo | raw }}" />
+								</video>
+								<script>
+									window.lazyLoadOptions = {
+										elements_selector: ".lazy"
+									};
+								</script>
+								<script async src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js"></script>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+
+		{% case "quote" %}
+		
+			<section class="{% if block.inPanel|length %}bg-primary{% else %}js-observe{% endif %}" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container text-center{% if block.inPanel|length %} py-5 text-white{% endif %}">
+					{% set image = block.quoteImage.one %}
+					{% if image %}
+						<img src="{{ image.getUrl() }}" width="120" alt="{{ image.title }}" loading="lazy">
+					{% endif %}
+					<p class="h3 my-4 widont">
+							{{ block.quoteText }}
+					</p>
+					<div>
+						<p>{% if block.citation | length %}{{ block.citation }}{% endif %}</p>
+					</div>
+				</div>
+				
+			</section>
+		
+			{% case "cards" %}
+
+			<section class="js-observe" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container">
+					<div class="row row-cols-1 align-items-stretch gx-md-5 gy-5 row-cols-md-3 justify-content-center">
+
+						{% if block.card1Text|length %}
+							<div class="col">
+								{% set rel = block.card1Link.one() ?? null %}
+								{% if rel %}
+									<a href="{{ rel.url }}" class="card text-decoration-none h-100 shadow-lg">
+								{% endif %}
+										{% set image = block.card1Image.one() ?? null %}
+										{% if image and image.extension == 'jpg' %}
+											<picture>
+											{% if craft.app.images.supportsWebP %}
+												<source srcset="{{ m.cardWebp(image) }}" type="image/webp">
+											{% endif %}
+												<img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+											</picture>
+										{% elseif image and image.extension == 'svg' %}
+											{{ svg(image)|attr({style: 'width: 100%'}) }}
+										{% elseif image and image.extension == 'png' %}
+											<img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+										{% endif %}
+										<div class="card-body p-4 p-lg-5">
+											<span class="text-gray-dark">{{ block.card1Text }}</span>
+										</div>
+									</a>
+							</div>
+						{% endif %}
+
+						{% if block.card2Text|length %}
+						<div class="col">
+							{% set rel = block.card2Link.one() ?? null %}
+							{% if rel %}
+								<a href="{{ rel.url }}" class="card text-decoration-none h-100 shadow-lg">
+							{% endif %}
+									{% set image = block.card2Image.one() ?? null %}
+									{% if image and image.extension == 'jpg' %}
+										<picture>
+										{% if craft.app.images.supportsWebP %}
+											<source srcset="{{ m.cardWebp(image) }}" type="image/webp">
+										{% endif %}
+											<img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+										</picture>
+									{% elseif image and image.extension == 'svg' %}
+										{{ svg(image)|attr({style: 'width: 100%'}) }}
+									{% elseif image and image.extension == 'png' %}
+										<img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+									{% endif %}
+									<div class="card-body p-4 p-lg-5">
+										<span class="text-gray-dark">{{ block.card2Text }}</span>
+									</div>
+								</a>
+						</div>
+						{% endif %}
+						{% if block.card3Text|length %}
+						<div class="col">
+							{% set rel = block.card3Link.one() ?? null %}
+							{% if rel %}
+								<a href="{{ rel.url }}" class="card text-decoration-none h-100 shadow-lg">
+							{% endif %}
+									{% set image = block.card3Image.one() ?? null %}
+									{% if image and image.extension == 'jpg' %}
+										<picture>
+										{% if craft.app.images.supportsWebP %}
+											<source srcset="{{ m.cardWebp(image) }}" type="image/webp">
+										{% endif %}
+											<img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+										</picture>
+									{% elseif image and image.extension == 'svg' %}
+										{{ svg(image)|attr({style: 'width: 100%'}) }}
+									{% elseif image and image.extension == 'png' %}
+										<img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+									{% endif %}
+									<div class="card-body p-4 p-lg-4">
+										<span class="text-gray-dark">{{ block.card3Text }}</span>
+									</div>
+								</a>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</section>
+
+			{% case "agendaTable" %}
+
+	    <section style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};" data-scroll data-scroll-repeat="2">
+	      <div class="container">
+	        <div class="col">
+						{% if block.agendaTitle|length %}
+							<p class="h3 pb-4">{{ block.agendaTitle }}</p>
+						{% endif %}
+				    <table class="table">
+							<thead>
+								<tr>
+									<th class="fw-bolder" scope="row" width="20%">Time</th>
+									<th class="fw-bolder" scope="row" width="40%">Topic</th>
+									<th class="fw-bolder" scope="row" width="40%">Speaker</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for row in block.agenda %}
+								<tr>
+									<td class="fw-bolder">{{ row.time }}</td>
+									<td>{{ row.topic }}</td>
+									<td>{{ row.speaker }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section><!-- end agenda -->
+
+			{% case "accordions" %}
+
+	    <section style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+	      <div class="container">
+	        <div class="col">
+						{% if block.accordionTitle|length %}
+							<p class="h3 text-center">{{ block.accordionTitle }}</p>
+						{% endif %}
+					</div>
+
+					<div class="col mt-5">
+						<div class="accordion" id="accordion-{{ loop.index }}">
+						{% for row in block.accordionSet %}
+
+							<div class="accordion-item mt-3">
+								<p class="h3 accordion-header" id="heading-{{ loop.index }}">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}" aria-expanded="true" aria-controls="collapse-{{ loop.index }}">
+										{{ row.question }}
+									</button>
+								</p>
+								<div id="collapse-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ loop.index }}" data-bs-parent="#accordion-{{ loop.index }}">
+									<div class="accordion-body">
+										{{ row.answer }}
+									</div>
+								</div>
+							</div>
+
+						{% endfor %}
+						</div>
+					</div>
+
+				</div>
+			</section><!-- end accordions -->
+
+			{% case "stats" %}
+			
+	    <section class="js-observe" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container text-center px-lg-5">
+					<div class="row row-cols-1 row-cols-md-4 justify-content-center">
+
+						{% if block.statFigure1|length %}
+							<div class="col mb-5 mb-lg-0">
+								<p class="h3 fs-68 fw-semibold lh-1">{{ block.statPre1 }}{{ block.statFigure1 }}{{ block.statSymbol1 }}</p>
+								<p>{{ block.statText1 }}</p>
+							</div>
+						{% endif %}
+
+						{% if block.statFigure2|length %}
+							<div class="col mb-5 mb-lg-0">
+								<p class="h3 fs-68 fw-semibold lh-1">{{ block.statPre2 }}{{ block.statFigure2 }}{{ block.statSymbol2 }}</p>
+								<p>{{ block.statText2 }}</p>
+							</div>
+						{% endif %}
+
+						{% if block.statFigure3|length %}
+							<div class="col mb-5 mb-lg-0">
+								<p class="h3 fs-68 fw-semibold lh-1">{{ block.statPre3 }}{{ block.statFigure3 }}{{ block.statSymbol3 }}</p>
+								<p>{{ block.statText3 }}</p>
+							</div>
+						{% endif %}
+
+						{% if block.statFigure4|length %}
+							<div class="col mb-5 mb-lg-0">
+								<p class="h3 fs-68 fw-semibold lh-1">{{ block.statPre4 }}{{ block.statFigure4 }}{{ block.statSymbol4 }}</p>
+								<p>{{ block.statText4 }}</p>
+							</div>
+						{% endif %}
+
+					</div>
+
+					<div class="row mt-0 mt-lg-4 text-center">
+						<p class="fs-14 ls-03 text-muted">{{ block.disclaimer }}</p>
+					</div>
+				
+			</section><!-- end stats -->
+
+			{% case "textColumns" %}
+			
+	    <section class="{% if block.inPanel|length %}bg-primary{% endif %}" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container{% if block.inPanel|length %} py-5 text-white{% endif %}">
+					{{ block.introText }}
+					{% if block.column4Text|length %}
+						{% set columnFull = '4' %}
+					{% else %}
+						{% set columnFull = '3' %}
+					{% endif %}
+					<div class="row row-cols-1 gx-0 mt-lg-5 row-cols-lg-{{columnFull}} js-observe">
+
+						<div class="col mb-5 px-5 border-white px-lg-5 border-lg-start">
+							{% if block.column1Icon %}
+								<div class="text-center">
+									<p><span class="material-icons{% if block.inPanel|length %} text-white{% endif %}">{{ block.column1Icon }}</span></p>
+								</div>
+							{% endif %}
+							<div class="text-center">
+								{{ block.column1Text }}
+							</div>
+						</div>
+						<div class="col mb-5 px-5 border-white px-lg-5 border-lg-start">
+							{% if block.column2Icon %}
+							<div class="text-center">
+								<p><span class="material-icons{% if block.inPanel|length %} text-white{% endif %}">{{ block.column2Icon }}</span></p>
+							</div>
+							{% endif %}
+							<div class="text-center">
+								{{ block.column2Text }}
+							</div>
+						</div>
+						<div class="col mb-5 px-5 border-white px-lg-5 border-lg-start">
+							{% if block.column3Icon %}
+							<div class="text-center">
+								<p><span class="material-icons{% if block.inPanel|length %} text-white{% endif %}">{{ block.column3Icon }}</span></p>
+							</div>
+							{% endif %}
+							<div class="text-center">
+								{{ block.column3Text }}
+							</div>
+						</div>
+
+						{% if block.column4Text|length %}
+						<div class="col mb-5 px-5 border-white px-lg-5 border-lg-start">
+							{% if block.column4Icon %}
+							<div class="text-center">
+								<p><span class="material-icons{% if block.inPanel|length %} text-white{% endif %}">{{ block.column4Icon }}</span></p>
+							</div>
+							{% endif %}
+							<div class="text-center">
+								{{ block.column4Text }}
+							</div>
+						</div>
+						{% endif %}
+					
+					</div>
+
+					{% if block.closingText|length  %}
+						<div class="text-center">
+								{{ block.closingText }}
+						</div>
+					{% endif %}
+
+					{% set ctaLink = block.ctaLink.all() ?? null %}
+						{% if ctaLink|length %}
+							{% for cta in ctaLink %}
+								<div class="mt-3 mt-lg-4 text-center">
+										<a href="{{ cta.url }}" class="btn {% if block.inPanel %}btn-light{% else %}btn-outline-primary{% endif %}">{{ block.ctaText }}</a>
+								</div>
+							{% endfor %}
+					{% endif %}
+				</div>
+			</section><!-- end text columns -->
+
+			{% case "mostRecent" %}
+
+			<section style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container">
+					{% if block.blockTitle | length %}
+						<div class="row justify-content-center mb-5">
+							<div class="col text-center">
+									<p class="h3">{{ block.blockTitle|title }}</p>
+							</div>
+						</div>
+					{% endif %}
+					{% if block.entryType|length %}
+
+						{% set limit = block.display.value %}
+						{% set content = block.entryType.value %}
+						{% set entries = craft.entries().section(content).limit(limit).all %}
+
+						<div class="row d-flex justify-content-center row-cols-1 row-cols-md-2 row-cols-lg-{{ limit }} g-lg-5 gy-4">
+							{% for entry in entries %}
+								<div class="col">
+									{% if limit == 3 %}
+										<div class="card text-decoration-none h-100 border-0 shadow-lg">
+											<a href="{{ entry.url }}">
+												{% set image = entry.listingImage.one() ?? null %}
+												{% if image and image.extension == 'jpg' %}
+													{% set outputWidths = [385] %}
+													{% if limit == 2 %}
+														{% set aspectRatio = (1/1) %}
+													{% else %}
+														{% set aspectRatio = (9/21) %}
+													{% endif %}
+													<picture>
+														{% if craft.app.images.supportsWebP %}
+															<source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+														{% endif %}
+															<source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg"> 
+															<img src="{{ m.srcset(image, outputWidths, aspectRatio) }}" class="{% if limit < 3 %}img-fluid rounded-start{% else %}card-img-top{% endif %}" alt="{{ image.title }}" loading="lazy">
+													</picture>
+												{% elseif image and image.extension == 'svg' %}
+													{{ svg(image)|attr({style: 'width: 100%'}) }}
+												{% elseif image and image.extension == 'png' %}
+													<img src="{{ image.getUrl() }}" class="img-fluid rounded-start" alt="{{ image.title }}" loading="lazy">
+												{% endif %}
+											</a>
+											<div class="card-body p-4">
+												<p>{{ entry.section.name|upper }}</p>
+												<p class="h3"><a href="{{ entry.url }}" class="text-decoration-none">{{ entry.title }}</a></p>
+												<p>{{ entry.excerpt|truncate(100, '...') }}</p>
+												<a href="{{ entry.url }}" class="link">Read More</a>
+											</div>
+										</div>
+									{% else %}
+										<div class="card text-decoration-none h-100 border-0 shadow-lg">
+											<div class="row h-100 g-0">
+												{% set image = entry.listingImage.one() ?? null %}
+												<div class="col-md-4 p-5" style="background: url('{{ image.getUrl('inlineImages') }}'); background-position: 50% 50%;">
+													&nbsp;
+												</div>
+												<div class="col-md-8">
+													<div class="card-body p-4">
+														<p>{{ entry.section.name|upper }}</p>
+														<p class="h3"><a href="{{ entry.url }}" class="text-decoration-none">{{ entry.title }}</a></p>
+														<p>{{ entry.excerpt|truncate(100, '...') }}</p>
+														<a href="{{ entry.url }}" class="link">Read More</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									{% endif %}
+								</div>
+							{% endfor %}
+					{% endif %}
+				</div>
+			</section><!-- end most recent -->
+
+			{% case "embed" %}
+		
+			<section class="{% if block.inPanel|length %}bg-primary{% endif %}" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col">
+							<div class="ratio ratio-4x3">
+								{{ block.embedCode|raw }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{% case "carousel" %}
+
+			<section style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container">
+
+					{% if block.blockHeader | length %}
+						<div class="row justify-content-center mb-5">
+							<div class="col text-center">
+									<p class="h3">{{ block.blockHeader|title }}</p>
+							</div>
+						</div>
+					{% endif %}
+
+					<div class="row justify-content-center mb-2">
+						<div class="col text-center">
+
+							<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+
+								<div class="carousel-indicators">
+									{% set slides = block.carouselImages.all() %}
+									{% for slide in slides %}
+										<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+									{% endfor %}
+								</div>
+								<div class="carousel-inner">
+									{% set images = block.carouselImages.all() %}
+									{% if images %}
+										{% for image in images %}
+											<div class="carousel-item {% if loop.first %}active{% endif %}">
+												<img src="{{ image.getUrl('slides') }}" alt="{{ image.title }}" class="d-block w-100" sizes="100vw" loading="lazy">
+												<div class="carousel-caption d-none d-md-block">
+													<p class="h5">{{ image.title }}</p>
+												</div>
+											</div>
+										{% endfor %}
+									{% endif %}
+								</div>
+
+								<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Previous</span>
+								</button>
+								<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Next</span>
+								</button>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{% case "callout" %}
+
+			<section class="js-observe" style="margin-top: {{ block.topMargin.value }}; margin-bottom: {{ block.bottomMargin.value }};">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 callout callout-primary">
+							<h4>{{ block.header }}</h4>
+							{{ block.blockText }}
+						</div>
+					</div>
+				</div>
+			</section>
+
+		{% default %}
+			<h1>Something went wrong here</h1>
+  {% endswitch %}
+{% endfor %}

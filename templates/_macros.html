@@ -1,0 +1,110 @@
+{% macro truncateWords(text, length, suffix) %}
+  {% spaceless %}
+    {% autoescape false %}
+      {# settings #}
+      {% set defaultSuffix = '...' %}
+      {# logic #}
+      {% if text and length %}
+        {% set suffix = suffix|default(defaultSuffix) %}
+        {% set text = text|striptags %}
+        {% set text = text|replace('/\\n/', '\n ') %}
+        {% set array = text|split(' ') %}
+        {% set arrayTruncated = array|slice(0, length) %}
+        {% set string = arrayTruncated|join(' ') %}
+        {% if array|length > length %}
+            {% set string = string ~ suffix %}
+        {% endif %}
+        {% set string = string|replace('/\\n\\s/', '\n') %}
+        {{ string }}
+      {% endif %}
+    {% endautoescape %}
+  {% endspaceless %}
+{% endmacro %}
+
+{# Use existing image format #}
+{% macro srcset(image, outputWidths, aspectRatio) %}
+  
+  {%- set outputWidths = outputWidths | default([640, 1024, 1440]) -%}
+  {%- set srcset = [] -%}
+
+  {# if output width is smaller than or equal to the original image width #}
+  {%- for outputWidth in outputWidths -%}
+    {%- if outputWidth <= image.width -%}
+      {%- if aspectRatio -%}
+        {%- set transformOptions = { width: outputWidth, height: outputWidth * aspectRatio, quality: 80, } -%}
+      {%- else -%}
+        {%- set transformOptions = { width: outputWidth, quality: 80, } -%}
+      {%- endif -%}
+      
+      {%- set srcset = srcset | merge([image.url(transformOptions) ~ ' ' ~ outputWidth ~ 'w']) -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {# output srcset #}
+  {{- srcset | join(', ') -}}
+{% endmacro %}
+
+{# Use convert to webp #}
+{% macro srcsetwebp(image, outputWidths, aspectRatio) %}
+  {# setup #}
+  {%- set outputWidths = outputWidths | default([640, 1024, 1440]) -%}
+  {%- set srcset = [] -%}
+
+  {# if output width is smaller than or equal to the original image width #}
+  {%- for outputWidth in outputWidths -%}
+    {%- if outputWidth <= image.width -%}
+      {%- if aspectRatio -%}
+        {%- set transformOptions = { width: outputWidth, height: outputWidth * aspectRatio, format: 'webp', quality: 80, } -%}
+      {%- else -%}
+        {%- set transformOptions = { width: outputWidth, format: 'webp', quality: 80, } -%}
+      {%- endif -%}
+      
+      {%- set srcset = srcset | merge([image.url(transformOptions) ~ ' ' ~ outputWidth ~ 'w']) -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {# output srcset #}
+  {{- srcset | join(', ') -}}
+{% endmacro %}
+
+{# hero background webp #}
+{%- macro heroWebp(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 1440, height: 580, format: 'webp', quality: 80, position: 'top-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# hero background jpg #}
+{%- macro heroJpg(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 1440, height: 580, format: 'jpg', quality: 80, position: 'top-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# Blog background webp #}
+{%- macro blogWebp(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 376, height: 415, format: 'webp', quality: 80, position: 'top-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# Blog background jpg #}
+{%- macro blogJpg(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 376, height: 415, format: 'jpg', quality: 80, position: 'top-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# Card Images webp #}
+{%- macro cardWebp(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 385, height: 194, format: 'webp', quality: 80, position: 'center-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# Card Images jpg #}
+{%- macro cardJpg(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 385, height: 194, format: 'jpg', quality: 80, position: 'center-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}
+
+{# blog Images jpg #}
+{%- macro blogJpg(image) -%}
+  {%- set transformOptions = { mode: 'crop', width: 385, height: 400, format: 'jpg', quality: 80, position: 'center-center'} -%}
+  {{ image.url(transformOptions) }}
+{%- endmacro -%}

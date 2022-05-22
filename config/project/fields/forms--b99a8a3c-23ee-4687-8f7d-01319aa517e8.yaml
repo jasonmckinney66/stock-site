@@ -1,0 +1,22 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: e89c6dc2-003f-4081-bbe8-08b20cf664d8 # Common
+handle: forms
+instructions: 'Add a form to the page. Optional.'
+name: Forms
+searchable: false
+settings:
+  allowSelfRelations: false
+  limit: '1'
+  localizeRelations: false
+  selectionLabel: 'Add a Form'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:a3deca4b-936e-4fea-a9af-375754b915d8' # Forms
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

@@ -1,0 +1,27 @@
+<!-- footer -->
+{# cache globally using key "footer" #}
+  <footer>
+    <div class="container-fluid bg-light p-5">
+      <div class="row">
+        <div class="col text-center">
+          
+          {% set footerItems = craft.globalSets.handle('footer').one.navItems %}
+          {% if footerItems|length %}
+          <nav class="navbar navbar-expand-lg navbar-light justify-content-center p-3">
+            <div class="navbar-nav mx-auto mb-2 mb-lg-0">
+              {% for item in footerItems.all() %}
+                <div class="nav-item">
+                  <a href="{{ item.parentPage.one.url() }}" class="nav-link">{{ item.parentPage.one }}</a>
+                </div>
+              {% endfor %}
+            </div>
+          </nav>
+          {% endif %}
+          
+          <span>Copyright ©{{ "now"|date('Y') }} Company, Inc.</span>
+          <a href="https://bluecoastweb.com" class="ms-2 text-nowrap" target="_blank" rel="noreferrer">Site Credit</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+{# endcache #}

@@ -1,0 +1,73 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}staff{% endblock %}
+{% block content %}
+{% include "_hero" %}
+
+<div class="bg-white py-5 mt-n5 mb-5">
+    <section class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-2">
+                {% set image = staff.staffPhoto.one() ?? null %}
+                {% if image %}
+                    {% set staffThumb = { mode: 'crop', width: 180, height: 180, quality: 70, position: 'center-center' } %}
+                    <img width="180" src="{{ image.getUrl(staffThumb) }}" alt="{{ image.title }}">
+                {% else %}
+                    <img width="180" src="/assets/images/profile.png" alt="Profile Image">
+                {% endif %}
+            </div>
+            <div class="col-sm-12 col-md-10">
+                <h4>{{ entry.staffTitle }}</h4>
+                <p>{{ entry.staffBio }}</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% set entries = craft.entries.section('blog').relatedTo(entry).all() %}
+{% if entries|length %}
+    <section class="container mb-5">
+        <p class="h3 text-center">Posts by {{ entry.title }}</p>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
+        {% for entry in entries %}
+            <div class="col">
+                <a href="{{ entry.url }}" class="card text-decoration-none h-100 shadow-lg">
+                {% set image = entry.listingImage[0] ?? null %}
+                {% if image and image.extension == 'jpg' %}
+                    {% set outputWidths = [388, 366] %}
+                    {% set aspectRatio = (5/3) %}
+                    <picture>
+                        {% if craft.app.images.supportsWebP %}
+                            <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+                        {% endif %}
+                        <img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+                    </picture>
+                {% elseif image and image.extension == 'svg' %}
+                    {{ svg(image)|attr({style: 'width: 100%'}) }}
+                {% elseif image and image.extension == 'png' %}
+                    <img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+                {% endif %}
+                <div class="card-body p-4 p-lg-5">
+
+                    {% set category = entry.blogCategory[0] ?? null %}
+                    {% if category is defined %}
+                    <h6 class="text-gray-medium">{{ category.title }}</h6>
+                    {% endif %}
+
+                    <h3 class="widont">{{ entry.title }}</h3>
+
+                    <p class="text-gray-light">{{ entry.excerpt }}</p>
+
+                </div>
+                <div class="card-footer text-muted text-center">
+                    {% set postContent = entry.contentBlocks.all() %}
+                    <small class="text-gray-light">Reading time: {{ readTime(postContent, false) }}</small>
+                </div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+{% endblock %}

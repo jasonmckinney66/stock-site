@@ -1,0 +1,76 @@
+{% include "_alertBar" %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm p-3">
+	<a href="#content" class="skip">Skip to Main Content</a>
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/">LOGO</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+				{% set navItems = craft.globalSets.handle('theNav').one.navItems %}
+				{% for item in navItems.all() %}
+
+					{% if item.childPages|length %}
+						<li class="nav-item dropdown has-megamenu">
+							<a href="#" class="nav-link {% if item.parentPage.one.slug in craft.app.request.segments %} active{% endif %}" id="nav-{{ item.parentPage.one|kebab }}" {% if item.parentPage.one.slug in craft.app.request.segments %}aria-current="page"{% endif %} role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ item.parentPage.one }}</a>
+							<!-- child menu -->
+							<div class="dropdown-menu megamenu shadow-sm" role="menu">
+								<div class="container">
+									<div class="row gx-3">
+										<div class="col-sm-12 col-md-3">
+											<ul aria-labelledby="nav-{{ item.parentPage.one|kebab }}" style="padding-left: 0;">
+
+												<li class="dropdown-item"><a href="{{ item.parentPage.one.url() }}" class="dropdown-item">Overview</a></li>
+
+												{% for child in item.childPages.all() %}
+													<li class="dropdown-item"><a href="{{ child.url }}" class="{% if child.url == craft.app.request.absoluteUrl %} active{% endif %} dropdown-item">{{ child }}</a></li>
+												{% endfor %}
+
+											</ul>
+										</div>
+										<div class="col-sm-12 col-md-9 navbar-text">
+											{{ item.sectionText }}
+										</div>
+									</div>
+								</div>
+							</div>
+					{% else %}
+						<li class="nav-item">
+							<a href="{{ item.parentPage.one.url() }}" class="nav-link {% if item.parentPage.one.slug in craft.app.request.segments %} active{% endif %}" {% if item.parentPage.one.slug in craft.app.request.segments %}aria-current="page"{% endif %}>{{ item.parentPage.one }}</a>
+						</li>
+					{% endif %}
+
+				{% endfor %}
+			</ul>
+			
+			<div class="d-grid gap-1">
+				<!-- desktop -->
+				<a href="#" type="button" class="ms-lg-2 my-2 mx-md-3 js-openSearch d-none d-md-block">
+					<span class="material-icons align-middle">search</span>
+					<!--<svg fill="none" height="24" stroke="#0d6efd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="10.5" cy="10.5" r="7.5"/><line x1="21" x2="15.8" y1="21" y2="15.8"/></svg>-->
+				</a>
+				<!-- mobile -->
+				<a href="#" type="button" class="btn btn-outline-primary ms-lg-2 my-2 js-openSearch d-md-none">Search</a>
+			</div>
+			<div class="d-grid gap-1">
+				<a href="{% set rel = theNav.ctaLink.one() %}{{ rel.url }}" class="btn btn-primary ms-lg-2 my-2">{{ theNav.ctaText }}</a>
+			</div>
+
+		</div>
+	</div>
+</nav>
+
+<!-- search panel -->
+<div class="container-fluid bg-white search" style="display: none;">
+	<div class="row justify-content-center">
+		<div class="col-9 col-md-4">
+			<form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}">
+				<input id="searchField" type="search" name="q" class="form-control mx-2" placeholder="Enter Keyword">
+				<button type="submit" class="btn btn-outline-primary" value="Search"> Search </button>
+				<a class="btn-close headerSearch-close search-close" aria-label="Close"></a>
+			</form>
+		</div>
+	</div>
+</div>

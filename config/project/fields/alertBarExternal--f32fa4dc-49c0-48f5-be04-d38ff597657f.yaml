@@ -1,0 +1,19 @@
+columnSuffix: iwphbcrm
+contentColumnType: text
+fieldGroup: aba08ad6-6936-4899-8588-6b0268236dbf # Global
+handle: alertBarExternal
+instructions: ''
+name: 'Alert Bar External'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

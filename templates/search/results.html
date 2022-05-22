@@ -1,0 +1,71 @@
+{% extends "_layout" %}
+{% block bodyClass %}search{% endblock %}
+{% import '_macros.html' as m %}
+{% block content %}
+{% include "_hero" %}
+
+<section>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        {% set query = craft.app.request.getParam('q') %}
+
+        <!-- get excluded ids -->
+        {% set excludePages = internalSearch.excludeFromSearch.all() %}
+        {% set excludeIdArray = [] %}
+        {% if excludePages|length %}
+          {% for item in excludePages %}
+            {% set excludeIdArray = excludeIdArray|merge([item.id]) %}
+          {% endfor %}
+        {% endif %}
+        {% set idsToExcludeString = excludeIdArray|join(', not ') %}
+        
+        {% set entries = craft.entries.search(query).section('and, not forms, not staff, not ctas, not promos').id('and, not ' ~ idsToExcludeString).orderBy('score').all() %}
+
+        {% if entries|length %}
+          <h3 class="mb-5">Your search for "{{ query }}" returned {{ entries|length }} result(s):</h3>
+                  
+          {% for entry in entries %}
+            <div class="mb-5 p-4 bg-light">
+              <p class="mb-0">{{ entry.section.name }}</p>
+              <h3 class="mb-3">{% if entry.title|length %}{{ entry.title }}{% else %}Home Page{% endif %}</h3>
+                <!-- handle results -->	
+                {% set blocks = entry.contentBlocks.one() ?? null %}
+                {% if blocks|length %}
+
+                  {% for block in entry.contentBlocks.all() %}
+                    {% if loop.first %}
+
+                      {% switch block.type %}
+                        {% case "fullWidthText" %}
+                          {% set text = block.blockText ?? null %}
+                          <span class="mb-4"><p>{{ m.truncateWords(text, 28, '...') }}</p></span>
+                        {% case "textAndImage" %}
+                          {% set text = block.blockText ?? null %}
+                          <span class="mb-4"><p>{{ m.truncateWords(text, 28, '...') }}</p></span>
+                        {% default %}
+                      {% endswitch %}
+                      
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <p>{{ entry.excerpt }}</p>
+                {% endif %}
+                <a href="{{ entry.url }}" class="btn btn-outline-primary">Read More</a>
+            </div>
+          {% endfor %}
+          
+        {% else %}
+          <div class="mb-5">
+            <h2>Your search for "{{ query }}" didn't return any results.</h2>
+            <a onclick="window.history.go(-1); return false;" class="btn btn-outline-primary btn-lg mt-5" href="#">Back</a>
+          </div>
+
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% endblock %}

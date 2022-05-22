@@ -1,0 +1,32 @@
+<section class="bg-light mt-n5 mb-5">
+  <div class="container-fluid">
+    <h6 class="text-center pt-4">In this section</h6>
+    <div class="row">
+      <nav class="navbar navbar-expand-lg navbar-light justify-content-center">
+        <div class="navbar-nav mx-auto mb-2 mb-lg-0">
+          {% set navItems = craft.globalSets.handle('theNav').one.navItems %}
+          {% for item in navItems.all() %}
+
+            {% set current = craft.entries.ancestorOf(entry).level(1).one() %}
+            {% if current|length %}
+              {% set parent = current.title %}
+            {% else %}
+              {% set parent = entry.title %}
+            {% endif %}
+
+            {% if item.parentPage.one == parent %}
+              <!-- child menu -->
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li><a href="{{ item.parentPage.one.url() }}" class="nav-link{% if item.parentPage.one.url() == craft.app.request.absoluteUrl %} active{% endif %}">Overview</a></li>
+                  {% for child in item.childPages.all() %}
+                      <li><a href="{{ child.url }}" class="nav-link{% if child.url == craft.app.request.absoluteUrl %} active{% endif %}">{{ child }}</a></li>
+                  {% endfor %}
+              </ul>
+            {% endif %}
+            
+          {% endfor %}
+        </div>
+      </nav>
+    </div>
+  </div>
+</section>

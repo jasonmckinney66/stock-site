@@ -1,0 +1,113 @@
+field: 5fc9fab4-09e8-4af9-9a55-8fd111110006 # Hero
+fieldLayouts:
+  959d3717-2c44-48b1-806d-496cd3ce1a0e:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 94d55693-cf10-4cdf-9742-88c6b2a2b09e # Custom Header Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 25125a6a-cf03-43fc-b5f4-19b8c4fd31e9 # Subtitle Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: c1698eed-378c-4ad5-a21c-e564e364906f # Background Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  94d55693-cf10-4cdf-9742-88c6b2a2b09e: # Custom Header Text
+    columnSuffix: vguuarss
+    contentColumnType: text
+    fieldGroup: null
+    handle: customHeaderText
+    instructions: 'Optional. If left blank, page title will be used.'
+    name: 'Custom Header Text'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  25125a6a-cf03-43fc-b5f4-19b8c4fd31e9: # Subtitle Text
+    columnSuffix: gzvzbpig
+    contentColumnType: text
+    fieldGroup: null
+    handle: subtitleText
+    instructions: Optional.
+    name: 'Subtitle Text'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  c1698eed-378c-4ad5-a21c-e564e364906f: # Background Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: backgroundImage
+    instructions: 'Must be at least 1440px wide.'
+    name: 'Background Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: 'Add the background image'
+      showSiteMenu: false
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: list
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+handle: header
+name: Header
+sortOrder: 1

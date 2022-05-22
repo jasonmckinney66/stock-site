@@ -1,0 +1,9 @@
+format: webp
+handle: backgroundDesktopWebp
+height: null
+interlace: none
+mode: fit
+name: 'Background Desktop WEBP'
+position: center-center
+quality: 60
+width: 1440

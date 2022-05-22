@@ -1,0 +1,81 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}blog-single{% endblock %}
+{% block content %}
+{% include "_hero" %}
+<section>
+  <div class="container">
+    <div class="row align-items-stretch gx-lg-5">
+      <div class="col-lg-3">
+        <div class="sticky-lg-top sticky-offset">
+          <h4>
+            {% set categories = entry.blogCategory.all() %}
+            {% if categories is defined %}
+              {% nav category in categories %}
+                {% if loop.first %}
+                {{ category.title }}
+                {% endif %}
+              {% endnav %}
+            {% endif %}
+          </h4>
+          {% if entry.articleDate %}<p>{{ entry.articleDate|date }}</p>{% endif %}
+          <div class="d-flex align-items-end my-4">
+            <div>
+            {% for author in entry.articleAuthor.all() %}
+              {% set image = author.staffPhoto.one() ?? null %}
+              {% if image %}
+                {% set authorThumb = { mode: 'crop', width: 80, height: 80, quality: 70, position: 'center-center' } %}
+                <img width="60" src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}">
+              {% else %}
+                <img width="60" src="/assets/images/profile.png" alt="Profile Image">
+              {% endif %}
+            </div>
+              <div class="ms-2"> By<br>
+                <span class="fw-medium"><a href="{{ author.url }}">{{ author.title }}</a></span>
+              </div>
+            {% endfor %}
+          </div>
+          
+          <div class="d-flex align-items-end my-4">
+            {% set postContent = entry.contentBlocks.all() %}
+            <p>Reading time: {{ readTime(postContent, false) }}</p>
+          </div>
+
+          <div>
+            <div class="accordion" id="accordionExample">
+              <div>
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="btn btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                      <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
+                    </svg>
+                    <span class="ms-2">Share This</span>
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body px-0 py-4">
+                    {% include "_share" %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <a href="/blog" class="d-block my-4 link text-decoration-none">&#8249; All Articles</a>
+
+        </div>
+      </div>
+      
+      <div class="col-lg-9 content">
+        <h2 class="mb-3 mx-5">{{ entry.headline }}</h2>
+        {% include "_contentBlocks" %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% include "_recommend" %}
+
+{% endblock %}

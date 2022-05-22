@@ -1,0 +1,14 @@
+columnSuffix: vzkkqpey
+contentColumnType: boolean
+fieldGroup: 470429c0-2630-4570-9480-15b56af93199 # Unique
+handle: formPosition
+instructions: ''
+name: 'Form Position'
+searchable: false
+settings:
+  default: false
+  offLabel: Bottom
+  onLabel: Side
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

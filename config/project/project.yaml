@@ -1,0 +1,439 @@
+dateModified: 1649177775
+email:
+  fromEmail: labs@bluecoastweb.com
+  fromName: Starter
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    0a56cb8e-474d-4321-91fa-db48fb788547: 'Content Blocks' # Content Blocks
+    0ab199fc-32aa-48fb-8656-6dfce6e90dd9: 'Stat Text 3' # Stat Text 3
+    0b970cc0-964b-4133-b06c-2b3ba89cf969: 'Nav Promo 2 Image' # Nav Promo 2 Image
+    0c72bf50-fad2-49f6-927d-0155daea22d1: 'Column 1 Text' # Column 1 Text
+    0d4eb167-b10b-4380-af19-180a3e5f7787: Callout # Callout
+    0d4447c1-b6be-4872-b885-d6af00f56166: 'Stat Text 4' # Stat Text 4
+    0fa839fb-78d1-4243-b8c2-f9a5ff4d7764: 'Sub Nav Text' # Sub Nav Text
+    0fe26133-0595-4b30-9129-4616a801d84c: Sources # Sources
+    1a3f4b87-0f78-40d4-9e77-e51542221683: 'Show All Questions CTA' # Show All Questions CTA
+    1b344a51-3a59-43a9-a10d-2fa7f4d7722a: 'Video Placeholder Image' # Video Placeholder Image
+    1c037e32-431c-4a07-a7a6-be2674f10b2e: Images # Images
+    1c613e65-c056-4c5a-802b-b7d7ae7a2c35: 'Block Video' # Block Video
+    1c41776e-04f9-4a2c-979d-76eeff056eff: 'Full Width Image' # Full Width Image
+    1cda5366-543c-40ec-8204-8227dd3c3ad5: 'Image Position' # Image Position
+    1d76e6b6-5057-490c-a187-f06cba9debe3: Disclaimer # Disclaimer
+    1d88bb05-cdeb-430f-9c3b-f56d04734fc5: 'Quote Image' # Quote Image
+    1e14142c-c050-4554-b0dc-9c15ce74c4ff: 'Meta Header' # Meta Header
+    1edf560a-00e0-4c68-a639-f8409dff02c1: 'Nav Promo 2' # Nav Promo 2
+    2ad67d45-f4c9-49d9-a1a0-eea4e5b03ad6: Promos # Promos
+    2b3b1d34-ee0f-4927-ae9e-8d3441ebcf6e: 'Stat Symbol 3' # Stat Symbol 3
+    2b5c36e7-cd37-4f88-a29d-df13852522a3: 'Leader Name' # Leader Name
+    2b588056-fe3a-4dc1-8187-3b2c7cb3aedd: Display # Display
+    2bda3050-17fe-4592-ab7c-cd9003e44e26: 'Top Margin' # Top Margin
+    2c11cc7d-86d7-4032-a7b5-c8e912cfce5a: 'Bottom Margin' # Bottom Margin
+    2cb5fbaa-37ce-40a0-b575-93a8e3795caf: 'Asset Subtitle' # Asset Subtitle
+    2ccd836b-5dae-4618-b094-350f36aa14f2: 'Card 3 Link' # Card 3 Link
+    2d53f6b9-ab8e-41dc-9c0b-ca40b5f77254: 'Top Margin' # Top Margin
+    2d720ba0-ad95-4236-aedb-dad02e50ad3f: 'Bottom Margin' # Bottom Margin
+    2d219004-71b7-468b-bc92-8601b3a0f4a5: 'Gated Item' # Gated Item
+    2e86ec93-1f73-4c5a-877c-eb899ae032c3: 'Stat Figure 1' # Stat Figure 1
+    2ebd3d0c-0aa2-4f78-9b72-583f949afa29: 'Full Width Video' # Full Width Video
+    2fb4c94a-f4ab-4db3-87ea-074356206b8e: 'Promo Text' # Promo Text
+    3a00b521-78df-4ef8-b725-8f28903c7a73: 'Top Margin' # Top Margin
+    3b1f2d1c-babd-483f-83be-8a54e2e09e74: 'Promo Text' # Promo Text
+    3bb190fc-b7b7-44d8-8fe5-ad91490b4127: 'In Panel' # In Panel
+    3c1ab5c0-b346-4fc0-b572-caf63f27e593: 'Asset Caption' # Asset Caption
+    3c80e529-0f7e-4286-b28d-6ee46a9c1b22: 'Alert Start' # Alert Start
+    3cf795e0-ccd7-4208-822c-8068702390e1: 'Nav Promo 1' # Nav Promo 1
+    3d47b496-e62d-49c4-9729-1b5bcc181707: Gateway # Gateway
+    3dd74ad4-87a2-41a5-9822-75bcaa07a905: 'Background Desktop WEBP' # Background Desktop WEBP
+    3e52c593-17d9-4331-b201-4c9c2ec034bf: '404 Page' # 404 Page
+    4a97e59e-89ae-4305-b57a-028c97bc3d15: 'Alert Bar' # Alert Bar
+    4a66582a-e699-45d7-87f1-ec59a02e3be4: 'Section Content' # Section Content
+    4ae96c6d-3e5b-42fd-bb55-4aa2ab3e84aa: 'In Panel' # In Panel
+    4b1d1f56-dd82-4636-aa83-34d73bd71c11: Default # Default
+    4c9cf689-f2f1-4d10-bc82-668cdca9824e: Header # Header
+    4c55d8cc-4357-4553-963c-4ebd6514e13f: 'Landing Pages' # Landing Pages
+    4d0f75ef-5e66-47d1-835e-e6db34d1c329: 'Bottom Margin' # Bottom Margin
+    4d5f0cb9-a6dd-4862-aca3-70a6cb8da93a: 'Raw HTML' # Raw HTML
+    4d7acc5e-c575-4da1-9e11-424cba6992a7: 'Nav Items' # Nav Items
+    4d365d9e-5f1e-41c0-b2e3-b0011d2d11ca: 'Stat Pre 2' # Stat Pre 2
+    4d4214d1-055f-4cd2-8a18-65308e043279: 'Meta Title' # Meta Title
+    4f8c91b4-6cdc-4e62-9c98-c250d47a784e: 'Top Margin' # Top Margin
+    4f887046-9980-425b-94f6-6449da74c455: 'Full Width Text' # Full Width Text
+    4fe89428-a9e2-4583-b96a-bf77d5211ee7: 'Gated Item Text' # Gated Item Text
+    05a6a479-bd4f-4275-baa1-3480d4a7a9e3: Slides # Slides
+    5a12b438-24b8-497c-887c-60009bf408e6: 'Bottom Margin' # Bottom Margin
+    05b95dc4-8336-40dc-8add-d7cd4ffd2230: 'Text and Video' # Text and Video
+    5be9114d-c1c7-4df3-bd27-6823a7920f17: Embed # Embed
+    5c21f7be-f859-4d15-aefb-ec8f617758b1: 'Column 2 Text' # Column 2 Text
+    5dfd8717-55d6-43e5-b761-62cd6e6365ea: 'Card 1 Link' # Card 1 Link
+    5e7aac43-2fc0-4037-b7b0-3a91f179d235: 'Stat Text 1' # Stat Text 1
+    5e8f8cb6-409f-4a1b-8943-c3c80c954e93: 'Full Width Images' # Full Width Images
+    5ecdc26a-7fa4-41d6-bf0c-b1be832e2ae7: 'Stat Figure 4' # Stat Figure 4
+    5f7d8e8b-e477-471e-9883-06629e44c4ea: 'Column 3 Text' # Column 3 Text
+    5fc9fab4-09e8-4af9-9a55-8fd111110006: Hero # Hero
+    6b1ecb87-a89e-4de5-9708-769d22c5d507: 'Bottom Margin' # Bottom Margin
+    6b61f89a-0e8a-4c7c-bb6d-ca9a34880bec: 'Panel Color' # Panel Color
+    6be00ece-4784-4d7a-98cb-e28debc324f1: 'Full Image' # Full Image
+    06be63fb-65c7-44e0-b5b2-52e2b07acfe0: 'Intro Text' # Intro Text
+    6bf29d04-f1d6-4ca9-9ebb-7d935f709c37: 'Stat Pre 3' # Stat Pre 3
+    6cf1fb3e-6814-4c8e-8996-c0de7278e37b: 'Stat Symbol 2' # Stat Symbol 2
+    6d7e8fe4-e73b-4537-b94e-1e614613eacb: 'Gated Item Thumb' # Gated Item Thumb
+    6dfd46f7-a0fc-4e25-9a82-17137afd77d5: 'Card 3 Link' # Card 3 Link
+    6e0c9b0c-b536-4f49-b1b7-574cefe201fe: Pages # Pages
+    6fdce9e0-509e-4966-b27b-150fa7505de9: Content # Content
+    7a60eb60-41ab-4521-ba09-94b50157cee7: 'Full Image' # Full Image
+    7a586c6a-4776-4177-bd87-061e157c9322: 'Hubspot Embed Code' # Hubspot Embed Code
+    7ba24811-4e11-4b9d-8a69-a5a888914bdb: 'Custom CSS' # Custom CSS
+    7c0e2520-9e45-4dd2-962d-9f67c6e3f54d: style-src # style-src
+    7c04b1ff-d229-433a-996b-c47d38132a9d: Sections # Sections
+    7c1c92cb-582b-434b-be7c-8b5bd39d4fb0: Image # Image
+    7d7037df-088b-4946-a0e3-25d5d4153c8c: 'Panel Color' # Panel Color
+    7ef8a29d-bc73-4042-ba81-a29cbbe8a885: 'In Panel' # In Panel
+    7f8ba8ea-b386-49d1-89bd-e455701e043d: 'Card 1 Link' # Card 1 Link
+    7f89b757-9ee6-420b-81cb-875d9e9906f2: 'Stat Figure 2' # Stat Figure 2
+    7f16639b-4961-49ce-a314-d697f254194d: 'Alert End' # Alert End
+    8a29ae16-24c7-4d50-a6cf-60dcf5dc5349: Logos # Logos
+    8a172de8-c276-412b-ad40-9ccd96dfa051: Agenda # Agenda
+    8b5f0a01-8af7-45f6-99b3-a2831898411c: 'Leader Title' # Leader Title
+    8c8c6a09-efdc-4c5c-95bd-2768c006696f: 'Background Desktop JPG' # Background Desktop JPG
+    8d7e4d9f-a720-4059-88d4-d90fae132829: 'Top Margin' # Top Margin
+    8d8d2402-a0af-4fe1-88e4-0c6dc32a23d7: 'Call to Action Text' # Call to Action Text
+    8d130fa8-1fce-4ac7-a84e-fd76ab7134b6: 'Bottom Margin' # Bottom Margin
+    008d2483-e256-408b-918a-76ec4bee99a4: CTAs # CTAs
+    8d72246c-00f0-4246-a714-09eb3fd1d1cb: 'Call to Action Link' # Call to Action Link
+    8df3a66d-86e8-4ad2-9363-84884d3bc12d: Video # Video
+    8eca0496-f390-45cd-9ac3-5084a9451492: 'Block Video' # Block Video
+    8fc1a6eb-87ea-4b1c-b6e1-1241468ac6d6: 'Top Margin' # Top Margin
+    9a29db23-933a-49a2-ac82-143a5540888e: Forms # Forms
+    9a4852c8-3c33-4744-af41-6986194209de: Subtitle # Subtitle
+    9d7c872b-73f1-4d90-bd90-6e83ffca4240: 'Stat Symbol 1' # Stat Symbol 1
+    9d353464-d61d-4d35-972d-a8a74bba699c: 'Asset Caption' # Asset Caption
+    9d954742-6319-493b-a299-ce9a27256514: 'Card 2 Link' # Card 2 Link
+    9dd2ddcd-d9aa-4875-8d7a-cf2bef94dcfd: 'Top Margin' # Top Margin
+    9de5aad9-0fe5-40ab-80a9-fef243607619: 'Stat Pre 2' # Stat Pre 2
+    9ea6c052-200c-40c3-9133-1eb9cf81a086: 'Accordion Title' # Accordion Title
+    9f472119-aa0c-4783-b946-4f9b7209b2b5: 'Show All Questions CTA' # Show All Questions CTA
+    14a15fb0-7c0b-4bba-a4c1-d519ffd44c1d: 'Call to Action' # Call to Action
+    15ff2ce0-259e-41ab-8035-f63b4ca0f249: 'In Panel' # In Panel
+    016d135f-215a-4308-91db-d122d2fa4c75: 'In Panel' # In Panel
+    17a9dd6a-9b59-48d9-b4d6-3664c96ffcc4: 'Video Position' # Video Position
+    19c8e5dc-e33e-4faf-9dd8-2380821fe105: 'Asset Title' # Asset Title
+    021b958a-8354-487d-8ea6-ada72a94b289: 'Bottom Margin' # Bottom Margin
+    21d78348-ef91-4044-8547-177c1295d3b2: Carousel # Carousel
+    24b2e617-952c-40fb-94f5-b59dab00c75b: 'Column 4 Text' # Column 4 Text
+    25af51cd-51b7-41f1-aebd-2b6eaeb4e446: 'Background Mobile JPG' # Background Mobile JPG
+    26db2510-fcd3-4f8e-9777-30cf7cc1987a: 'Bottom Margin' # Bottom Margin
+    27bfc8c5-ffba-44e6-adb4-0002b2a4a634: 'CTA Text' # CTA Text
+    30dd44de-030a-4245-8c82-ae7d54c50cba: 'Event Category' # Event Category
+    036aab38-d4d8-4fff-a046-1ea6a8b3bdda: 'Half Page Text' # Half Page Text
+    36b668a9-6175-43e2-bb9a-226e5064717c: Promos # Promos
+    36eebaeb-aa5c-4f1a-9b63-8806b91ca86c: 'Promo Text' # Promo Text
+    39ef4954-73cd-4b4e-9085-a76b4a907a7e: 'Top Margin' # Top Margin
+    40e3b093-2697-45a9-8263-db67024b7860: 'Bottom Margin' # Bottom Margin
+    45d02d97-1424-48d0-81a6-1bf9c6a5d4fa: 'Section Text' # Section Text
+    45eafb20-8351-4327-98ac-9bc2aa11bdf2: Accordions # Accordions
+    45f2d382-5c9a-4e1f-89a7-31d74536bb42: 'Quote Image' # Quote Image
+    46bac151-be0d-41a8-af2e-4145a2bfc6a9: 'Top Margin' # Top Margin
+    47a15d62-b73d-4b78-be84-65ddcce3fdb7: 'Column 2 Text' # Column 2 Text
+    52e22ae7-902c-41db-8962-fa044b8931a2: 'Leader Photo' # Leader Photo
+    52fdda31-4dbc-4a19-8ca2-0b0909742073: 'Blog Listings' # Blog Listings
+    55cc2c5a-a084-494a-9668-748875172308: Quote # Quote
+    57bc1dbd-3a03-4587-979a-7d0856882a3c: Starter # Starter
+    60f3f035-c55d-4862-88ad-08953d50103e: 'Top Margin' # Top Margin
+    61c9834f-1328-4f87-ae06-3e48e27855c9: connect-src # connect-src
+    64d2ce41-43f7-4565-be39-6a72ec89487d: 'Most Recent' # Most Recent
+    64fce544-9576-4e2e-a882-737d4e34f73a: 'Alert Bar' # Alert Bar
+    66a3d003-dc85-4a89-8c6c-614ba132fd13: 'Stat Symbol 4' # Stat Symbol 4
+    66d7a271-3a1b-4eac-91b9-02cc24608c5b: 'Card 3 Image' # Card 3 Image
+    68c3cf7f-136d-448d-8146-623ec1f96a0c: 'Call to Action Link' # Call to Action Link
+    68efc7a7-aa86-476f-a52d-5b487a61e003: 'Stat Symbol 1' # Stat Symbol 1
+    71f751e8-d568-4a9f-9713-25c8c6a53c82: 'Card 2 Text' # Card 2 Text
+    72bb6701-438f-43c6-b7e5-6a6429d78390: 'Promo Image' # Promo Image
+    74d4f9ef-01e6-4cd1-a0f1-5023afd1b223: 'Article Date' # Article Date
+    76ee813c-6b36-4b61-961d-7b31c554380e: Agenda # Agenda
+    78f7139d-6444-46a1-805b-d463ba0c16b7: 'Card 1 Text' # Card 1 Text
+    79f78bcd-fea0-48d7-98b5-d282e2e52edd: 'Stat Pre 3' # Stat Pre 3
+    082c4897-bdf8-4a7b-920d-abe6a32ceeec: 'Parent Page' # Parent Page
+    84f506ec-12d1-4431-9929-9a2bd8389741: Sources # Sources
+    87e4bf44-2983-45e5-988f-95f2de2e7149: Pages # Pages
+    90b1120e-dbfb-41e5-bb95-eb5fe25373b0: Blog # Blog
+    93b3f6b6-6f02-43be-8483-4ad93baae02d: 'Stat Figure 3' # Stat Figure 3
+    94cbaba1-1811-44cb-83c4-4fb64e993997: 'Internal Search' # Internal Search
+    94d1e16c-20b1-4028-b54c-41f0419e4bec: 'Staff Bio' # Staff Bio
+    94d55693-cf10-4cdf-9742-88c6b2a2b09e: 'Custom Header Text' # Custom Header Text
+    95e2d28c-e7dc-441d-9baa-489a5a0cef66: 'Bottom Margin' # Bottom Margin
+    96e103f2-ca21-48b3-ad58-2747368f59aa: 'Stat Symbol 2' # Stat Symbol 2
+    99aa3c75-cc87-4f8f-ba44-02d49f0d6162: 'Block Text' # Block Text
+    112e2c01-0221-4f9a-933d-96e85020aa1a: 'Embed Code' # Embed Code
+    119ed4e1-07e4-488b-b5f2-7228d600b8d7: Footer # Footer
+    132c13e9-f4e0-410f-bb72-d2aa84de24d7: 'Stat Symbol 4' # Stat Symbol 4
+    155b6135-8497-4387-9b61-25a35a9c4c02: 'Column 2 Icon' # Column 2 Icon
+    265e3bed-1b6b-46ea-bfcf-4eca5042d6e6: 'Quote Text' # Quote Text
+    295fbcde-9885-4ace-a50d-712092f4e200: Home # Home
+    306e040a-7b1f-4bcd-ab51-0843db8b0253: 'Alert Bar Text' # Alert Bar Text
+    366f20ee-a14f-401c-96d6-7713be1684db: 'Landing Pages' # Landing Pages
+    402e1216-b232-44e1-b14c-14d9db1f1fbd: 'Top Margin' # Top Margin
+    424bb87b-5272-495a-b20b-fab476725f98: Sources # Sources
+    434b2c7d-26d2-4570-bd35-e7f1da11ad82: 'Card 1 Text' # Card 1 Text
+    444bb583-cf72-4b11-aad8-04120ce00f75: CTAs # CTAs
+    499e669a-5bfd-46fa-bfe9-2f606812257f: 'Panel Color' # Panel Color
+    0544fb13-a6d1-4fdf-95ae-8008e9cc5674: 'Column 4 Text' # Column 4 Text
+    570c866c-79df-48d6-9aa9-a2b0006c7f2a: Sources # Sources
+    632b33d3-b64f-4eca-bfa9-20ff3d16a30d: 'Intro Text' # Intro Text
+    643c4a20-f0ea-43bb-8b56-c0ba952a00f8: 'Alert Bar Link' # Alert Bar Link
+    706cb2e1-48b3-4cb2-b17e-c15191d2002f: 'Video Position' # Video Position
+    761aad5d-9058-4179-a255-c92e6dc76eeb: Sources # Sources
+    773d35cf-07ed-406f-ab18-b636950e0eac: Title # Title
+    776deeae-dd0f-4f7d-a010-30cc9e5eca30: 'Card 1 Image' # Card 1 Image
+    810be3ed-2c5e-4125-a2de-512130c2ec51: Sources # Sources
+    815aefcf-be11-4252-984f-21237d3f560c: 'Top Margin' # Top Margin
+    824d76a8-6217-46f2-ba84-e8074031ca29: 'Accordion Set' # Accordion Set
+    841b6a39-814f-4093-a68a-7f0a286d85d9: 'Top Margin' # Top Margin
+    927a9feb-f377-4a76-b416-aa82b78de8ae: 'Column 4 Icon' # Column 4 Icon
+    969ec5f2-f519-48f9-b19d-86b73c19de42: 'Search Results' # Search Results
+    970cc2a8-c94b-4cd9-b7f2-7d22b77b85ac: Content # Content
+    970f291e-44de-4975-81e1-14ca5dff0607: 'Column 1 Text' # Column 1 Text
+    989a88bb-63f7-468f-b73a-d1b7b127e04f: 'Top Margin' # Top Margin
+    995e14b0-066c-4e17-9baa-d208c41edbad: 'Panel Color' # Panel Color
+    1536a6f1-c2b7-4991-9aa0-468ccbd7844c: 'Text and Image' # Text and Image
+    1713d7bd-30a3-45b0-bcd6-25c70cfc2831: 'Text Columns' # Text Columns
+    1973f12c-2b3c-4d4e-9521-d9f0e3d31792: 'Top Margin' # Top Margin
+    2136c67b-cb54-4444-8dd8-77d380e918e9: Header # Header
+    2362b86f-8b0d-499f-b2e4-c984ae86b42f: 'Agenda Table' # Agenda Table
+    02395d9b-319e-46d0-a165-b9d6c6256276: 'Alert Bar CTA' # Alert Bar CTA
+    2816c5fc-9328-4f67-832c-d31a1fe224f1: Leadership # Leadership
+    3120e624-6aa9-4758-b734-924af1242061: 'Stat Symbol 3' # Stat Symbol 3
+    3311b5c5-8b81-4b93-b911-663bc7b93b4d: 'Top Margin' # Top Margin
+    3943b2e0-f196-4332-afaa-3df80b854b65: 'Call to Action Link' # Call to Action Link
+    4727a90b-6d7e-4e47-a1d5-4a143260e8ee: 'CTA Link' # CTA Link
+    4924cc65-7b4e-4ef4-8d30-25686ba75117: 'Stat Figure 3' # Stat Figure 3
+    5229f0c3-3d12-4545-95d0-5c1954e5f155: Promos # Promos
+    5366b5cc-8158-4496-8b55-fad092599d68: Citation # Citation
+    5843a4f0-858d-4b41-9965-c8247b00b909: 'Nav Promo 1 Image' # Nav Promo 1 Image
+    5916d209-954c-4e03-b8a4-3e308a0b9b19: Layout # Layout
+    6174c222-a699-4789-b559-c3645692b419: script-src # script-src
+    7466e531-b51c-41b6-8f22-983295b8e98e: 'Block Text' # Block Text
+    7677ea45-4866-4620-9a1f-8e4b7fbd1a2b: 'Bottom Margin' # Bottom Margin
+    7734ce64-7e2e-4423-a762-7b0356069391: 'Promo Title' # Promo Title
+    08183fd0-718b-4456-a877-797e28e7ec98: 'Top Margin' # Top Margin
+    8443f6f3-d25c-4b69-a5a0-7b6fede72817: form-action # form-action
+    9549c79f-e4a4-402f-928f-bcfe3f26f387: 'In Panel' # In Panel
+    9651a547-3c91-4cec-9b8f-a2d71b32b60f: 'Bottom Margin' # Bottom Margin
+    13339a8b-ac5a-4046-b1d3-673898eeb8f2: 'Card 2 Link' # Card 2 Link
+    14300c45-67aa-4aa7-879f-08172d220ba6: 'Staff Photo' # Staff Photo
+    15975da5-9021-4d68-91cc-1b3adb9f76aa: 'Stat Pre 1' # Stat Pre 1
+    17404c35-32b4-4ae7-8e6e-65798a9f782a: 'Stat Pre 4' # Stat Pre 4
+    18558b8e-01c0-4a18-892f-3d5c38499862: 'GA Event Label' # GA Event Label
+    19696b0a-3d50-449a-baf7-ea068233825d: 'Bottom Margin' # Bottom Margin
+    22071e56-70e7-43ab-8664-d97656464ded: 'Stat Pre 1' # Stat Pre 1
+    24266dcd-d310-4613-b52b-b7d0014b6cf4: 'Staff Title' # Staff Title
+    25125a6a-cf03-43fc-b5f4-19b8c4fd31e9: 'Subtitle Text' # Subtitle Text
+    36877bb4-9e0b-4a5e-b1d3-6d677b9ab04d: 'Trackable CTA' # Trackable CTA
+    37613e43-a9bd-4883-8900-9c8ab7659dda: 'Call to Action Link' # Call to Action Link
+    44466adc-8ecf-4364-b8d2-cc067bdaf086: Proportion # Proportion
+    73147ebc-fafc-423e-9134-627b34a946cf: 'Top Margin' # Top Margin
+    92956ef6-ea8a-4c7b-bb9f-0b9d5933d0a1: 'Header Image' # Header Image
+    94051f65-8327-4d10-a9f7-d80d7336c141: 'Card 3 Text' # Card 3 Text
+    470429c0-2630-4570-9480-15b56af93199: Unique # Unique
+    614901ed-b26e-4da6-a8b5-4bf3d844c349: 'Embed Code' # Embed Code
+    3233606f-497c-43e9-9337-91426dd98568: 'Asset Caption' # Asset Caption
+    4620676c-d005-4ba2-8029-647de7eb6084: 'Call to Action' # Call to Action
+    6220498c-06ba-4d19-9dba-563eb0e021c6: Forms # Forms
+    8207741f-415c-4e9e-b12e-ec347565d121: 'Card 1 Image' # Card 1 Image
+    9406261a-79e6-46c9-be83-a6179702e6b9: 'In Panel' # In Panel
+    9881345f-2ddb-490d-a0c1-764888b64ee4: 'Bottom Margin' # Bottom Margin
+    46460530-2012-4870-a6d4-07c7cb86c29a: 'Child Pages' # Child Pages
+    62039500-9aa4-41b2-a37c-91e2e7c177cb: 'CTA link' # CTA link
+    66135057-d441-45c3-bd8d-1743dd99eefa: 'Video Placeholder Image' # Video Placeholder Image
+    73856687-2155-480f-967d-cfc398e9097e: Starter # Starter
+    80224163-457f-4da5-b1f7-d486c7a2aecd: 'Bottom Margin' # Bottom Margin
+    86555421-b1de-4edd-a88a-164edd0f7a15: 'Bottom Margin' # Bottom Margin
+    91821229-b77d-4543-b148-ead1c3c115d0: 'Call to Action Text' # Call to Action Text
+    a2d0c405-2af4-42b5-ac43-57d63fe7b476: 'Image Position' # Image Position
+    a3a7c74b-dfa1-41e9-836e-d4222df1575f: Documents # Documents
+    a3deca4b-936e-4fea-a9af-375754b915d8: Forms # Forms
+    a4c2d270-5755-4265-939b-8885ed44a995: 'Panel Color' # Panel Color
+    a5fe090c-7f2b-4638-a8ce-1e4eb94951e2: 'Carousel Header' # Carousel Header
+    a8bce940-26ba-4f03-87b4-6a500bdc47d7: 'Block Text' # Block Text
+    a8f0fc11-c04c-42ae-8641-cfb9ec78eed8: Item # Item
+    a64cb678-8fb5-4743-8287-8fd65853a773: 'Card 3 Image' # Card 3 Image
+    a68d7846-d99e-45e5-86ee-64296a7bfc47: 'Column 3 Icon' # Column 3 Icon
+    a79ed1ea-570b-4e13-a62f-a105b73e7c35: 'Agenda Title' # Agenda Title
+    a174c093-4c3c-4522-9d84-0aae87eb5ed4: 'Closing Text' # Closing Text
+    a27715f1-d3fa-4075-aaea-5cfc4a0484d3: img-src # img-src
+    a3145890-ef5f-411b-9ca8-0819396889fa: 'Video Placeholder Image' # Video Placeholder Image
+    ab6ea18d-4a03-4c98-bf51-0bdfa50da5ee: Content # Content
+    aba08ad6-6936-4899-8588-6b0268236dbf: Global # Global
+    abda111f-7e28-4db8-88bd-fdf4802cdc41: 'Bottom Margin' # Bottom Margin
+    abe04043-7f65-4fea-9601-49d81e00edc7: 'Top Margin' # Top Margin
+    ae1ac008-0a6e-403a-8b92-de8759e7c207: 'CTA Page' # CTA Page
+    aee3c18f-bbf9-4f43-a7e5-0785a193b2f2: 'CTA Text' # CTA Text
+    af1c49ba-0d31-43d5-b067-a90c195ac406: Sources # Sources
+    af74fc2e-93c8-443e-8e33-94ff67576d34: Image # Image
+    b0c37d0b-37be-4763-9be3-c51e2f2f4f9e: 'Article Author' # Article Author
+    b0c46030-dbdc-4654-b80d-74d0a463931f: 'Bottom Margin' # Bottom Margin
+    b1a0bc24-a457-4750-8bb3-5c717ab39319: 'Stand Alone Pages' # Stand Alone Pages
+    b4c5a1b0-a66b-4d20-9e43-0a6af22c6d84: 'Bottom Margin' # Bottom Margin
+    b5da3204-07ba-4f35-b727-d5b8eb467480: Sections # Sections
+    b6b8dbc4-2d12-4e15-8097-782a64cc656c: 'Stat Figure 4' # Stat Figure 4
+    b6ecc38a-5e8f-45c9-9c4a-3535b81d2de5: object-src # object-src
+    b15e9c91-1344-4fe7-bf36-15bf6c8b760c: Icons # Icons
+    b35b5359-1e7d-48fa-b21b-c42fd053a98b: 'Stand Alone' # Stand Alone
+    b67c56cb-a48e-4df0-bbc9-83ff07a03e55: 'Content Security Policy' # Content Security Policy
+    b99a8a3c-23ee-4687-8f7d-01319aa517e8: Forms # Forms
+    b128db0c-9877-4c73-956f-9e0b93220f76: 'Stat Text 3' # Stat Text 3
+    b531b623-9a40-4bc9-8910-9a892c062776: 'Column 1 Icon' # Column 1 Icon
+    b7191f1e-94b0-4e5b-9f4c-f27f038696e4: 'On-Page Navigation' # On-Page Navigation
+    b9934872-5701-478b-bc8e-6d69367cf72c: 'Stat Text 2' # Stat Text 2
+    ba338bc7-a815-4234-b66e-541acfee3100: 'Stat Pre 4' # Stat Pre 4
+    bb84d936-3468-44bb-8df4-3d28639a2961: 'Background Mobile WEBP' # Background Mobile WEBP
+    bbf819b3-26c8-4ada-a420-9b5c4c255d45: 'CTA Text' # CTA Text
+    bc83180f-03c4-4593-af98-2a8d52f77ab3: 'Accordion Title' # Accordion Title
+    bc460604-5fdb-4e53-a87a-43909845c996: 'Listing Image' # Listing Image
+    bda72045-9e27-492a-8d05-5a5c125ef3b6: 'Column 3 Text' # Column 3 Text
+    bdb27b1a-45e7-46a6-af2a-23a535edb0c3: 'Thank You' # Thank You
+    bea2cb18-37a1-4d53-ac25-577dfbc9890d: 'Closing Text' # Closing Text
+    bef3d34e-58d2-42f1-bdd2-c75f9e9f967e: 'Meta Header' # Meta Header
+    befa9eda-851e-401f-973a-d8799d205c9c: 'Comment by' # Comment by
+    bfd41180-35fc-4724-8240-9c59ca4c31e9: 'Bottom Margin' # Bottom Margin
+    c03d36de-8c68-48b8-b473-7162f967106d: 'Background Image' # Background Image
+    c1e2904a-8c40-4f67-8469-ccf6ce428f4a: Sources # Sources
+    c2cc2ef4-7100-4bb3-9699-aa7cc060712d: 'Blog Category' # Blog Category
+    c21b7c78-d570-4857-9967-cb25bffff93e: 'Block Meta' # Block Meta
+    c22e2e44-411e-4355-9276-6e6645a73aa1: Icons # Icons
+    c33e1a55-e782-4e15-9acb-42e83ee96a88: Staff # Staff
+    c52bd23e-bafe-4f09-993f-c4700c53dd9f: 'Top Margin' # Top Margin
+    c58c26a5-03b9-4922-8260-a07eb3e7e0e4: font-src # font-src
+    c58f9371-07bc-4b4f-a162-ab7b94a7757a: 'Card 2 Text' # Card 2 Text
+    c67e89ec-b963-4bc3-9bf6-d018d21c9d46: 'Stat Text 2' # Stat Text 2
+    c96e766a-0893-4a8b-9252-27f513f88eff: frame-src # frame-src
+    c471b20b-04d9-44d5-9b27-29f9269cbd74: media-src # media-src
+    c921e2cb-9cee-42ac-a9c2-9bd3be96eff1: Header # Header
+    c1698eed-378c-4ad5-a21c-e564e364906f: 'Background Image' # Background Image
+    c8958809-9802-4317-b13e-5349d11e253e: 'Top Margin' # Top Margin
+    ca9494bf-5933-4f98-ade0-783bf2a94206: Home # Home
+    caa9d107-0b2e-4b62-8b80-4ecbf233be5a: 'Custom Scripts' # Custom Scripts
+    cacb7793-1c82-41d3-b9bd-6e8e3a1dcfde: Proportion # Proportion
+    cb980ebb-b1c1-4ae7-9e03-685c27f607e0: 'Background Image' # Background Image
+    cb420377-5a58-4614-bab6-47bd91bc257e: 'Bottom Margin' # Bottom Margin
+    cb705579-42a6-441c-b537-813ca13848f8: 'Top Margin' # Top Margin
+    cc8b4642-4858-46b3-913e-e83dc4636a33: 'Section Name' # Section Name
+    ccd0ae2d-a021-452d-a654-af94c3091d16: Staff # Staff
+    cdb641bb-c2d4-49fe-9927-0ebc8e41f651: 'Stat Text 1' # Stat Text 1
+    cdc1557e-5a1e-4b41-b1e3-02015fad8362: Promos # Promos
+    ce463b49-6328-4efd-80fa-ef97951f155a: 'Top Margin' # Top Margin
+    ceaa300d-ff7a-4309-8f99-1934c8617b97: 'Bottom Margin' # Bottom Margin
+    cfb64daf-9a15-4e41-a9f2-9642ec5f39a6: 'Asset Caption' # Asset Caption
+    d4eab9f2-26cc-4c26-98e4-6fee197bc7c2: 'Card 2 Image' # Card 2 Image
+    d5b911c4-243c-453e-bd54-9a1072ed520c: 'CSP Enable' # CSP Enable
+    d5ec454e-0fc9-48eb-98cf-bad6323e4b7d: 'In Panel' # In Panel
+    d50cff81-14c8-44c5-823c-4e0b0579da34: 'Bottom Margin' # Bottom Margin
+    d441b096-1bf0-4b97-847e-51da91f20737: 'Bottom Margin' # Bottom Margin
+    d500cc47-b4fa-4b6e-9300-9a4694f0a478: Citation # Citation
+    d505b0f3-84d6-41e4-a3e1-6295a2af288b: 'CTA Button Type' # CTA Button Type
+    d705b6e1-f106-475a-b77e-3c094423ee19: 'Top Margin' # Top Margin
+    d1043f25-8702-4a32-9402-96a182da59b6: Excerpt # Excerpt
+    d32630af-86e7-4c26-875e-0d29d4b162f3: 'Top Margin' # Top Margin
+    dbb019bb-4c1a-4d35-95e4-cb37d1a942ed: Title # Title
+    dbd7a87f-ff77-40cb-a4de-ad5967c7e697: Headline # Headline
+    dc438f7a-5709-4690-a14f-b5a00c56b6e1: 'Inline Images' # Inline Images
+    dd99ee44-397f-42bc-b1af-38df2abbc9c9: Sources # Sources
+    dd881e9a-5b1c-4559-9f05-c903a6f7b803: 'Bottom Margin' # Bottom Margin
+    de49bf1c-fdaa-4caf-87dd-c5f39c286dbc: 'In Panel' # In Panel
+    deba474c-10fb-40c0-be9c-71ee291e1045: Home # Home
+    e0cdc0da-7f52-410e-bec2-b32bd085766d: default-src # default-src
+    e009b4c0-f3f1-4c0a-a8dc-d633e9a554d3: Blog # Blog
+    e05bc4ab-7d72-400c-b5a9-a08b9531d82f: 'Accordion Set' # Accordion Set
+    e5a61842-828e-4a77-8600-84bd11354a19: 'Header Content' # Header Content
+    e6a57d45-c63b-4e9c-8f4f-04cafe56082c: Blog # Blog
+    e6c91bcc-739c-4861-a15a-92250a8a5711: '404 Page' # 404 Page
+    e8d5d790-b511-4ac0-9b7e-0ae47121be06: Video # Video
+    e9dafa94-7472-4838-b692-6710916c034a: 'Bottom Margin' # Bottom Margin
+    e23be66b-7a03-40eb-9369-db2130f3c2e6: CTAs # CTAs
+    e23fc2dc-9177-4984-91b9-8cc0a5f2baad: 'Block Header' # Block Header
+    e89c6dc2-003f-4081-bbe8-08b20cf664d8: Common # Common
+    e416abd4-1ca7-4cfc-90e0-7073eda2c989: Disclaimer # Disclaimer
+    e6026dec-566e-427b-a35d-ac1bd0d4d457: Stats # Stats
+    e5527833-d906-4259-b2e1-bc28383afba2: 'CTA Document' # CTA Document
+    ea6d5d02-57e1-4cfc-8107-fbe8f1e21120: 'Form Position' # Form Position
+    eb0b4875-df30-4055-9854-069b1c434d50: 'Public Schema' # Public Schema
+    eb392201-a98b-4795-a8ac-7af0963afe8c: 'Top Margin' # Top Margin
+    eba99648-c3a4-4d78-bf85-49e715335d9e: 'Bottom Margin' # Bottom Margin
+    ec85ab9c-36c8-471b-9ff6-87d378205fd9: 'Card 3 Text' # Card 3 Text
+    ec68321d-edd8-4c40-a6fb-b0dcf843e44a: CSP # CSP
+    ee202e8b-5e1b-489d-988a-e0404a9931ab: 'In Panel' # In Panel
+    eecf68ee-3d44-4575-83d3-2e19a9db4439: 'Bottom Margin' # Bottom Margin
+    efe0df4a-f295-4411-8aec-3257b3ea64ed: 'Top Margin' # Top Margin
+    efe64023-5389-443c-84b2-5d13a31c45bb: 'Exclude From Search' # Exclude From Search
+    f00b7668-c3fc-4c27-86b2-3fb59f4fb1aa: 'Panel Color' # Panel Color
+    f0000701-e481-4af7-9125-3160d4116c19: 'Staff Category' # Staff Category
+    f0371057-ddfa-466d-ac78-30d104002367: 'Custom Title' # Custom Title
+    f04e87c8-1a19-4728-9388-24502709165d: 'Leader Bio' # Leader Bio
+    f0711dd2-5f75-4fd4-b7a4-d38b216feacf: 'Entry Type' # Entry Type
+    f1b36863-7001-42d0-b762-c4a33c7e4676: 'Stat Figure 2' # Stat Figure 2
+    f1dfeba9-c4cf-48f2-a1b3-19fe632f893c: 'Agenda Title' # Agenda Title
+    f1f93f37-8573-4d0e-a1b6-20f99517dfd6: 'Trackable CTA' # Trackable CTA
+    f18fd2aa-b0da-4982-bce8-ee2723eebbd4: 'Video Placeholder Image' # Video Placeholder Image
+    f32fa4dc-49c0-48f5-be04-d38ff597657f: 'Alert Bar External' # Alert Bar External
+    f55a147e-280f-43d9-aec9-15d0d18f0e3e: Sources # Sources
+    f221ec05-7379-4e0b-a579-4801d7797628: Cards # Cards
+    f739e90c-8dc8-432c-9017-1147d5dd83aa: 'Search Results' # Search Results
+    f888a7ab-8b82-466f-9e50-be19ca1a5feb: 'Quote Text' # Quote Text
+    f2815a38-011b-47e0-83b3-e91c7bc0902b: 'Card 2 Image' # Card 2 Image
+    f5053ad7-6ff8-4a73-b808-bad4c0e926f1: Comment # Comment
+    f9543f25-d358-4094-aa15-d22f7e7fc3cb: 'Carousel Images' # Carousel Images
+    f789419b-a1c4-4ded-a412-3ec4c1533dd2: 'Stat Text 4' # Stat Text 4
+    f4343539-914e-4f2b-89b5-a34c032c2cea: Staff # Staff
+    f5318839-eda6-4e49-91b3-274cc22bb9ed: 'Form Text' # Form Text
+    f8273224-3f0e-4c03-a28c-b96568a407aa: 'Top Margin' # Top Margin
+    f8384681-60b1-4531-a82c-7eee846d7acd: 'CTA Link' # CTA Link
+    fa24fece-10ce-4325-81b9-b74a8e4dde59: 'Meta Title' # Meta Title
+    fc7e0dc9-2adc-4e05-b361-c1c11f5ab816: 'Stat Figure 1' # Stat Figure 1
+    fe9538f9-845f-49bf-860c-daa7f2cf8aeb: 'Promo Title' # Promo Title
+    fee34a32-e601-431e-8152-4fc998e24371: 'Event Label' # Event Label
+    ff1d1c65-0c80-4280-b146-fadb372bb823: 'Block Text' # Block Text
+plugins:
+  assetrev:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  default-dashboard:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  diy-widget:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.0.1
+  position-fieldtype:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  read-time:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  redactor:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.3.0
+  redactor-custom-styles:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  snitch:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.1.0
+system:
+  edition: solo
+  live: true
+  name: Starter
+  schemaVersion: 3.7.33
+  timeZone: America/Los_Angeles
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: 1c037e32-431c-4a07-a7a6-be2674f10b2e # Images
+  requireEmailVerification: true

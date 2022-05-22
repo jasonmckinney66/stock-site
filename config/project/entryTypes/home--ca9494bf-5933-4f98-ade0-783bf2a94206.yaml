@@ -1,0 +1,80 @@
+fieldLayouts:
+  4e99be11-4d61-4650-96d0-ca1c729265cf:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 5fc9fab4-09e8-4af9-9a55-8fd111110006 # Hero
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: 'Logo Carousel'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: a5fe090c-7f2b-4638-a8ce-1e4eb94951e2 # Carousel Header
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 8a29ae16-24c7-4d50-a6cf-60dcf5dc5349 # Logos
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: 'Page Content'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: home
+hasTitleField: false
+name: Home
+section: 295fbcde-9885-4ace-a50d-712092f4e200 # Home
+sortOrder: 1
+titleFormat: '{section.name|raw}'
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

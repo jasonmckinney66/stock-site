@@ -1,0 +1,19 @@
+columnSuffix: srgwukfe
+contentColumnType: text
+fieldGroup: 470429c0-2630-4570-9480-15b56af93199 # Unique
+handle: gaEventLabel
+instructions: 'If you''d like to track this CTA.'
+name: 'GA Event Label'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

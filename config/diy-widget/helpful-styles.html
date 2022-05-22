@@ -1,0 +1,17 @@
+{% js %}
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+{% endjs %}
+<p>Use in the html editor.</p>
+<hr>
+<p>Create a bullet list with checkmarks.</p>
+<span id="p1" class="matrixblock" style="padding: .6em 1em;">&lt;ul class="check"&gt;</span> <button onclick="copyToClipboard('#p1')" class="btn">Copy</button>
+<hr>
+<p>Material Design icons. Example:</p>
+<figure><pre style="white-space: pre-wrap"><code>&lt;span class="material-icons align-middle"&gt;analytics&lt;/span&gt;</code></pre></figure> 
+<p><a href="https://fonts.google.com/icons" target="_blank">Available Icons</a></p>

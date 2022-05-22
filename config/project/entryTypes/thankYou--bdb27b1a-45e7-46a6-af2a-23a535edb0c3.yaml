@@ -1,0 +1,101 @@
+fieldLayouts:
+  7c65c88a-130a-49ba-bd13-0e264f3701bf:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 50
+          -
+            fieldUid: f0371057-ddfa-466d-ac78-30d104002367 # Custom Title
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: dbd7a87f-ff77-40cb-a4de-ad5967c7e697 # Headline
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+      -
+        elements:
+          -
+            heading: 'Gated Item'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: 2d219004-71b7-468b-bc92-8601b3a0f4a5 # Gated Item
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 6d7e8fe4-e73b-4537-b94e-1e614613eacb # Gated Item Thumb
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 4fe89428-a9e2-4583-b96a-bf77d5211ee7 # Gated Item Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Settings
+        sortOrder: 2
+handle: thankYou
+hasTitleField: true
+name: 'Thank You'
+section: b1a0bc24-a457-4750-8bb3-5c717ab39319 # Stand Alone Pages
+sortOrder: 2
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

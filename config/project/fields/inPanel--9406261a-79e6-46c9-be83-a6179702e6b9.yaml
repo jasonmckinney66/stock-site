@@ -1,0 +1,14 @@
+columnSuffix: sitxxqal
+contentColumnType: boolean
+fieldGroup: 470429c0-2630-4570-9480-15b56af93199 # Unique
+handle: inPanel
+instructions: ''
+name: 'In Panel'
+searchable: false
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

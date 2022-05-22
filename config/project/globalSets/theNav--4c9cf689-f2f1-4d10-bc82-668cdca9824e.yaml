@@ -1,0 +1,43 @@
+fieldLayouts:
+  81d2a331-71d2-47f5-b464-94a05d4e264d:
+    tabs:
+      -
+        elements:
+          -
+            heading: 'Main Navigation'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: 4d7acc5e-c575-4da1-9e11-424cba6992a7 # Nav Items
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: 'Main Call to Action'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: bbf819b3-26c8-4ada-a420-9b5c4c255d45 # CTA Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 62039500-9aa4-41b2-a37c-91e2e7c177cb # CTA link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Settings
+        sortOrder: 1
+handle: theNav
+name: Header
+sortOrder: 2

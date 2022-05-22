@@ -1,0 +1,639 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  6d4b0d0f-69e6-437d-9955-887d26deb45a:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 22071e56-70e7-43ab-8664-d97656464ded # Stat Pre 1
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: fc7e0dc9-2adc-4e05-b361-c1c11f5ab816 # Stat Figure 1
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 9d7c872b-73f1-4d90-bd90-6e83ffca4240 # Stat Symbol 1
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: cdb641bb-c2d4-49fe-9927-0ebc8e41f651 # Stat Text 1
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 9de5aad9-0fe5-40ab-80a9-fef243607619 # Stat Pre 2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f1b36863-7001-42d0-b762-c4a33c7e4676 # Stat Figure 2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 6cf1fb3e-6814-4c8e-8996-c0de7278e37b # Stat Symbol 2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: b9934872-5701-478b-bc8e-6d69367cf72c # Stat Text 2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 6bf29d04-f1d6-4ca9-9ebb-7d935f709c37 # Stat Pre 3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 4924cc65-7b4e-4ef4-8d30-25686ba75117 # Stat Figure 3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 3120e624-6aa9-4758-b734-924af1242061 # Stat Symbol 3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: b128db0c-9877-4c73-956f-9e0b93220f76 # Stat Text 3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 17404c35-32b4-4ae7-8e6e-65798a9f782a # Stat Pre 4
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: b6b8dbc4-2d12-4e15-8097-782a64cc656c # Stat Figure 4
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 66a3d003-dc85-4a89-8c6c-614ba132fd13 # Stat Symbol 4
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f789419b-a1c4-4ded-a412-3ec4c1533dd2 # Stat Text 4
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 1d76e6b6-5057-490c-a187-f06cba9debe3 # Disclaimer
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 4f8c91b4-6cdc-4e62-9c98-c250d47a784e # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 95e2d28c-e7dc-441d-9baa-489a5a0cef66 # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  1d76e6b6-5057-490c-a187-f06cba9debe3: # Disclaimer
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: disclaimer
+    instructions: ''
+    name: Disclaimer
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  4f8c91b4-6cdc-4e62-9c98-c250d47a784e: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  6bf29d04-f1d6-4ca9-9ebb-7d935f709c37: # Stat Pre 3
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statPre3
+    instructions: ''
+    name: 'Stat Pre 3'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  6cf1fb3e-6814-4c8e-8996-c0de7278e37b: # Stat Symbol 2
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statSymbol2
+    instructions: ''
+    name: 'Stat Symbol 2'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  9d7c872b-73f1-4d90-bd90-6e83ffca4240: # Stat Symbol 1
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statSymbol1
+    instructions: ''
+    name: 'Stat Symbol 1'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  9de5aad9-0fe5-40ab-80a9-fef243607619: # Stat Pre 2
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statPre2
+    instructions: ''
+    name: 'Stat Pre 2'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  66a3d003-dc85-4a89-8c6c-614ba132fd13: # Stat Symbol 4
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statSymbol4
+    instructions: ''
+    name: 'Stat Symbol 4'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  95e2d28c-e7dc-441d-9baa-489a5a0cef66: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  3120e624-6aa9-4758-b734-924af1242061: # Stat Symbol 3
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statSymbol3
+    instructions: ''
+    name: 'Stat Symbol 3'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  4924cc65-7b4e-4ef4-8d30-25686ba75117: # Stat Figure 3
+    columnSuffix: null
+    contentColumnType: string(16)
+    fieldGroup: null
+    handle: statFigure3
+    instructions: ''
+    name: 'Stat Figure 3'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 4
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  17404c35-32b4-4ae7-8e6e-65798a9f782a: # Stat Pre 4
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statPre4
+    instructions: ''
+    name: 'Stat Pre 4'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  22071e56-70e7-43ab-8664-d97656464ded: # Stat Pre 1
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: statPre1
+    instructions: ''
+    name: 'Stat Pre 1'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  b6b8dbc4-2d12-4e15-8097-782a64cc656c: # Stat Figure 4
+    columnSuffix: null
+    contentColumnType: string(16)
+    fieldGroup: null
+    handle: statFigure4
+    instructions: ''
+    name: 'Stat Figure 4'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 4
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  b128db0c-9877-4c73-956f-9e0b93220f76: # Stat Text 3
+    columnSuffix: null
+    contentColumnType: string(112)
+    fieldGroup: null
+    handle: statText3
+    instructions: ''
+    name: 'Stat Text 3'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 28
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  b9934872-5701-478b-bc8e-6d69367cf72c: # Stat Text 2
+    columnSuffix: null
+    contentColumnType: string(112)
+    fieldGroup: null
+    handle: statText2
+    instructions: ''
+    name: 'Stat Text 2'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 28
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  cdb641bb-c2d4-49fe-9927-0ebc8e41f651: # Stat Text 1
+    columnSuffix: null
+    contentColumnType: string(112)
+    fieldGroup: null
+    handle: statText1
+    instructions: ''
+    name: 'Stat Text 1'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 28
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  f1b36863-7001-42d0-b762-c4a33c7e4676: # Stat Figure 2
+    columnSuffix: null
+    contentColumnType: string(16)
+    fieldGroup: null
+    handle: statFigure2
+    instructions: ''
+    name: 'Stat Figure 2'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 4
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  f789419b-a1c4-4ded-a412-3ec4c1533dd2: # Stat Text 4
+    columnSuffix: null
+    contentColumnType: string(112)
+    fieldGroup: null
+    handle: statText4
+    instructions: ''
+    name: 'Stat Text 4'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 28
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  fc7e0dc9-2adc-4e05-b361-c1c11f5ab816: # Stat Figure 1
+    columnSuffix: null
+    contentColumnType: string(16)
+    fieldGroup: null
+    handle: statFigure1
+    instructions: ''
+    name: 'Stat Figure 1'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: 4
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: stats
+name: Stats
+sortOrder: 8

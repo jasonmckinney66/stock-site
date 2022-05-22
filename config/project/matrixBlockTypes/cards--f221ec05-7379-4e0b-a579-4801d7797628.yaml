@@ -1,0 +1,479 @@
+field: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+fieldLayouts:
+  c648cbda-d5af-4b28-b267-1bb430e0b5eb:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 8207741f-415c-4e9e-b12e-ec347565d121 # Card 1 Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 434b2c7d-26d2-4570-bd35-e7f1da11ad82 # Card 1 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 5dfd8717-55d6-43e5-b761-62cd6e6365ea # Card 1 Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: f2815a38-011b-47e0-83b3-e91c7bc0902b # Card 2 Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 71f751e8-d568-4a9f-9713-25c8c6a53c82 # Card 2 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 9d954742-6319-493b-a299-ce9a27256514 # Card 2 Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 66d7a271-3a1b-4eac-91b9-02cc24608c5b # Card 3 Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 94051f65-8327-4d10-a9f7-d80d7336c141 # Card 3 Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 6dfd46f7-a0fc-4e25-9a82-17137afd77d5 # Card 3 Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 3311b5c5-8b81-4b93-b911-663bc7b93b4d # Top Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 2d720ba0-ad95-4236-aedb-dad02e50ad3f # Bottom Margin
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+        name: Content
+        sortOrder: 1
+fields:
+  2d720ba0-ad95-4236-aedb-dad02e50ad3f: # Bottom Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: bottomMargin
+    instructions: ''
+    name: 'Bottom Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  5dfd8717-55d6-43e5-b761-62cd6e6365ea: # Card 1 Link
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card1Link
+    instructions: ''
+    name: 'Card 1 Link'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Link to a Page'
+      showSiteMenu: true
+      source: null
+      sources: '*'
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  6dfd46f7-a0fc-4e25-9a82-17137afd77d5: # Card 3 Link
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card3Link
+    instructions: ''
+    name: 'Card 3 Link'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: ''
+      localizeRelations: false
+      selectionLabel: 'Link to a Page'
+      showSiteMenu: true
+      source: null
+      sources: '*'
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  9d954742-6319-493b-a299-ce9a27256514: # Card 2 Link
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card2Link
+    instructions: ''
+    name: 'Card 2 Link'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Link to a Page'
+      showSiteMenu: true
+      source: null
+      sources: '*'
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  66d7a271-3a1b-4eac-91b9-02cc24608c5b: # Card 3 Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card3Image
+    instructions: ''
+    name: 'Card 3 Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: 'Optional Image'
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: list
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  71f751e8-d568-4a9f-9713-25c8c6a53c82: # Card 2 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: card2Text
+    instructions: ''
+    name: 'Card 2 Text'
+    searchable: false
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  434b2c7d-26d2-4570-bd35-e7f1da11ad82: # Card 1 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: card1Text
+    instructions: ''
+    name: 'Card 1 Text'
+    searchable: false
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  3311b5c5-8b81-4b93-b911-663bc7b93b4d: # Top Margin
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: topMargin
+    instructions: ''
+    name: 'Top Margin'
+    searchable: false
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - None
+            -
+              - value
+              - '0'
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - 4em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Medium
+            -
+              - value
+              - 6em
+            -
+              - default
+              - ''
+        -
+          __assoc__:
+            -
+              - label
+              - Large
+            -
+              - value
+              - 8em
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  94051f65-8327-4d10-a9f7-d80d7336c141: # Card 3 Text
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: card3Text
+    instructions: ''
+    name: 'Card 3 Text'
+    searchable: false
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: '1'
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  8207741f-415c-4e9e-b12e-ec347565d121: # Card 1 Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card1Image
+    instructions: ''
+    name: 'Card 1 Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: 'Optional Image'
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: list
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  f2815a38-011b-47e0-83b3-e91c7bc0902b: # Card 2 Image
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: card2Image
+    instructions: Optional.
+    name: 'Card 2 Image'
+    searchable: false
+    settings:
+      allowSelfRelations: false
+      allowUploads: false
+      allowedKinds: null
+      defaultUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: ''
+      selectionLabel: 'Optional Image'
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      singleUploadLocationSource: 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      singleUploadLocationSubpath: ''
+      source: null
+      sources:
+        - 'volume:1c037e32-431c-4a07-a7a6-be2674f10b2e' # Images
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: list
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+handle: cards
+name: Cards
+sortOrder: 9

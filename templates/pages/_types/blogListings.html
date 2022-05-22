@@ -1,0 +1,93 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}blog-listing-page{% endblock %}
+{% block content %}
+
+{% if not entry is defined %} {# handle alternate base URL #}
+	{% set entry = craft.entries.id(774).one() %}
+{% endif %}
+{% set section = 'blog' %}
+
+{% include "_hero" %}
+
+<section class="container">
+    <div class="row justify-content-center">
+        <div class="col mb-3 text-center">
+            <h2>{{ entry.headline }}</h2>
+        </div>
+    </div>
+</section>
+
+{% include "_contentBlocks" %}
+
+<section class="pt-2 mb-5">
+    <div class="container">
+
+        <!-- Filters -->
+        {% set total   = craft.entries({section: section, limit: null}).count %}
+        {% set cats    = [] %}
+
+        {% for cat in craft.categories.group(section).all %}
+            {% set count = craft.entries({section: section, relatedTo: cat, limit: null}).count %}
+            {% if count > 0 %}
+                {% set cats = cats|merge([{slug: cat.slug, title: cat.title, url: cat.url, count: count}]) %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="text-center">
+            <div class="d-flex align-items-center justify-content-center">
+                <div>
+                    <select class="form-select filter" data-section="{{ section }}">
+                        <option {% if not category is defined %}selected{% endif %} data-slug="" data-url="/{{ section }}" data-count="{{ total }}">Show All</option>
+                        {% for cat in cats %}
+                            <option {% if (category is defined) and (category.slug == cat.slug) %}selected{% endif %} data-category="{{ cat.slug }}" data-url="{{ cat.url }}" data-count="{{ cat.count }}">{{ cat.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>   
+            </div>
+        </div>
+
+        {% set content = {section: section} %}
+        {% if category is defined %}
+            {% set content = content|merge({relatedTo: category}) %}
+        {% endif %}
+        {% set limit = 3 %}
+        {% set eager = ['listingImage','blogCategory'] %}
+        {% set entries = craft.entries(content).limit(limit).with(eager).all() %}
+        {% set showing_count = entries|length %}
+        {% set total_count = craft.entries(content).count %}
+        <script>var limit = '{{ limit }}';</script>
+
+        <!-- listings -->
+        {% if entries|length %}
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 listings">
+            {{ include('blog/_entries.html') }}
+          </div><!-- close listing row-->
+        {% else %}
+            <p class="text-center mt-2">Sorry. There are no items here to display. Please check back soon.</p>
+        {% endif %}
+
+        {% set display = (showing_count < total_count) ? 'block' : 'none' %}
+        <div class="text-center counts" style="display:{{ display }}">
+            <div class="mt-5"> Showing <span class="display-count">{{ showing_count }}</span> of <span class="display-total">{{ total_count }}</span> </div>
+            <button class="btn btn-primary mt-3 more" style="display:none">Load More</button>
+        </div>
+    </div>
+</section>
+
+{% if entry.forms|length %}
+    {% include "_forms" %}
+{% endif %}
+
+{% endblock %}
+
+{% js %}
+$(function() {
+  $('select.filter').more({
+    displayCount: true,
+    displayTotal: true,
+    limit: limit,
+    url: '/more/blog',
+  });
+});
+{% endjs %}

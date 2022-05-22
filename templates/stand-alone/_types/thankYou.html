@@ -1,0 +1,43 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}pages{% endblock %}
+{% block content %}
+{% include "_hero" %}
+
+<section class="container">
+    <div class="row justify-content-center">
+        <div class="col mb-3">
+            <h2>{{ entry.headline }}</h2>
+        </div>
+    </div>
+</section>
+<section class="container mt-3">
+    <div class="row justify-content-center g-lg-5">
+        <div class="col-sm-12 col-md-3 pb-3">
+            {% set image = entry.gatedItemThumb.one() ?? null %}
+            {% if image and image.extension == 'jpg' %}
+                {% set outputWidths = [375, 680] %}
+                <picture>
+                {% if craft.app.images.supportsWebP %}
+                    <source srcset="{{ m.srcsetwebp(image, outputWidths) }}" type="image/webp">
+                {% endif %}
+                    <source srcset="{{ m.srcset(image, outputWidths) }}" type="image/jpeg">
+                    <img src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" class="w-100" sizes="100vw" loading="lazy">
+                </picture>
+            {% elseif image and image.extension == 'svg' %}
+                {{ svg(image)|attr({style: 'width: 100%'}) }}
+            {% elseif image and image.extension == 'png' %}
+                <img width="100%" src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" loading="lazy">
+            {% endif %}
+        </div>
+        <div class="col-sm-12 col-md-9">
+            {{ entry.gatedItemText }}
+            {% set asset = entry.gatedItem.one() ?? null %}
+            <a href="{{ asset.getUrl() }}" class="btn btn-outline-primary">Download Now</a>
+        </div>
+    </div>
+</section>
+
+{% include "_contentBlocks" %}
+
+{% endblock %}

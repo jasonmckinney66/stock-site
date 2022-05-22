@@ -1,0 +1,19 @@
+fieldLayouts:
+  5072d530-adb1-4bfb-8c53-25ae357f83c9:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 4d7acc5e-c575-4da1-9e11-424cba6992a7 # Nav Items
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: footer
+name: Footer
+sortOrder: 3

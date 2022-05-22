@@ -1,0 +1,56 @@
+{% extends "_layout" %}
+{% block bodyClass %}contact{% endblock %}
+{% block content %}
+{% include "_hero" %}
+
+{% if entry.formPosition|length %}
+  <section>
+    <div class="container">
+      <div class="row row-cols-1 gx-lg-5 row-cols-lg-2">
+
+        <div class="col mb-5">
+          <h2 class="mb-3">{{ entry.headline }}</h2>
+          {{ entry.halfPageText }}
+        </div>
+
+        <div class="col mt-n5 mb-5 zindex-1">
+          <div class="bg-light px-5 pt-4 pb-5 mt-n4">
+              {% include "_forms" %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  {% include "_contentBlocks" %}
+  
+{% else %}
+
+  <section class="container">
+    <div class="row justify-content-center">
+        <div class="col mb-3">
+            <h2>{{ entry.headline }}</h2>
+        </div>
+    </div>
+  </section>
+
+  {% include "_contentBlocks" %}
+
+  {% if entry.forms|length %}
+    {% include "_forms" %}
+  {% endif %}
+
+{% endif %}
+
+{% if entry.customScripts|length %}
+    {% js %}
+        {{ entry.customScripts|raw }}
+    {% endjs %}
+{% endif %}
+{% if entry.customCss|length %}
+    {% css %}
+        {{ entry.customCss|raw }}
+    {% endcss %}
+{% endif %}
+
+{% endblock %}

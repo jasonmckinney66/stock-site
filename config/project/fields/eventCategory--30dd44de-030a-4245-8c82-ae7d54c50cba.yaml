@@ -1,0 +1,19 @@
+columnSuffix: tfpabrni
+contentColumnType: text
+fieldGroup: e23be66b-7a03-40eb-9369-db2130f3c2e6 # CTAs
+handle: eventCategory
+instructions: ''
+name: 'Event Category'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: 'Ex. CTA'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

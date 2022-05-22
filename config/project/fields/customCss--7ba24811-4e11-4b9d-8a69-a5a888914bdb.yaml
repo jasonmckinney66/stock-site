@@ -1,0 +1,19 @@
+columnSuffix: lyvfuzzv
+contentColumnType: text
+fieldGroup: e89c6dc2-003f-4081-bbe8-08b20cf664d8 # Common
+handle: customCss
+instructions: ''
+name: 'Custom CSS'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: '1'
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

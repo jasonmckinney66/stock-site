@@ -1,0 +1,76 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}leadership-page{% endblock %}
+{% block content %}
+
+{% include "_hero" %}
+
+<section class="container">
+    <div class="row justify-content-center">
+        <div class="col mb-3 text-center">
+            <h2>{{ entry.headline }}</h2>
+        </div>
+    </div>
+</section>
+
+{% include "_contentBlocks" %}
+
+<section class="pt-2 pb-5 bg-white">
+    <div class="container">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 mt-3 g-5 justify-content-center">
+        {% set category = craft.categories.group('staff').slug('leadership').one() %}
+        {% set entries = craft.entries().section('staff').relatedTo(category).all() %}
+        {% if entries %}
+            {% for entry in entries %}
+            <div class="col">
+                <a href="{{ entry.url }}" class="card text-decoration-none h-100 border-0" data-bs-toggle="modal" data-bs-target="#bioModal-{{ loop.index }}">
+                    {% set image = entry.staffPhoto.one() ?? null %}
+                    {% set outputWidths = [385] %}
+                    {% set aspectRatio = (1/1) %}
+                    <picture>
+                        {% if craft.app.images.supportsWebP %}
+                            <source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+                        {% endif %}
+                        <source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg"> 
+                        <img width="100%" src="{{ m.cardJpg(image) }}" class="rounded-circle" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+                    </picture>
+
+                    <div class="card-body p-4 text-center">
+                        <h3>{{ entry.title }}</h3>
+                        <p class="text-meta">{{ entry.staffTitle }}</p>
+                    </div>
+                </a>
+
+                <div class="modal fade" id="bioModal-{{ loop.index }}" tabindex="-1" aria-labelledby="bioModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="m-0">{{ entry.title }}</h3>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body bg-light p-5">
+                                <h4>{{ entry.staffTitle }}</h4>
+                                <p>{{ entry.staffBio }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {% endfor %}
+          </div><!-- close listing row-->
+        {% else %}
+            <p class="text-center mt-2">There is no staff here to display.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% if entry.forms|length %}
+    {% include "_forms" %}
+{% endif %}
+
+{% endblock %}

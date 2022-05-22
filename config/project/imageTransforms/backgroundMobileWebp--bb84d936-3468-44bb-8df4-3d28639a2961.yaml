@@ -1,0 +1,9 @@
+format: webp
+handle: backgroundMobileWebp
+height: null
+interlace: none
+mode: fit
+name: 'Background Mobile WEBP'
+position: center-center
+quality: 60
+width: 550

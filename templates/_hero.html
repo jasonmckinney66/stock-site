@@ -1,0 +1,63 @@
+<section class="position-relative bg-secondary zindex-1 overflow-hidden header-sm{% if entry.level > 1 %} mb-0{% else %} mb-5{% endif %}">
+  {% set blocks = entry.hero.all() ?? null %}
+  {% if blocks|length %}
+    {% for block in blocks %}
+
+      {% set image = block.backgroundImage.one ?? null %}
+      {% if image is not null %}
+        <picture class="position-absolute w-100 h-100 zindex-under animate fade-in">
+          <!-- mobile -->
+          {% if craft.app.images.supportsWebP %}
+            <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileWebp') }}" type="image/webp">
+          {% endif %}
+          <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileJpg') }}" type="image/jpeg">
+          <!-- desktop -->
+          {% if craft.app.images.supportsWebP %}
+            <source srcset="{{ image.getUrl('backgroundDesktopWebp') }}" type="image/webp">
+          {% endif %}
+          <img class="object-cover" width="100%" height="100%" src="{{ image.getUrl('backgroundDesktopJpg') }}" alt="">
+        </picture>
+      {% endif %}
+      
+      <div class="d-flex align-items-center header-sm {% if image is not null %}gradient-mask{% endif %}">
+        <div class="container animate delay-2 fade-in p-4">
+        {% set parent = craft.entries.ancestorOf(entry).level(1).one() %}
+        {% if parent|length %}
+          <p class="h5 text-uppercase text-gray-light">{{ parent.title }}</p>
+        {% endif %}
+          <h1 class="text-white">{% if block.customHeaderText|length %}{{ block.customHeaderText }}{% else %}{{ entry.title }}{% endif %}</h1>
+          <p class="text-white lead">{{ block.subtitleText }}</p>
+        </div>
+      </div>
+
+    {% endfor %}
+  {% else %}
+    <!-- hero block not initialized -->
+    <div class="text-white d-flex align-items-center header-sm">
+      <div class="container delay-2 fade-in">
+        <h1 class="text-white">{{ entry.title }}</h1>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<!-- breadcrumb for child pages -->
+{% if entry.section.handle == 'pages' and entry.level > 1 %}
+  <section class="mb-4">
+    <div class="container">
+      <div class="row py-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb float-md-end">
+              <li class="breadcrumb-item">
+                <a href="/">Home</a>
+              </li>
+              {% for crumb in entry.getAncestors().all() %}
+                <li class="breadcrumb-item">{{ crumb.getLink() }}</li>
+              {% endfor %}
+              <li class="breadcrumb-item active">{{ entry.title }}</li>
+            </ol>
+        </nav>
+      </div>
+    </div>
+  </section>
+{% endif %}

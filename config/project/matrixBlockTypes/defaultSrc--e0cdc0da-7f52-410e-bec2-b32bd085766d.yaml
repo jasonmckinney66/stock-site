@@ -1,0 +1,41 @@
+field: b67c56cb-a48e-4df0-bbc9-83ff07a03e55 # Content Security Policy
+fieldLayouts:
+  3c16c7c9-e4f2-4f74-b7dd-1177d68a7ecb:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 761aad5d-9058-4179-a255-c92e6dc76eeb # Sources
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  761aad5d-9058-4179-a255-c92e6dc76eeb: # Sources
+    columnSuffix: ukmsdjsp
+    contentColumnType: text
+    fieldGroup: null
+    handle: sources
+    instructions: ''
+    name: Sources
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: defaultSrc
+name: default-src
+sortOrder: 1

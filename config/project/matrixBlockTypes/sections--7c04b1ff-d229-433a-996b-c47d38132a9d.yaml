@@ -1,0 +1,79 @@
+field: b5da3204-07ba-4f35-b727-d5b8eb467480 # Sections
+fieldLayouts:
+  f33d032b-73f8-430b-9289-9b30c346d4d0:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: cc8b4642-4858-46b3-913e-e83dc4636a33 # Section Name
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 4a66582a-e699-45d7-87f1-ec59a02e3be4 # Section Content
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+        name: Content
+        sortOrder: 1
+fields:
+  4a66582a-e699-45d7-87f1-ec59a02e3be4: # Section Content
+    columnSuffix: maostwul
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionContent
+    instructions: ''
+    name: 'Section Content'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      cleanupHtml: true
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: '1'
+      redactorConfig: ''
+      removeEmptyTags: '1'
+      removeInlineStyles: ''
+      removeNbsp: '1'
+      showHtmlButtonForNonAdmins: ''
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: false
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  cc8b4642-4858-46b3-913e-e83dc4636a33: # Section Name
+    columnSuffix: tuxmriny
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionName
+    instructions: 'Lowercase. No spaces.'
+    name: 'Section Name'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: sections
+name: Sections
+sortOrder: 1

@@ -1,0 +1,17 @@
+columnSuffix: nsbjyxjl
+contentColumnType: datetime
+fieldGroup: aba08ad6-6936-4899-8588-6b0268236dbf # Global
+handle: alertStart
+instructions: ''
+name: 'Alert Start'
+searchable: false
+settings:
+  max: null
+  min: null
+  minuteIncrement: '60'
+  showDate: true
+  showTime: true
+  showTimeZone: ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Date

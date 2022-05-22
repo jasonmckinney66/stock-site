@@ -1,0 +1,14 @@
+columnSuffix: mhdozgjm
+contentColumnType: boolean
+fieldGroup: aba08ad6-6936-4899-8588-6b0268236dbf # Global
+handle: alertBar
+instructions: ''
+name: 'Alert Bar'
+searchable: false
+settings:
+  default: false
+  offLabel: 'Off'
+  onLabel: 'Scheduled >'
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

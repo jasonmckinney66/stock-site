@@ -1,0 +1,19 @@
+columnSuffix: uwefcbqu
+contentColumnType: string(800)
+fieldGroup: e89c6dc2-003f-4081-bbe8-08b20cf664d8 # Common
+handle: excerpt
+instructions: ''
+name: Excerpt
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: 200
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: '1'
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

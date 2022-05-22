@@ -1,0 +1,124 @@
+{% extends "_layout-min" %}
+{% block bodyClass %}landing-page{% endblock %}
+{% import '_macros.html' as m %}
+{% block content %}
+
+{% if entry.formPosition|length %}
+
+	<section>
+
+		<div class="container-fluid bg-light">
+			<div class="row p-5">
+				<div class="col mb-5">
+					<h1 class="text-center">{{ entry.headline }}</h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="container border-bottom">
+			<div class="row row-cols-1 gx-lg-5 row-cols-lg-2">
+				<div class="col my-5 px-lg-5">
+					{{ entry.headerContent }}
+
+					{% set image = entry.headerImage.one() %}
+					{% if image and image.extension == 'jpg' %}
+						{% set outputWidths = [375, 680] %}
+						<picture>
+						{% if craft.app.images.supportsWebP %}
+							<source srcset="{{ m.srcsetwebp(image, outputWidths) }}" type="image/webp">
+						{% endif %}
+							<source srcset="{{ m.srcset(image, outputWidths) }}" type="image/jpeg">
+							<img src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" class="w-100" sizes="100vw" loading="lazy">
+						</picture>
+					{% elseif image and image.extension == 'svg' %}
+						{{ svg(image)|attr({style: 'width: 100%'}) }}
+					{% elseif image and image.extension == 'png' %}
+						<img width="100%" src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" loading="lazy">
+					{% endif %}
+
+				</div>
+				<div class="col mt-n5 mb-5 bg-secondary">
+					<div class="px-4 pt-3 pb-4 text-white">
+							{% include "_forms" %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	{% include "_contentBlocks" %}
+	
+	{% if entry.promos|length %}
+    {% include "_promos" %}
+	{% endif %}
+
+{% else %}
+
+	<section>
+
+		<div class="container-fluid bg-light">
+			<div class="row p-5">
+				<div class="col mb-5">
+					<h1 class="text-center">{{ entry.headline }}</h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="container border-bottom">
+			<div class="row row-cols-1 gx-lg-5 row-cols-lg-2">
+				<div class="col my-5 px-lg-5">
+					{{ entry.headerContent }}
+					{% if entry.ctaText|length %}
+						<a href="{{ entry.ctaLink }}" class="btn btn-outline-primary my-2" {% if entry.gaEventLabel|length %}onclick="dataLayer.push({'event': 'GAevent','eventCategory': 'landing-cta','eventAction': 'click','eventLabel': '{{ entry.gaEventLabel }}','eventValue': undefined});"{% endif %}>{{ entry.ctaText }}</a>
+					{% endif %}
+				</div>
+
+				<div class="col mt-n5 mb-5">
+
+					{% set image = entry.headerImage.one() %}
+					{% if image and image.extension == 'jpg' %}
+						{% set outputWidths = [375, 680] %}
+						<picture>
+						{% if craft.app.images.supportsWebP %}
+							<source srcset="{{ m.srcsetwebp(image, outputWidths) }}" type="image/webp">
+						{% endif %}
+							<source srcset="{{ m.srcset(image, outputWidths) }}" type="image/jpeg">
+							<img src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" class="w-100" sizes="100vw" loading="lazy">
+						</picture>
+					{% elseif image and image.extension == 'svg' %}
+						{{ svg(image)|attr({style: 'width: 100%'}) }}
+					{% elseif image and image.extension == 'png' %}
+						<img width="100%" src="{{ image.getUrl('inlineImages') }}" alt="{{ image.title }}" loading="lazy">
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	{% include "_contentBlocks" %}
+
+	{% if entry.promos|length %}
+    {% include "_promos" %}
+	{% endif %}
+
+	{% if entry.forms|length %}
+			{% include "_forms" %}
+	{% endif %}
+
+{% endif %}
+
+{% if entry.customScripts|length %}
+    {% js %}
+        {{ entry.customScripts|raw }}
+    {% endjs %}
+{% endif %}
+{% if entry.customCss|length %}
+    {% css %}
+        {{ entry.customCss|raw }}
+    {% endcss %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{
+  "buttons": ["formatting", "bold", "italic", "unorderedlist", "orderedlist", "link", "image", "html"],
+  "plugins": ["imagemanager", "alignment", "customstyles"],
+  "toolbarFixed": true,
+  "imageFigure": false,
+  "structure": true,
+  "imagePosition": true,
+  "linkNewTab": true,
+  "customStyles": {
+      "style": {
+        "dropdown": {
+          "Button Blue": {
+          	    "args": {
+          	        "tag": "a",
+          	        "class": "btn btn-primary",
+          	        "type": "toggle"
+          		}
+          	 },
+          "Button White": {
+          	 	    "args": {
+          	 	        "tag": "a",
+          	 	        "class": "btn btn-light",
+          	 	        "type": "toggle"
+          	 		}
+          	 	 },
+          "Button Outline": {
+            "args": {
+                "tag": "a",
+                "class": "btn btn-outline-primary",
+                "type": "toggle"
+                }
+               },
+          "Blue Text": {
+            "args": {
+                "tag": "span",
+                "class": "text-blue",
+                "type": "toggle"
+                }
+               },
+          
+          "clearStyles": {
+            "api": "module.inline.clearformat"
+          }
+        }
+      }
+  },
+  "formattingAdd": {
+    "h3": {
+      "title": "Heading 3",
+      "api": "module.block.format",
+      "args": {
+          "tag": "p",
+          "class": "h3"
+      }
+    },
+    "h4": {
+      "title": "Heading 4",
+      "api": "module.block.format",
+      "args": {
+          "tag": "p",
+          "class": "h4"
+      }
+    },
+    "lead": {
+      "title": "Lead",
+      "api": "module.block.format",
+      "args": {
+          "tag": "p",
+          "class": "lead"
+      }
+    },
+    "quote": {
+      "title": "Blockquote",
+      "api": "module.block.format",
+      "args": {
+          "tag": "blockquote",
+          "class": "blockquote"
+      }
+    },
+    "citation": {
+      "title": "Citation",
+      "api": "module.block.format",
+      "args": {
+          "tag": "figcaption",
+          "class": "blockquote-footer"
+      }
+    }
+    
+  },
+
+  "formattingHide": ["blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "pre"]
+  
+}

@@ -1,0 +1,12 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}404{% endblock %}
+
+{% set entry = craft.entries().id(31).one() %}
+{% block content %}
+
+{% include "_hero" %}
+
+{% include "_contentBlocks" %}
+
+{% endblock %}

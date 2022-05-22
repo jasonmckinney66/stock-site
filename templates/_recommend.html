@@ -1,0 +1,49 @@
+{% import '_macros' as m %}
+<section class="my-5">
+	<div class="container">
+		<div class="row justify-content-center mb-5">
+			<div class="col text-center">
+					<p class="h3">You may also be interested in:</p>
+			</div>
+		</div>
+		{% set section = entry.getSection().handle %}
+		{% set entries = craft.entries.section(section).limit(3).id('not ' ~ entry.id).orderBy('articleDate desc') %}
+
+			<div class="row row-cols-1 row-cols-lg-1 row-cols-xl-3 gx-5 gy-3">
+				{% for entry in entries.all() %}
+					<div class="col">
+						<div href="{{ entry.url }}" class="card text-decoration-none h-100 shadow">
+							<div class="col">
+								
+								{% set image = entry.listingImage.one() ?? null %}
+								{% if image and image.extension == 'jpg' %}
+									{% set outputWidths = [385] %}
+									{% set aspectRatio = (9/21) %}
+									<a href="{{ entry.url }}">
+									<picture>
+									{% if craft.app.images.supportsWebP %}
+										<source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+									{% endif %}
+										<source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg"> 
+										<img src="{{ m.srcset(image, outputWidths, aspectRatio) }}" class="card-img-top" alt="{{ image.title }}" loading="lazy">
+									</picture>
+								{% elseif image and image.extension == 'svg' %}
+									{{ svg(image)|attr({style: 'width: 100%'}) }}
+								{% elseif image and image.extension == 'png' %}
+									<img src="{{ image.getUrl() }}" class="img-fluid rounded-start" alt="{{ image.title }}" loading="lazy">
+								{% endif %}
+									</a>
+
+									<div class="card-body p-4">
+										<p>{{ entry.section.name|upper }}</p>
+										<p class="h3"><a href="{{ entry.url }}" class="text-decoration-none">{{ entry.title }}</a></p>
+										<p>{{ entry.excerpt|truncate(100, '...') }}</p>
+										<a href="{{ entry.url }}" class="link">Read More</a>
+									</div>
+
+							</div><!-- close column -->
+						</div><!-- close card -->
+					</div><!-- close column -->
+				{% endfor %}
+	</div><!-- close container -->
+</section>

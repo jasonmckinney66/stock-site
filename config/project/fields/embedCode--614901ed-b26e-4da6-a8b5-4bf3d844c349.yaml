@@ -1,0 +1,19 @@
+columnSuffix: zusuvfsi
+contentColumnType: text
+fieldGroup: 470429c0-2630-4570-9480-15b56af93199 # Unique
+handle: embedCode
+instructions: ''
+name: 'Embed Code'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: '1'
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

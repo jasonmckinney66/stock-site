@@ -1,0 +1,18 @@
+{% set ctaTracking = block.trackableCta.all() %}
+{% if ctaTracking|length %}
+  {% for cta in ctaTracking %}
+    {% if cta.ctaDocument|length %}
+      {% set asset = cta.ctaDocument.one() %}
+      {% set target = asset.getUrl() %}
+    {% else %}
+      {% set page = cta.ctaPage.one() %}
+      {% set target = page.getUrl() %}
+    {% endif %}
+
+    {% if cta.hubspotEmbedCode is empty %}
+      <a href="{{ target }}" class="btn {{ cta.ctaButtonType }}" onclick="dataLayer.push({'event': 'GAevent','eventCategory': '{{ cta.eventCategory }}','eventAction': 'click','eventLabel': '{{ cta.eventLabel }}','eventValue': undefined});">{{ cta.ctaText }}</a>
+    {% else %}
+      {{ hubspotEmbedCode|raw }}
+    {% endif %}
+  {% endfor %}
+{% endif %}

@@ -1,0 +1,155 @@
+@import "./vendor/bootstrap/functions";
+@import "./vendor/bootstrap/variables";
+
+$sm: map-get($grid-breakpoints, sm);
+$pre-sm: ($sm - 1px);
+$md: map-get($grid-breakpoints, md);
+$pre-md: ($md - 1px);
+$lg: map-get($grid-breakpoints, lg);
+$pre-lg: ($lg - 1px);
+
+$gradient: linear-gradient(#1F4F7D, #153B5F);
+$gray-lightest: #ebf1f8;
+$gray-light: #bcc5cc;
+$gray-medium: #747f88;
+$gray-dark: #445460;
+$gray-darkest: #141f27;
+$slate: #003c62;
+$blue: #0092FF;
+$blue-light: #7BBBF9;
+$blue-lightest: #d4e0f5;
+$green: #37d08d;
+$tangerine: #ff9914;
+
+$body-color: $gray-dark;
+$body-bg: $gray-lightest;
+$link-color: $blue;
+
+$custom-colors: (
+  'gray-lightest': $gray-lightest,
+  'gray-light': $gray-light,
+  'gray-medium': $gray-medium,
+  'gray-dark': $gray-dark,
+  'gray-darkest': $gray-darkest,
+  'slate': $slate,
+  'blue': $blue,
+  'blue-light': $blue-light,
+  'blue-lightest': $blue-lightest,
+  'green': $green,
+  'tangerine': $tangerine,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+// BASE
+$font-family-base: 'Rubik', sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
+
+// HEADINGS
+$headings-font-family: 'Poppins', sans-serif;
+//$headings-font-weight: 500;
+$headings-line-height: 1.2;
+//$headings-color: $gray-darkest;
+$headings-margin-bottom: 1rem;
+$h1-font-size: '48px';
+$h2-font-size: '38px';
+$h3-font-size: '24px';
+$h4-font-size: '18px';
+$h5-font-size: '16px';
+$h6-font-size: '14px';
+
+$container-max-widths: (
+  sm: 540px,
+  md: 780px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1200px,
+);
+
+$spacers: map-merge($spacers, (
+  6: 6px,
+  8: 8px,
+  16: 16px,
+  20: 20px,
+  32: 32px,
+  40: 40px,
+  50: 50px,
+  60: 60px,
+  70: 70px,
+  80: 80px,
+  90: 90px,
+  100: 100px,
+  110: 110px,
+  125: 125px,
+  140: 140px,
+  160: 160px,
+  185: 185px,
+  200: 200px,
+  210: 210px,
+  300: 300px,
+));
+
+$gutters: map-merge($gutters, (
+  10: 10px,
+  25: 25px,
+  36: 36px,
+  40: 40px,
+  80: 80px,
+));
+
+$breadcrumb-divider: quote(">");
+
+// ACCORDION
+$accordion-bg:                            transparent;
+$accordion-border-color:                  $gray-light;
+$accordion-border-radius:                 0;
+$accordion-body-padding-y:                20px;
+$accordion-body-padding-x:                15px;
+$accordion-button-padding-y:              15px;
+$accordion-button-padding-x:              25px;
+$accordion-button-color:                  $blue;
+$accordion-button-bg:                     $accordion-bg;
+$accordion-button-active-bg:              #fff;
+$accordion-button-active-color:           $blue;
+$accordion-icon-width:                    24px;
+
+
+@import "./vendor/bootstrap/mixins";
+@import "./vendor/bootstrap/utilities";
+@import "./vendor/bootstrap/utilities/api";
+
+// Layout & components
+@import "./vendor/bootstrap/root";
+@import "./vendor/bootstrap/reboot";
+@import "./vendor/bootstrap/type";
+@import "./vendor/bootstrap/images";
+@import "./vendor/bootstrap/containers";
+@import "./vendor/bootstrap/grid";
+@import "./vendor/bootstrap/tables";
+@import "./vendor/bootstrap/forms";
+@import "./vendor/bootstrap/buttons";
+@import "./vendor/bootstrap/transitions";
+@import "./vendor/bootstrap/dropdown";
+@import "./vendor/bootstrap/button-group";
+@import "./vendor/bootstrap/nav";
+@import "./vendor/bootstrap/navbar";
+@import "./vendor/bootstrap/card";
+@import "./vendor/bootstrap/accordion";
+@import "./vendor/bootstrap/breadcrumb";
+@import "./vendor/bootstrap/pagination";
+@import "./vendor/bootstrap/badge";
+@import "./vendor/bootstrap/alert";
+@import "./vendor/bootstrap/progress";
+@import "./vendor/bootstrap/list-group";
+@import "./vendor/bootstrap/close";
+@import "./vendor/bootstrap/toasts";
+@import "./vendor/bootstrap/modal";
+@import "./vendor/bootstrap/tooltip";
+@import "./vendor/bootstrap/popover";
+@import "./vendor/bootstrap/carousel";
+@import "./vendor/bootstrap/spinners";
+@import "./vendor/bootstrap/offcanvas";
+
+// // Helpers
+@import "./vendor/bootstrap/helpers";

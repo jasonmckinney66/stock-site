@@ -1,0 +1,19 @@
+fieldLayouts:
+  57864f53-b7be-48aa-b292-bc8817f8b638:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: efe64023-5389-443c-84b2-5d13a31c45bb # Exclude From Search
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Settings
+        sortOrder: 1
+handle: internalSearch
+name: 'Internal Search'
+sortOrder: 5

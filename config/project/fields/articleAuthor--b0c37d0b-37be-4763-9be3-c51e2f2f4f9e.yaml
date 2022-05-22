@@ -1,0 +1,22 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: e6a57d45-c63b-4e9c-8f4f-04cafe56082c # Blog
+handle: articleAuthor
+instructions: ''
+name: 'Article Author'
+searchable: false
+settings:
+  allowSelfRelations: false
+  limit: '1'
+  localizeRelations: false
+  selectionLabel: 'Select the Author'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:ccd0ae2d-a021-452d-a654-af94c3091d16' # Staff
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

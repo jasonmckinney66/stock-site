@@ -1,0 +1,153 @@
+fieldLayouts:
+  389eaad1-e086-408c-9987-13d6824f805b:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 50
+          -
+            fieldUid: 5fc9fab4-09e8-4af9-9a55-8fd111110006 # Hero
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: Intro
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: dbd7a87f-ff77-40cb-a4de-ad5967c7e697 # Headline
+            instructions: ''
+            label: ''
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: 'Section Content'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: b5da3204-07ba-4f35-b727-d5b8eb467480 # Sections
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: d1043f25-8702-4a32-9402-96a182da59b6 # Excerpt
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 2ad67d45-f4c9-49d9-a1a0-eea4e5b03ad6 # Promos
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 9406261a-79e6-46c9-be83-a6179702e6b9 # In Panel
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: b99a8a3c-23ee-4687-8f7d-01319aa517e8 # Forms
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: ea6d5d02-57e1-4cfc-8107-fbe8f1e21120 # Form Position
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: caa9d107-0b2e-4b62-8b80-4ecbf233be5a # Custom Scripts
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 7ba24811-4e11-4b9d-8a69-a5a888914bdb # Custom CSS
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Settings
+        sortOrder: 2
+handle: onPageNav
+hasTitleField: true
+name: 'On-Page Navigation'
+section: 87e4bf44-2983-45e5-988f-95f2de2e7149 # Pages
+sortOrder: 4
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

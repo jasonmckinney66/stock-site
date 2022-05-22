@@ -1,0 +1,19 @@
+columnSuffix: ekxrffiz
+contentColumnType: text
+fieldGroup: e89c6dc2-003f-4081-bbe8-08b20cf664d8 # Common
+handle: customTitle
+instructions: ''
+name: 'Custom Title'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

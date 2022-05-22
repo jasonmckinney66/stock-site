@@ -1,0 +1,131 @@
+fieldLayouts:
+  05b2bdf9-fc28-4ef6-a9ce-341c2607069b:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 5fc9fab4-09e8-4af9-9a55-8fd111110006 # Hero
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: dbd7a87f-ff77-40cb-a4de-ad5967c7e697 # Headline
+            instructions: ''
+            label: ''
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            heading: 'Side Form'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: ea6d5d02-57e1-4cfc-8107-fbe8f1e21120 # Form Position
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 036aab38-d4d8-4fff-a046-1ea6a8b3bdda # Half Page Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            heading: 'Form Bottom or No Form'
+            type: craft\fieldlayoutelements\Heading
+          -
+            fieldUid: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: b99a8a3c-23ee-4687-8f7d-01319aa517e8 # Forms
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: d1043f25-8702-4a32-9402-96a182da59b6 # Excerpt
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: caa9d107-0b2e-4b62-8b80-4ecbf233be5a # Custom Scripts
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 7ba24811-4e11-4b9d-8a69-a5a888914bdb # Custom CSS
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Settings
+        sortOrder: 2
+handle: standAlone
+hasTitleField: true
+name: 'Stand Alone'
+section: b1a0bc24-a457-4750-8bb3-5c717ab39319 # Stand Alone Pages
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

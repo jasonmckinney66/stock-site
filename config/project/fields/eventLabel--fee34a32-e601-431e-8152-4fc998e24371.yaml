@@ -1,0 +1,19 @@
+columnSuffix: qdtbrzje
+contentColumnType: text
+fieldGroup: e23be66b-7a03-40eb-9369-db2130f3c2e6 # CTAs
+handle: eventLabel
+instructions: ''
+name: 'Event Label'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: 'Ex. documents|downloads'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

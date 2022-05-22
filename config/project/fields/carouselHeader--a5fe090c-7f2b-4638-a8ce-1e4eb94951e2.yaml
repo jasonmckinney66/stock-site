@@ -1,0 +1,19 @@
+columnSuffix: fdmsamxy
+contentColumnType: text
+fieldGroup: deba474c-10fb-40c0-be9c-71ee291e1045 # Home
+handle: carouselHeader
+instructions: ''
+name: 'Carousel Header'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

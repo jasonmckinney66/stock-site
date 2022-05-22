@@ -1,0 +1,35 @@
+columnSuffix: hyygcmma
+contentColumnType: string
+fieldGroup: e23be66b-7a03-40eb-9369-db2130f3c2e6 # CTAs
+handle: ctaButtonType
+instructions: ''
+name: 'CTA Button Type'
+searchable: false
+settings:
+  optgroups: true
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Filled
+        -
+          - value
+          - btn-primary
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - Hollow
+        -
+          - value
+          - btn-outline-primary
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

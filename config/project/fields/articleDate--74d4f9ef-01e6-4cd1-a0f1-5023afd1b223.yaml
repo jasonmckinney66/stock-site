@@ -1,0 +1,17 @@
+columnSuffix: cftdcilb
+contentColumnType: datetime
+fieldGroup: e6a57d45-c63b-4e9c-8f4f-04cafe56082c # Blog
+handle: articleDate
+instructions: ''
+name: 'Article Date'
+searchable: false
+settings:
+  max: null
+  min: null
+  minuteIncrement: '30'
+  showDate: true
+  showTime: false
+  showTimeZone: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Date

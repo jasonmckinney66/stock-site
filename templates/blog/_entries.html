@@ -1,0 +1,39 @@
+{% import '_macros' as m %}	
+
+{% for entry in entries %}
+  <div class="col">
+    <a href="{{ entry.url }}" class="card text-decoration-none h-100 shadow-lg">
+      {% set image = entry.listingImage[0] ?? null %}
+      {% if image and image.extension == 'jpg' %}
+          {% set outputWidths = [388, 366] %}
+          {% set aspectRatio = (5/3) %}
+          <picture>
+              {% if craft.app.images.supportsWebP %}
+                  <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+              {% endif %}
+              <img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+          </picture>
+      {% elseif image and image.extension == 'svg' %}
+          {{ svg(image)|attr({style: 'width: 100%'}) }}
+      {% elseif image and image.extension == 'png' %}
+          <img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+      {% endif %}
+      <div class="card-body p-4 p-lg-5">
+
+        {% set category = entry.blogCategory[0] ?? null %}
+        {% if category is defined %}
+          <h6 class="text-gray-medium">{{ category.title }}</h6>
+        {% endif %}
+
+        <h3 class="widont">{{ entry.title }}</h3>
+
+        <p class="text-gray-light">{{ entry.excerpt }}</p>
+
+      </div>
+      <div class="card-footer text-muted text-center">
+        {% set postContent = entry.contentBlocks.all() %}
+        <small class="text-gray-light">Reading time: {{ readTime(postContent, false) }}</small>
+      </div>
+    </a>
+  </div>
+{% endfor %}
