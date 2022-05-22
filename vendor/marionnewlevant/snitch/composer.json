@@ -1,0 +1,44 @@
+{
+    "name": "marionnewlevant/snitch",
+    "description": "Report when two people might be editing the same element (eg entry, category, or global) or field",
+    "type": "craft-plugin",
+    "version": "3.0.4.1",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "snitch"
+    ],
+    "support": {
+        "docs": "https://github.com/marionnewlevant/craft-snitch/blob/v2/README.md",
+        "issues": "https://github.com/marionnewlevant/craft-snitch/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marion Newlevant",
+            "homepage": "http://marion.newlevant.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "marionnewlevant\\snitch\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Snitch",
+        "handle": "snitch",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "documentationUrl": "https://github.com/marionnewlevant/craft-snitch/blob/v2/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/marionnewlevant/craft-snitch/v2/CHANGELOG.md",
+        "components": {
+            "collision": "marionnewlevant\\snitch\\services\\Collision"
+        },
+        "class": "marionnewlevant\\snitch\\Snitch"
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "name": "jalendport/craft-readtime",
+    "description": "Calculate the estimated read time for content.",
+    "type": "craft-plugin",
+    "version": "1.6.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "average read time"
+    ],
+    "support": {
+        "docs": "https://github.com/jalendport/craft-readtime/blob/master/README.md",
+        "issues": "https://github.com/jalendport/craft-readtime/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jalen Davenport",
+            "homepage": "https://jalendport.com"
+        },
+        {
+            "name": "Luke Youell",
+            "homepage": "https://github.com/lukeyouell"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "jalendport\\readtime\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Read Time",
+        "handle": "read-time",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/jalendport/craft-readtime/master/CHANGELOG.md",
+        "class": "jalendport\\readtime\\ReadTime"
+    }
+}

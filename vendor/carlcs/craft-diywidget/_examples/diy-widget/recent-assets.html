@@ -1,0 +1,24 @@
+{% set assets = craft.assets()
+    .kind(null)
+    .with(['uploader'])
+    .orderBy('elements.dateCreated desc')
+    .limit(10)
+    .all() %}
+
+{% if assets|length %}
+    <table class="fullwidth">
+        {% for asset in assets %}
+            <tr>
+                <td>
+                    <a href="{{ asset.getUrl() }}">{{ asset.filename }}</a>
+                    <span class="light">
+                        {{ asset.dateCreated|timestamp('short') }}
+                        {%- if CraftEdition == CraftPro and asset.uploader %}, {{ asset.uploader.username }}{% endif -%}
+                    </span>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>{{ 'No assets exist yet.'|t('site') }}</p>
+{% endif %}
