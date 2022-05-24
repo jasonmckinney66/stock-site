@@ -37,7 +37,7 @@ return [
     'disallowRobots' => !$isProd,
 
     'aliases' => [
-        '@baseRoot' => getenv('BASE_ROOT'),
-        '@baseUrl' => getenv('PRIMARY_SITE_URL'),
+        '@baseRoot' => getenv('BASE_URL'),
+        '@baseUrl' => getenv('SITE_URL'),
     ],
 ];

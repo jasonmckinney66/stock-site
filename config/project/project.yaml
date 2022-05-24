@@ -1,7 +1,11 @@
-dateModified: 1653364189
+dateModified: 1653405468
 email:
-  fromEmail: labs@bluecoastweb.com
-  fromName: Starter
+  fromEmail: j@jasonmckinney.com
+  fromName: Stock-Site
+  replyToEmail: null
+  template: null
+  transportSettings:
+    command: '/usr/sbin/sendmail -bs'
   transportType: craft\mail\transportadapters\Sendmail
 meta:
   __names__:
