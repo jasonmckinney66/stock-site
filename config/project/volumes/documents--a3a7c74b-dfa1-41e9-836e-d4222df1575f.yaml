@@ -32,9 +32,9 @@ handle: documents
 hasUrls: true
 name: Documents
 settings:
-  path: '@baseRoot/docs'
+  path: docs
 sortOrder: 2
 titleTranslationKeyFormat: null
 titleTranslationMethod: null
 type: craft\volumes\Local
-url: '@baseUrl/docs'
+url: docs

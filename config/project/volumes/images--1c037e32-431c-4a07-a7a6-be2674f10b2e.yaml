@@ -32,9 +32,9 @@ handle: images
 hasUrls: true
 name: Images
 settings:
-  path: '@baseRoot/img'
+  path: img
 sortOrder: 1
 titleTranslationKeyFormat: null
 titleTranslationMethod: null
 type: craft\volumes\Local
-url: '@baseUrl/img'
+url: img
