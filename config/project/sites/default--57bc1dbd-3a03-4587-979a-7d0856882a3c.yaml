@@ -1,9 +1,9 @@
-baseUrl: $PRIMARY_SITE_URL
+baseUrl: 'http://$PRIMARY_SITE_URL/'
 enabled: true
 handle: default
 hasUrls: true
 language: en-US
-name: Starter
+name: Stock-Site
 primary: true
-siteGroup: 73856687-2155-480f-967d-cfc398e9097e # Starter
+siteGroup: 73856687-2155-480f-967d-cfc398e9097e # Stock-Site
 sortOrder: 1

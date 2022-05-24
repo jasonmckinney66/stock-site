@@ -4,7 +4,7 @@ handle: pages
 name: Pages
 propagationMethod: all
 siteSettings:
-  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Stock-Site
     enabledByDefault: true
     hasUrls: true
     template: pages/_entry

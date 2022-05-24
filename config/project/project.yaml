@@ -1,4 +1,4 @@
-dateModified: 1653356073
+dateModified: 1653364189
 email:
   fromEmail: labs@bluecoastweb.com
   fromName: Starter
@@ -138,7 +138,7 @@ meta:
     52e22ae7-902c-41db-8962-fa044b8931a2: 'Leader Photo' # Leader Photo
     52fdda31-4dbc-4a19-8ca2-0b0909742073: 'Blog Listings' # Blog Listings
     55cc2c5a-a084-494a-9668-748875172308: Quote # Quote
-    57bc1dbd-3a03-4587-979a-7d0856882a3c: Starter # Starter
+    57bc1dbd-3a03-4587-979a-7d0856882a3c: Stock-Site # Stock-Site
     60f3f035-c55d-4862-88ad-08953d50103e: 'Top Margin' # Top Margin
     61c9834f-1328-4f87-ae06-3e48e27855c9: connect-src # connect-src
     64d2ce41-43f7-4565-be39-6a72ec89487d: 'Most Recent' # Most Recent
@@ -245,7 +245,7 @@ meta:
     46460530-2012-4870-a6d4-07c7cb86c29a: 'Child Pages' # Child Pages
     62039500-9aa4-41b2-a37c-91e2e7c177cb: 'CTA link' # CTA link
     66135057-d441-45c3-bd8d-1743dd99eefa: 'Video Placeholder Image' # Video Placeholder Image
-    73856687-2155-480f-967d-cfc398e9097e: Starter # Starter
+    73856687-2155-480f-967d-cfc398e9097e: Stock-Site # Stock-Site
     80224163-457f-4da5-b1f7-d486c7a2aecd: 'Bottom Margin' # Bottom Margin
     86555421-b1de-4edd-a88a-164edd0f7a15: 'Bottom Margin' # Bottom Margin
     91821229-b77d-4543-b148-ead1c3c115d0: 'Call to Action Text' # Call to Action Text
@@ -428,7 +428,8 @@ plugins:
 system:
   edition: solo
   live: true
-  name: Starter
+  name: Stock-Site
+  retryDuration: null
   schemaVersion: 3.7.33
   timeZone: America/Los_Angeles
 users:

@@ -32,7 +32,7 @@ fieldLayouts:
 handle: blog
 name: Blog
 siteSettings:
-  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Starter
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Stock-Site
     hasUrls: true
     template: pages/_types/blogListings
     uriFormat: 'blog/{slug}'
