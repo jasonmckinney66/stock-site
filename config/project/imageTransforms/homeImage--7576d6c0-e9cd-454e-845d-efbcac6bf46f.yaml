@@ -1,0 +1,9 @@
+format: null
+handle: homeImage
+height: null
+interlace: none
+mode: crop
+name: 'Home Image'
+position: center-center
+quality: null
+width: 1400

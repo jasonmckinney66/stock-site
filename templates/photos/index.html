@@ -1,0 +1,47 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}photos-listing-page{% endblock %}
+{% block content %}
+
+{% set requestedSlug = craft.app.request.segments|last %}
+{% set category = craft.categories().slug(requestedSlug|literal).one() %}
+<section class="position-relative bg-primary zindex-1 overflow-hidden header-sm mb-0">
+    <div class="text-white d-flex align-items-center header-sm">
+        <div class="container delay-2 fade-in">
+        <h1 class="text-white">{{ category }}</h1>
+        </div>
+    </div>
+</section>
+<section class="pt-2 mb-5">
+    <div class="container">
+        <!-- listings -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 listings">
+            {% set entries = craft.entries().section('photos').relatedTo(category).all()%}
+            {% for entry in entries %}
+                <div class="col">
+                    <a href="{{ entry.url }}" class="card bg-dark text-white text-decoration-none h-100 shadow-lg">
+                    {% set image = entry.photo[0] ?? null %}
+                    {% if image %}
+                        {% set outputWidths = [388, 366] %}
+                        {% set aspectRatio = (2/3) %}
+                        <picture>
+                            {% if craft.app.images.supportsWebP %}
+                                <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+                            {% endif %}
+                            <img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" loading="lazy" sizes="100vw">
+                        </picture>
+                    {% endif %}
+                    <div class="card-img-overlay text-center p-4 p-lg-5">
+                        <h3 class="widont card-text">{{ entry.title }}</h3>
+                        <p class="card-text text-gray-light">{{ entry.photoLocation }}</p>
+                    </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div><!-- close listing row-->
+    </div>
+</section>
+
+{% endblock %}
+
+

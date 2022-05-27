@@ -8,26 +8,40 @@
   <section class="position-relative header-lg zindex-1 overflow-hidden mb-5">
   {% for block in blocks %}
 
-    {% set image = block.backgroundImage.one ?? null %}
-    {% if image is not null %}
-      <picture class="position-absolute w-100 h-100 zindex-under">
-        <!-- mobile -->
-        {% if craft.app.images.supportsWebP %}
-          <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileWebp') }}" type="image/webp">
+    {% set randos = craft.entries.section('photos') %}
+    {% for rando in randos.order('RAND()') %}
+      {% if rando.photo | length %}
+        {% set image = rando.photo.one ?? null %}
+        {% if image is not null %}
+          <picture class="position-absolute w-100 h-100 zindex-under">
+            <!-- mobile -->
+            {% if craft.app.images.supportsWebP %}
+              <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileWebp') }}" type="image/webp">
+            {% endif %}
+            <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileJpg') }}" type="image/jpeg">
+            <!-- desktop -->
+            {% if craft.app.images.supportsWebP %}
+              <source srcset="{{ image.getUrl('backgroundDesktopWebp') }}" type="image/webp">
+            {% endif %}
+            <img class="object-cover" width="100%" height="100%" src="{{ image.getUrl('backgroundDesktopJpg') }}" alt="">
+          </picture>
         {% endif %}
-        <source media="(orientation: portrait) and (max-width: 551px)" srcset="{{ image.getUrl('backgroundMobileJpg') }}" type="image/jpeg">
-        <!-- desktop -->
-        {% if craft.app.images.supportsWebP %}
-          <source srcset="{{ image.getUrl('backgroundDesktopWebp') }}" type="image/webp">
-        {% endif %}
-        <img class="object-cover" width="100%" height="100%" src="{{ image.getUrl('backgroundDesktopJpg') }}" alt="">
-      </picture>
-    {% endif %}
+      {% endif %}
+    {% endfor %}
 
-    <div class="text-white d-flex align-items-center header-lg{% if image is not null %} gradient-mask{% endif %}">
+    <div class="text-white d-flex align-items-center header-lg gradient-mask">
       <div class="container">
-        <h1 class="text-center">{{ block.customHeaderText }}</h1>
-        <p class="text-center">{{ block.subtitleText }}</p>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
+          <div class="col">
+            <h1 class="text-center">{{ block.customHeaderText }}</h1>
+            <p class="text-center">{{ block.subtitleText }}</p>
+            <form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}" style="background-color: transparent; margin-top: auto; padding-top: 1em;">
+              <input id="searchField" type="search" name="q" class="form-control mx-2" placeholder="Enter Keyword">
+              <button type="submit" class="btn btn-primary" value="Search"> Search </button>
+              <a class="btn-close headerSearch-close search-close" aria-label="Close"></a>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -35,52 +49,37 @@
   </section>
 {% endif %}
 
-<section>
+<section class="pt-2 mb-5">
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <h3 class="text-center">{{ entry.carouselHeader }}</h3>
-      </div>
-    </div>
-  </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
+      {% set myCategoryQuery = craft.categories().group('photos').orderBy('lft ASC') %}
+      {% set categories = myCategoryQuery.all() %}
+      {% for category in categories %}
+        <div class="col">
+          <a href="{{ category.url }}" class="card text-decoration-none h-100 shadow-lg">
+            {% set image = category.photoCategoryImage[0] ?? null %}
+            {% if image and image.extension != 'svg' %}
+              {% set outputWidths = [388, 366] %}
+              {% set aspectRatio = (5/3) %}
+              <picture>
+                {% if craft.app.images.supportsWebP %}
+                  <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+                {% endif %}
+                <img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}" class="card-img-top" loading="lazy" sizes="100vw">
+              </picture>
+            {% elseif image and image.extension == 'svg' %}
+                {{ svg(image)|attr({style: 'width: 100%'}) }}
+            {% elseif image and image.extension == 'png' %}
+                <img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
+            {% endif %}
 
-  <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-
-    <div class="carousel-indicators">
-      {% set count = entry.logos.count() %}
-      {% set logoCount = count//3 %}
-      {% for i in range(1, logoCount) %}
-        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
-      {% endfor %}
-    </div>
-
-    <div class="carousel-inner">
-      {% set logos = entry.logos.all() %}
-      {% for logo in logos %}
-        {% if loop.index in ['5', '9', '15'] or loop.first %}
-          <div class="carousel-item{% if loop.first %} active data-bs-interval='10000'{% endif %}">
-            <div class="container">
-              <div class="row row-cols-2 row-cols-md-4 justify-content-center p-4">
-        {% endif %}
-                <div class="col">
-                  <img src="{{ logo.getUrl() }}" class="d-block" alt="{{ logo.title }}">
-                </div>
-        {% if loop.index in ['4', '8'] or loop.last  %}
-              </div>
+            <div class="card-body p-4 p-lg-5">
+              <h3 class="text-gray-medium text-center">{{ category.title }}</h3>
             </div>
-          </div>
-        {% endif %}
+          </a>
+        </div>
       {% endfor %}
     </div>
-    
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
   </div>
 </section>
 

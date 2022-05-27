@@ -1,5 +1,5 @@
 fieldLayouts:
-  76ceb4c3-36e0-423a-b871-15934f39a6b7:
+  86ca4f4d-b9db-4ded-a9a8-20cb0e96f171:
     tabs:
       -
         elements:
@@ -23,18 +23,10 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\AssetTitleField
+            type: craft\fieldlayoutelements\TitleField
             warning: null
             width: 100
         name: Content
         sortOrder: 1
-handle: documents
-hasUrls: true
-name: Documents
-settings:
-  path: docs
-sortOrder: 2
-titleTranslationKeyFormat: null
-titleTranslationMethod: null
-type: craft\volumes\Local
-url: '@web/docs'
+handle: photoTags
+name: 'Photo Tags'

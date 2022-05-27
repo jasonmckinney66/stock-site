@@ -1,0 +1,81 @@
+{% import '_macros' as m %}	
+{% extends "_layout" %}
+{% block bodyClass %}photos-single{% endblock %}
+{% block content %}
+
+<div class="text-white d-flex align-items-center mx-3">
+  <div class="container">
+    <p>&nbsp;</p>
+  </div>
+</div>
+
+<section class="mb-4">
+  <div class="container">
+    <div class="row align-items-stretch gx-lg-5">
+      <div class="col-lg-3">
+        <div class="sticky-lg-top sticky-offset">
+          <p class="h6 text-secondary text-uppercase">
+            {% set category = entry.photoCategory.one() %}
+            {{ category.title }}
+          </p>
+          <p class="h4 my-3">{{ entry.title }}</p>
+          {% if entry.articleDate %}<p>{{ entry.articleDate|date }}</p>{% endif %}
+          <div class="d-flex align-items-end my-4">
+            <div>
+            {% for author in entry.photographer.all() %}
+              {% set image = author.staffPhoto.one() ?? null %}
+              {% if image %}
+                {% set authorThumb = { mode: 'crop', width: 80, height: 80, quality: 70, position: 'center-center' } %}
+                <img width="60" src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}">
+              {% else %}
+                <img width="60" src="/assets/images/profile.png" alt="Profile Image">
+              {% endif %}
+            </div>
+              <div class="ms-2"> By<br>
+                <span class="fw-medium">{{ author.title }}</span>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="my-3">
+            <p>Location: {{ entry.photoLocation }}</p>
+            <p>Size: {{ entry.photoSize }}</p>
+            {% set tags = entry.photoTags.all() %}
+            {% for tag in tags %}
+              <a href="{{ url('blog/tags/'~tag.id) }}" class="btn btn-outline-secondary btn-sm m-1 text-uppercase">{{ tag.title }}</a>
+            {% endfor %}
+          </div>
+          <div class="d-grid gap-2">
+            <a href="{% set image = entry.photo.one() %}{{ image.getUrl() }}" class="btn btn-primary" download>Download</a>
+          </div>
+          <a href="/photos/{{ category.slug }}" class="d-block my-4 link text-decoration-none">&#8249; Back</a>
+        </div>
+      </div>
+      
+      <div class="col-lg-9 content">
+        {% set image = entry.photo.one() %}
+        {% if image and image.extension == 'jpg' %}
+          {% set outputWidths = [375, 1024, 1200] %}
+          {% set aspectRatio = (2/3) %}
+          <picture>
+          {% if craft.app.images.supportsWebP %}
+            <source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+          {% endif %}
+            <source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg">
+            <img src="{{ image.getUrl('fullWidthImages') }}" class="w-100" alt="{{ image.title }}" sizes="100vw" loading="lazy">
+          </picture>
+        {% elseif image and image.extension == 'svg' %}
+          {{ svg(image)|attr({style: 'width: 100%'}) }}
+        {% elseif image and image.extension == 'png' %}
+          <img width="100%" src="{{ image.getUrl('fullWidthImages') }}" alt="{{ image.title }}" loading="lazy">
+        {% endif %}
+        <div class="my-4">
+          {{ entry.photoDescription }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{#{% include "_recommend" %}#}
+
+{% endblock %}

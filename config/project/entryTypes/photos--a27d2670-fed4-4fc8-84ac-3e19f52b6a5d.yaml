@@ -1,0 +1,107 @@
+fieldLayouts:
+  d5082f94-d338-4008-af25-dec05b3a02f0:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 49323aa4-6575-4ac9-93b0-a91be3f37675 # Photo
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 75
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 50497c6a-8d8e-4ec3-96de-0001bba51a8f # Photo Location
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 8b4d5bcc-8a67-47b5-aacd-0d68b595a6f9 # Photo Size
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: 85078505-a857-4ca4-a974-f34c312b5612 # Photographer
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 3f398214-9036-41dc-95bd-0fc77a7763f6 # Photo Category
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            fieldUid: fa09cfc7-00fb-425b-9f61-851ca887058f # Photo Tags
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 75
+          -
+            type: craft\fieldlayoutelements\HorizontalRule
+          -
+            fieldUid: 253792d8-c372-4a6f-aaed-00ddcca83413 # Photo Description
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: photos
+hasTitleField: true
+name: Photos
+section: 5415c3cd-05af-42f6-8907-a6702071a326 # Photos
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

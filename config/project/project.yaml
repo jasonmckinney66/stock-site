@@ -1,4 +1,4 @@
-dateModified: 1653405468
+dateModified: 1653608131
 email:
   fromEmail: j@jasonmckinney.com
   fromName: Stock-Site
@@ -50,6 +50,7 @@ meta:
     3d47b496-e62d-49c4-9729-1b5bcc181707: Gateway # Gateway
     3dd74ad4-87a2-41a5-9822-75bcaa07a905: 'Background Desktop WEBP' # Background Desktop WEBP
     3e52c593-17d9-4331-b201-4c9c2ec034bf: '404 Page' # 404 Page
+    3f398214-9036-41dc-95bd-0fc77a7763f6: 'Photo Category' # Photo Category
     4a97e59e-89ae-4305-b57a-028c97bc3d15: 'Alert Bar' # Alert Bar
     4a66582a-e699-45d7-87f1-ec59a02e3be4: 'Section Content' # Section Content
     4ae96c6d-3e5b-42fd-bb55-4aa2ab3e84aa: 'In Panel' # In Panel
@@ -98,6 +99,7 @@ meta:
     7f16639b-4961-49ce-a314-d697f254194d: 'Alert End' # Alert End
     8a29ae16-24c7-4d50-a6cf-60dcf5dc5349: Logos # Logos
     8a172de8-c276-412b-ad40-9ccd96dfa051: Agenda # Agenda
+    8b4d5bcc-8a67-47b5-aacd-0d68b595a6f9: 'Photo Size' # Photo Size
     8b5f0a01-8af7-45f6-99b3-a2831898411c: 'Leader Title' # Leader Title
     8c8c6a09-efdc-4c5c-95bd-2768c006696f: 'Background Desktop JPG' # Background Desktop JPG
     8d7e4d9f-a720-4059-88d4-d90fae132829: 'Top Margin' # Top Margin
@@ -158,6 +160,7 @@ meta:
     78f7139d-6444-46a1-805b-d463ba0c16b7: 'Card 1 Text' # Card 1 Text
     79f78bcd-fea0-48d7-98b5-d282e2e52edd: 'Stat Pre 3' # Stat Pre 3
     082c4897-bdf8-4a7b-920d-abe6a32ceeec: 'Parent Page' # Parent Page
+    83bd4551-9049-4d94-96f2-f3397037cbdd: Photos # Photos
     84f506ec-12d1-4431-9929-9a2bd8389741: Sources # Sources
     87e4bf44-2983-45e5-988f-95f2de2e7149: Pages # Pages
     90b1120e-dbfb-41e5-bb95-eb5fe25373b0: Blog # Blog
@@ -213,10 +216,12 @@ meta:
     4924cc65-7b4e-4ef4-8d30-25686ba75117: 'Stat Figure 3' # Stat Figure 3
     5229f0c3-3d12-4545-95d0-5c1954e5f155: Promos # Promos
     5366b5cc-8158-4496-8b55-fad092599d68: Citation # Citation
+    5415c3cd-05af-42f6-8907-a6702071a326: Photos # Photos
     5843a4f0-858d-4b41-9965-c8247b00b909: 'Nav Promo 1 Image' # Nav Promo 1 Image
     5916d209-954c-4e03-b8a4-3e308a0b9b19: Layout # Layout
     6174c222-a699-4789-b559-c3645692b419: script-src # script-src
     7466e531-b51c-41b6-8f22-983295b8e98e: 'Block Text' # Block Text
+    7576d6c0-e9cd-454e-845d-efbcac6bf46f: 'Home Image' # Home Image
     7677ea45-4866-4620-9a1f-8e4b7fbd1a2b: 'Bottom Margin' # Bottom Margin
     7734ce64-7e2e-4423-a762-7b0356069391: 'Promo Title' # Promo Title
     08183fd0-718b-4456-a877-797e28e7ec98: 'Top Margin' # Top Margin
@@ -235,9 +240,12 @@ meta:
     36877bb4-9e0b-4a5e-b1d3-6d677b9ab04d: 'Trackable CTA' # Trackable CTA
     37613e43-a9bd-4883-8900-9c8ab7659dda: 'Call to Action Link' # Call to Action Link
     44466adc-8ecf-4364-b8d2-cc067bdaf086: Proportion # Proportion
+    49323aa4-6575-4ac9-93b0-a91be3f37675: Photo # Photo
+    50497c6a-8d8e-4ec3-96de-0001bba51a8f: 'Photo Location' # Photo Location
     73147ebc-fafc-423e-9134-627b34a946cf: 'Top Margin' # Top Margin
     92956ef6-ea8a-4c7b-bb9f-0b9d5933d0a1: 'Header Image' # Header Image
     94051f65-8327-4d10-a9f7-d80d7336c141: 'Card 3 Text' # Card 3 Text
+    253792d8-c372-4a6f-aaed-00ddcca83413: 'Photo Description' # Photo Description
     470429c0-2630-4570-9480-15b56af93199: Unique # Unique
     614901ed-b26e-4da6-a8b5-4bf3d844c349: 'Embed Code' # Embed Code
     3233606f-497c-43e9-9337-91426dd98568: 'Asset Caption' # Asset Caption
@@ -251,6 +259,7 @@ meta:
     66135057-d441-45c3-bd8d-1743dd99eefa: 'Video Placeholder Image' # Video Placeholder Image
     73856687-2155-480f-967d-cfc398e9097e: Stock-Site # Stock-Site
     80224163-457f-4da5-b1f7-d486c7a2aecd: 'Bottom Margin' # Bottom Margin
+    85078505-a857-4ca4-a974-f34c312b5612: Photographer # Photographer
     86555421-b1de-4edd-a88a-164edd0f7a15: 'Bottom Margin' # Bottom Margin
     91821229-b77d-4543-b148-ead1c3c115d0: 'Call to Action Text' # Call to Action Text
     a2d0c405-2af4-42b5-ac43-57d63fe7b476: 'Image Position' # Image Position
@@ -260,6 +269,8 @@ meta:
     a5fe090c-7f2b-4638-a8ce-1e4eb94951e2: 'Carousel Header' # Carousel Header
     a8bce940-26ba-4f03-87b4-6a500bdc47d7: 'Block Text' # Block Text
     a8f0fc11-c04c-42ae-8641-cfb9ec78eed8: Item # Item
+    a22bc101-b39f-4806-a84d-edac8656a690: 'Photo Category Image' # Photo Category Image
+    a27d2670-fed4-4fc8-84ac-3e19f52b6a5d: Photos # Photos
     a64cb678-8fb5-4743-8287-8fd65853a773: 'Card 3 Image' # Card 3 Image
     a68d7846-d99e-45e5-86ee-64296a7bfc47: 'Column 3 Icon' # Column 3 Icon
     a79ed1ea-570b-4e13-a62f-a105b73e7c35: 'Agenda Title' # Agenda Title
@@ -338,6 +349,7 @@ meta:
     d705b6e1-f106-475a-b77e-3c094423ee19: 'Top Margin' # Top Margin
     d1043f25-8702-4a32-9402-96a182da59b6: Excerpt # Excerpt
     d32630af-86e7-4c26-875e-0d29d4b162f3: 'Top Margin' # Top Margin
+    db9e40a9-d618-401f-aafc-6d085b4cce20: 'Photo Tags' # Photo Tags
     dbb019bb-4c1a-4d35-95e4-cb37d1a942ed: Title # Title
     dbd7a87f-ff77-40cb-a4de-ad5967c7e697: Headline # Headline
     dc438f7a-5709-4690-a14f-b5a00c56b6e1: 'Inline Images' # Inline Images
@@ -358,6 +370,7 @@ meta:
     e89c6dc2-003f-4081-bbe8-08b20cf664d8: Common # Common
     e416abd4-1ca7-4cfc-90e0-7073eda2c989: Disclaimer # Disclaimer
     e6026dec-566e-427b-a35d-ac1bd0d4d457: Stats # Stats
+    e6974f54-a7e5-44a5-8224-5318967aa57a: Photos # Photos
     e5527833-d906-4259-b2e1-bc28383afba2: 'CTA Document' # CTA Document
     ea6d5d02-57e1-4cfc-8107-fbe8f1e21120: 'Form Position' # Form Position
     eb0b4875-df30-4055-9854-069b1c434d50: 'Public Schema' # Public Schema
@@ -391,6 +404,7 @@ meta:
     f5318839-eda6-4e49-91b3-274cc22bb9ed: 'Form Text' # Form Text
     f8273224-3f0e-4c03-a28c-b96568a407aa: 'Top Margin' # Top Margin
     f8384681-60b1-4531-a82c-7eee846d7acd: 'CTA Link' # CTA Link
+    fa09cfc7-00fb-425b-9f61-851ca887058f: 'Photo Tags' # Photo Tags
     fa24fece-10ce-4325-81b9-b74a8e4dde59: 'Meta Title' # Meta Title
     fc7e0dc9-2adc-4e05-b361-c1c11f5ab816: 'Stat Figure 1' # Stat Figure 1
     fe9538f9-845f-49bf-860c-daa7f2cf8aeb: 'Promo Title' # Promo Title

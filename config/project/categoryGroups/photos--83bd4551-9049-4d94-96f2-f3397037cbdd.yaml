@@ -1,0 +1,50 @@
+defaultPlacement: end
+fieldLayouts:
+  c055a076-7cb2-4028-bc16-a4148c56491c:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: a22bc101-b39f-4806-a84d-edac8656a690 # Photo Category Image
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 25
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 75
+        name: Content
+        sortOrder: 1
+handle: photos
+name: Photos
+siteSettings:
+  57bc1dbd-3a03-4587-979a-7d0856882a3c: # Stock-Site
+    hasUrls: true
+    template: photos/index.html
+    uriFormat: 'photos/{slug}'
+structure:
+  maxLevels: null
+  uid: 97e58763-c0cb-49f1-a2e6-e5fddd4a4aec
