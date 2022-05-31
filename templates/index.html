@@ -5,7 +5,7 @@
 
 {% set blocks = entry.hero.all() %}
 {% if blocks|length %}
-  <section class="position-relative header-lg zindex-1 overflow-hidden mb-5">
+  <section class="position-relative header-hm zindex-1 overflow-hidden mb-5">
   {% for block in blocks %}
 
     {% set randos = craft.entries.section('photos') %}
@@ -29,7 +29,7 @@
       {% endif %}
     {% endfor %}
 
-    <div class="text-white d-flex align-items-center header-lg gradient-mask">
+    <div class="text-white d-flex align-items-center header-hm gradient-mask">
       <div class="container">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
           <div class="col">
@@ -38,7 +38,6 @@
             <form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}" style="background-color: transparent; margin-top: auto; padding-top: 1em;">
               <input id="searchField" type="search" name="q" class="form-control mx-2" placeholder="Enter Keyword">
               <button type="submit" class="btn btn-primary" value="Search"> Search </button>
-              <a class="btn-close headerSearch-close search-close" aria-label="Close"></a>
             </form>
           </div>
         </div>
