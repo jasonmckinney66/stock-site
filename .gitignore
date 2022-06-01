@@ -4,7 +4,8 @@ dev/
 prod/
 # /config/project
 /vendor
-
+/web/img/
+/web/docs/
 # ignore log files and databases
 *.log
 ##*.sql - I need this

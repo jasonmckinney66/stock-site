@@ -31,8 +31,15 @@
 
     <div class="text-white d-flex align-items-center header-hm gradient-mask">
       <div class="container">
+        <div class=" rowmd-flex align-items-center">
+          <div class="d-flex justify-content-center animate delay-1 fade-in">
+            <a class="navbar-brand" href="/">
+              <img src="/assets/images/logo.svg" alt="logo" width="200">
+            </a>
+          </div>
+        </div>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
-          <div class="col">
+          <div class="col animate delay-2 fade-in">
             <h1 class="text-center">{{ block.customHeaderText }}</h1>
             <p class="text-center">{{ block.subtitleText }}</p>
             <form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}" style="background-color: transparent; margin-top: auto; padding-top: 1em;">
@@ -50,16 +57,16 @@
 
 <section class="pt-2 mb-5">
   <div class="container">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-3 g-5 justify-content-center">
       {% set myCategoryQuery = craft.categories().group('photos').orderBy('lft ASC') %}
       {% set categories = myCategoryQuery.all() %}
       {% for category in categories %}
         <div class="col">
-          <a href="{{ category.url }}" class="card text-decoration-none h-100 shadow-lg">
+          <a href="{{ category.url }}" class="card text-decoration-none p-2 h-100 shadow-lg">
             {% set image = category.photoCategoryImage[0] ?? null %}
             {% if image and image.extension != 'svg' %}
               {% set outputWidths = [388, 366] %}
-              {% set aspectRatio = (5/3) %}
+              {% set aspectRatio = (2/3) %}
               <picture>
                 {% if craft.app.images.supportsWebP %}
                   <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
@@ -72,7 +79,7 @@
                 <img src="{{ image.getUrl() }}" alt="{{ image.title }}" loading="lazy">
             {% endif %}
 
-            <div class="card-body p-4 p-lg-5">
+            <div class="card-body p-3">
               <h3 class="text-gray-medium text-center">{{ category.title }}</h3>
             </div>
           </a>
