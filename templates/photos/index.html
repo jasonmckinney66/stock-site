@@ -1,14 +1,25 @@
 {% import '_macros' as m %}	
 {% extends "_layout" %}
-{% block bodyClass %}photos-listing-page{% endblock %}
+{% block bodyClass %}photos-listing-page bg-secondary{% endblock %}
 {% block content %}
 
 {% set requestedSlug = craft.app.request.segments|last %}
 {% set category = craft.categories().slug(requestedSlug|literal).one() %}
-<section class="position-relative bg-primary zindex-1 overflow-hidden header-sm mb-0">
-    <div class="text-white d-flex align-items-center header-sm">
-        <div class="container delay-2 fade-in">
-        <h1 class="text-white">{{ category }}</h1>
+<section>
+    <div class="container header-sm mb-0">
+        <div class="row py-4">
+            <div class="col-12 text-center">
+                <a class="navbar-brand" href="/">
+                    <img src="/assets/images/logo.svg" alt="logo" width="200">
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="delay-2 fade-in">
+                    <h1 class="text-white bg-dark d-inline px-2">{{ category }}</h1>
+                </div>
+            </div>
         </div>
     </div>
 </section>

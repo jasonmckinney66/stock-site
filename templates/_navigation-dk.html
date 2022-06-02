@@ -1,5 +1,5 @@
 {% include "_alertBar" %}
-<nav class="navbar navbar-dark bg-danger sticky-top p-3">
+<nav class="navbar navbar-dark bg-danger sticky-top">
 	<a href="#content" class="skip">Skip to Main Content</a>
 	<div class="container-fluid">
 		<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
@@ -30,7 +30,7 @@
     <h5 id="offcanvasLeftLabel">Categories</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-body bg-secondary">
+  <div class="offcanvas-body bg-primary">
     {% set myCategoryQuery = craft.categories().group('photos').orderBy('lft ASC') %}
     {% set categories = myCategoryQuery.all() %}
     {% for category in categories %}

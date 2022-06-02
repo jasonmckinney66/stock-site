@@ -58,7 +58,16 @@ a.skip {
   transform: translateY(-120%);
   transition: transform 0.3s;
 }
-
+.offcanvas-body a:link h4 {
+  padding: .5em;
+  background-image: linear-gradient(#b84c4c,#b84c4c);
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  transition: .4s;
+}
+.offcanvas-body a:hover h4 {
+  background-size: 100% 100%;
+}
 .navbar .megamenu{ 
   padding: 2rem;
   border-radius: 0;
