@@ -18,30 +18,15 @@
             {% set category = entry.photoCategory.one() %}
             {{ category.title }}
           </p>
-          <p class="h4 my-3">{{ entry.title }}</p>
+          <p class="h3 my-3">{{ entry.title }}</p>
           {% if entry.articleDate %}<p>{{ entry.articleDate|date }}</p>{% endif %}
-          <div class="d-flex align-items-end my-4">
-            <div>
-            {% for author in entry.photographer.all() %}
-              {% set image = author.staffPhoto.one() ?? null %}
-              {% if image %}
-                {% set authorThumb = { mode: 'crop', width: 80, height: 80, quality: 70, position: 'center-center' } %}
-                <img width="60" src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}">
-              {% else %}
-                <img width="60" src="/assets/images/profile.png" alt="Profile Image">
-              {% endif %}
-            </div>
-              <div class="ms-2"> By<br>
-                <span class="fw-medium">{{ author.title }}</span>
-              </div>
-            {% endfor %}
-          </div>
+
           <div class="my-3">
             <p>Location: {{ entry.photoLocation }}</p>
             <p>Size: {{ entry.photoSize }}</p>
             {% set tags = entry.photoTags.all() %}
             {% for tag in tags %}
-              <a href="{{ url('blog/tags/'~tag.id) }}" class="btn btn-outline-secondary btn-sm m-1 text-uppercase">{{ tag.title }}</a>
+              <a href="{{ url('blog/tags/'~tag.id) }}" class="btn btn-secondary btn-sm m-1">{{ tag.title }}</a>
             {% endfor %}
           </div>
           <div class="d-grid gap-2">
@@ -70,6 +55,27 @@
         {% endif %}
         <div class="my-4">
           {{ entry.photoDescription }}
+        </div>
+
+        <!-- author-->
+        <div class="p-4 mt-4 position-relative">
+          <div class="row tape bg-warning shadow-sm p-4">
+            {% for author in entry.photographer.all() %}
+              <div class="col-8">
+                <p class="lead">{{ author.title }}</h3>
+                <p>{{ author.staffBio }}</h3>
+              </div>
+              <div class="col-4">
+                {% set image = author.staffPhoto.one() ?? null %}
+                {% if image %}
+                  {% set authorThumb = { mode: 'crop', width: 320, height: 320, quality: 80, position: 'center-center' } %}
+                  <img src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}" class="border border-white rounded">
+                {% else %}
+                  <img src="/assets/images/profile.png" alt="Profile Image">
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>

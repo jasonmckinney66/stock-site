@@ -135,6 +135,10 @@ a.skip {
 .zindex-under {
   z-index: -1;
 }
+.btn, a.nav-link {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #fff;
+}
 .gradient-mask {
  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
  color: white;
@@ -145,6 +149,31 @@ a.skip {
 }
 .mt-n7 {
   margin-top: -5.4rem !important;
+}
+.tape::before, .tape::after {
+  content: '';
+  display: block;
+  position: absolute;
+  background-color: rgba(220,212,176,0.65);
+  height: 25px;
+}
+.tape:before {
+  left: -11px;
+  top: 16px;
+  width: 45px;
+  -webkit-transform: rotate(-12deg);
+  -moz-transform: rotate(-12deg);
+  -o-transform: rotate(-12deg);
+  -ms-transform: rotate(-12deg);
+}
+.tape:after {
+  left: 810px;
+  top: 16px;
+  width: 70px;
+  -webkit-transform: rotate(20deg);
+  -moz-transform: rotate(20deg);
+  -o-transform: rotate(20deg);
+  -ms-transform: rotate(20deg);
 }
 /* ==========================================================================
 Animation System by Neale Van Fleet from Rogue Amoeba
