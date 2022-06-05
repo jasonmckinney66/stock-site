@@ -1,4 +1,4 @@
-dateModified: 1653608131
+dateModified: 1654468294
 email:
   fromEmail: j@jasonmckinney.com
   fromName: Stock-Site
@@ -415,6 +415,10 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 1.0.0
+  contact-form:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
   default-dashboard:
     edition: standard
     enabled: true
@@ -423,6 +427,10 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 2.0.1
+  feed-me:
+    edition: standard
+    enabled: true
+    schemaVersion: 4.4.0
   position-fieldtype:
     edition: standard
     enabled: true

@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.5.3 (2022-03-28)
+- "To people of Russia": There is a war in Ukraine right now. The forces of the Russian Federation are attacking civilians.
+- use optimized phpdocs for phpstan
+
 ### 6.5.2 (2022-01-30)
 - update vendor (ASCII)
 

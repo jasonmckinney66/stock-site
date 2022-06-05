@@ -48,7 +48,9 @@ if (!\function_exists('Stringy\collection')) {
             if (\is_string($stringOrStringy)) {
                 $stringOrStringy = new Stringy($stringOrStringy);
             }
+            assert($stringOrStringy instanceof Stringy);
 
+            /** @phpstan-ignore-next-line - FP? */
             $newCollection[] = $stringOrStringy;
         }
 

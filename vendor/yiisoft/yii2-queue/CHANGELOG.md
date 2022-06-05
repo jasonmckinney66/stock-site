@@ -1,6 +1,12 @@
 Yii2 Queue Extension Change Log
 ===============================
 
+2.3.4 March 31, 2022
+--------------------
+
+- Enh #449: Force db to use the index on the `reserved_at` column to unlock unfinished tasks in DB driver (erickskrauch)
+
+
 2.3.3 December 30, 2021
 -----------------------
 
