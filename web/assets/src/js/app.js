@@ -256,3 +256,41 @@ if (window.IntersectionObserver) {
 } else {
   console.log("IntersectionObserver not supported.");
 }
+//Only run this on home page
+if ($('body').hasClass('home')) {
+  $(".view").hide();
+  $("#in").fadeIn("slow");
+  $(window).on("load", function() {
+    $("#in").hide();
+    $(".view").fadeIn("slow");
+  });
+}
+//Only run this on categories page
+if (($('body').hasClass('categories')) || ($('body').hasClass('tags'))) {
+
+  //Hide Stuff
+  $(".view").hide();
+  $("#in").fadeIn("slow");
+  
+  // Initialize Masonry
+  var $containter = $('#container-one');
+  $containter.imagesLoaded( function(){
+    $containter.masonry({
+        itemSelector: '.box',
+        isAnimated: !Modernizr.csstransitions,
+        isFitWidth: true
+    });
+  });
+  
+  $(window).on("load", function() {
+    $("#in").hide();
+    $("#grid").fadeIn("slow");
+  });
+      
+  // Hover on Grid Item
+  $(document).on('mouseenter','.roContent', function (event) {
+      $(this).addClass('active')
+  }).on('mouseleave','.roContent',  function(){
+      $(this).removeClass('active')
+  });
+}

@@ -36,7 +36,7 @@ gulp.task('build', function(pd) {
 
 // Minify JS
 gulp.task('scripts', function(sc) {
-  gulp.src(['./src/js/vendor/jquery.navpoints.js','./src/js/vendor/tweet-highlighted.js','./src/js/app.js'])
+  gulp.src(['./src/js/vendor/jquery.navpoints.js','./src/js/vendor/tweet-highlighted.js','./src/js/vendor/modernizr.js','./src/js/vendor/jquery.masonry.js','./src/js/app.js'])
     .pipe(concat('app.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./js/'))

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js canvas">
 	<head> 
 		{% set expiry = now|date_modify('+30 days') %}
 		{% header "Cache-Control: max-age=" ~ expiry.timestamp %}
@@ -67,8 +67,6 @@
 			{% block content %}{% endblock %}
 		</div>
 		<!-- END content -->
-		
-		{% include "_footer" %}
 
 		<!-- Scripts -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -77,21 +75,16 @@
 			<script src="/assets/src/js/vendor/bootstrap/bootstrap.min.js"></script>
 			<script src="/assets/src/js/vendor/jquery.navpoints.js"></script>
 			<script src="/assets/src/js/vendor/tweet-highlighted.js"></script>
+
+			<script src= "/assets/src/js/vendor/modernizr.js"></script>
+			<script src= "/assets/src/js/vendor/jquery.masonry.js"></script>
+
 			<script src="/assets/src/js/app.js"></script>
 		{% else %}
 			<script src="/assets/src/js/vendor/bootstrap/bootstrap.min.js"></script>
 			<script src="/assets/js/app.min.js"></script>
 		{% endif %}
-		<script>
-			$('body').tweetHighlighted({											 
-				node: '<a href="javascript:;" class="btn btn-primary">Tweet</a>',
-				minLength: 6,
-				maxLength: 240 * 2,
-				extra: 'https://bluecoastweb.com',
-				via: 'bluecoastweb',
-				popupArgs: 'width=600,height=600,toolbar=0,location=0'
-			});
-		</script> 
+
 		<!-- End Scripts -->
 
 		{{ endBody() }}	
