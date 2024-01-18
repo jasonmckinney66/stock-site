@@ -16,7 +16,6 @@ use craft\db\Table;
 use craft\elements\Asset;
 use craft\errors\MissingComponentException;
 use craft\events\ConfigEvent;
-use craft\events\FieldEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\VolumeEvent;
 use craft\helpers\ArrayHelper;
@@ -66,17 +65,17 @@ class Volumes extends Component
     const EVENT_REGISTER_VOLUME_TYPES = 'registerVolumeTypes';
 
     /**
-     * @event VolumeEvent The event that is triggered before an Asset volume is saved.
+     * @event VolumeEvent The event that is triggered before a volume is saved.
      */
     const EVENT_BEFORE_SAVE_VOLUME = 'beforeSaveVolume';
 
     /**
-     * @event VolumeEvent The event that is triggered after an Asset volume is saved.
+     * @event VolumeEvent The event that is triggered after a volume is saved.
      */
     const EVENT_AFTER_SAVE_VOLUME = 'afterSaveVolume';
 
     /**
-     * @event VolumeEvent The event that is triggered before an Asset volume is deleted.
+     * @event VolumeEvent The event that is triggered before a volume is deleted.
      */
     const EVENT_BEFORE_DELETE_VOLUME = 'beforeDeleteVolume';
 
@@ -87,7 +86,7 @@ class Volumes extends Component
     const EVENT_BEFORE_APPLY_VOLUME_DELETE = 'beforeApplyVolumeDelete';
 
     /**
-     * @event VolumeEvent The event that is triggered after a Asset volume is deleted.
+     * @event VolumeEvent The event that is triggered after a volume is deleted.
      */
     const EVENT_AFTER_DELETE_VOLUME = 'afterDeleteVolume';
 
@@ -365,7 +364,7 @@ class Volumes extends Component
             $volume->sortOrder = (new Query())
                     ->from([Table::VOLUMES])
                     ->max('[[sortOrder]]') + 1;
-        } else if (!$volume->uid) {
+        } elseif (!$volume->uid) {
             $volume->uid = Db::uidById(Table::VOLUMES, $volume->id);
         }
 
@@ -415,9 +414,9 @@ class Volumes extends Component
                 $layout->id = $volumeRecord->fieldLayoutId;
                 $layout->type = Asset::class;
                 $layout->uid = key($data['fieldLayouts']);
-                Craft::$app->getFields()->saveLayout($layout);
+                Craft::$app->getFields()->saveLayout($layout, false);
                 $volumeRecord->fieldLayoutId = $layout->id;
-            } else if ($volumeRecord->fieldLayoutId) {
+            } elseif ($volumeRecord->fieldLayoutId) {
                 // Delete the field layout
                 Craft::$app->getFields()->deleteLayoutById($volumeRecord->fieldLayoutId);
                 $volumeRecord->fieldLayoutId = null;
@@ -727,43 +726,10 @@ class Volumes extends Component
     }
 
     /**
-     * Prune a deleted field from volume layouts.
-     *
-     * @param FieldEvent $event
+     * @deprecated in 3.7.51. Unused fields will be pruned automatically as field layouts are resaved.
      */
-    public function pruneDeletedField(FieldEvent $event)
+    public function pruneDeletedField()
     {
-        $field = $event->field;
-        $fieldUid = $field->uid;
-
-        $projectConfig = Craft::$app->getProjectConfig();
-        $volumes = $projectConfig->get(self::CONFIG_VOLUME_KEY);
-
-        // Engage stealth mode
-        $projectConfig->muteEvents = true;
-
-        // Loop through the volumes and prune the UID from field layouts.
-        if (is_array($volumes)) {
-            foreach ($volumes as $volumeUid => $volume) {
-                if (!empty($volume['fieldLayouts'])) {
-                    foreach ($volume['fieldLayouts'] as $layoutUid => $layout) {
-                        if (!empty($layout['tabs'])) {
-                            foreach ($layout['tabs'] as $tabUid => $tab) {
-                                $projectConfig->remove(self::CONFIG_VOLUME_KEY . '.' . $volumeUid . '.fieldLayouts.' . $layoutUid . '.tabs.' . $tabUid . '.fields.' . $fieldUid, 'Prune deleted field');
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Nuke all the layout fields from the DB
-        Db::delete(Table::FIELDLAYOUTFIELDS, [
-            'fieldId' => $field->id,
-        ]);
-
-        // Allow events again
-        $projectConfig->muteEvents = false;
     }
 
     /**

@@ -189,7 +189,7 @@ class Category extends Element
      * @inheritdoc
      * @since 3.5.0
      */
-    public static function defineFieldLayouts(string $source): array
+    protected static function defineFieldLayouts(string $source): array
     {
         $fieldLayouts = [];
         if (
@@ -221,7 +221,7 @@ class Category extends Element
         // Get the group we need to check permissions on
         if (preg_match('/^group:(\d+)$/', $source, $matches)) {
             $group = Craft::$app->getCategories()->getGroupById($matches[1]);
-        } else if (preg_match('/^group:(.+)$/', $source, $matches)) {
+        } elseif (preg_match('/^group:(.+)$/', $source, $matches)) {
             $group = Craft::$app->getCategories()->getGroupByUid($matches[1]);
         }
 
@@ -238,14 +238,18 @@ class Category extends Element
             if (isset($group->siteSettings[$site->id]) && $group->siteSettings[$site->id]->hasUrls) {
                 $actions[] = $elementsService->createAction([
                     'type' => View::class,
-                    'label' => Craft::t('app', 'View category'),
+                    'label' => Craft::t('app', 'View {type}', [
+                        'type' => static::lowerDisplayName(),
+                    ]),
                 ]);
             }
 
             // Edit
             $actions[] = $elementsService->createAction([
                 'type' => Edit::class,
-                'label' => Craft::t('app', 'Edit category'),
+                'label' => Craft::t('app', 'Edit {type}', [
+                    'type' => static::lowerDisplayName(),
+                ]),
             ]);
 
             // New Child
@@ -258,7 +262,9 @@ class Category extends Element
 
                 $actions[] = $elementsService->createAction([
                     'type' => NewChild::class,
-                    'label' => Craft::t('app', 'Create a new child category'),
+                    'label' => Craft::t('app', 'Create a new child {type}', [
+                        'type' => static::lowerDisplayName(),
+                    ]),
                     'maxLevels' => $group->maxLevels,
                     'newChildUrl' => $newChildUrl,
                 ]);
@@ -288,9 +294,15 @@ class Category extends Element
         // Restore
         $actions[] = $elementsService->createAction([
             'type' => Restore::class,
-            'successMessage' => Craft::t('app', 'Categories restored.'),
-            'partialSuccessMessage' => Craft::t('app', 'Some categories restored.'),
-            'failMessage' => Craft::t('app', 'Categories not restored.'),
+            'successMessage' => Craft::t('app', '{type} restored.', [
+                'type' => static::pluralDisplayName(),
+            ]),
+            'partialSuccessMessage' => Craft::t('app', 'Some {type} restored.', [
+                'type' => static::pluralLowerDisplayName(),
+            ]),
+            'failMessage' => Craft::t('app', '{type} not restored.', [
+                'type' => static::pluralDisplayName(),
+            ]),
         ]);
 
         return $actions;
@@ -459,7 +471,7 @@ class Category extends Element
         $path = "categories/$group->handle";
 
         if ($this->id) {
-            $path .= "/$this->id" . ($this->slug ? "-$this->slug" : '');
+            $path .= "/$this->id" . ($this->slug ? sprintf('-%s', str_replace('/', '-', $this->slug)) : '');
         } else {
             $path .= '/new';
         }

@@ -18,23 +18,71 @@ use craft\elements\Entry;
 use craft\elements\MatrixBlock;
 use craft\elements\Tag;
 use craft\elements\User;
+use craft\errors\InvalidElementException;
 use craft\events\BatchElementActionEvent;
-use craft\fieldlayoutelements\CustomField;
+use craft\helpers\ElementHelper;
 use craft\helpers\Queue;
 use craft\helpers\StringHelper;
 use craft\queue\jobs\ResaveElements;
 use craft\services\Elements;
+use Throwable;
 use yii\console\ExitCode;
 use yii\helpers\Console;
 
 /**
  * Allows you to bulk-save elements.
  *
+ * See [Bulk-Resaving Elements](https://craftcms.com/knowledge-base/bulk-resaving-elements) for examples.
+ *
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @since 3.1.15
  */
 class ResaveController extends Controller
 {
+    /**
+     * Returns [[to]] normalized to a callable.
+     *
+     * @param string|null $to
+     * @return callable
+     * @since 3.7.56
+     * @internal
+     */
+    final public static function normalizeTo(?string $to): callable
+    {
+        // empty
+        if ($to === ':empty:') {
+            return function() {
+                return null;
+            };
+        }
+
+        // object template
+        if (StringHelper::startsWith($to, '=')) {
+            $template = substr($to, 1);
+            $view = Craft::$app->getView();
+            return function(ElementInterface $element) use ($template, $view) {
+                return $view->renderObjectTemplate($template, $element);
+            };
+        }
+
+        // PHP arrow function
+        if (preg_match('/^fn\s*\(\s*(?:\$(\w+)\s*)?\)\s*=>\s*(.+)/', $to, $match)) {
+            $var = $match[1];
+            $php = sprintf('return %s;', StringHelper::removeLeft(rtrim($match[2], ';'), 'return '));
+            return function(ElementInterface $element) use ($var, $php) {
+                if ($var) {
+                    $$var = $element;
+                }
+                return eval($php);
+            };
+        }
+
+        // attribute name
+        return static function(ElementInterface $element) use ($to) {
+            return $element->$to;
+        };
+    }
+
     /**
      * @var bool Whether the elements should be resaved via a queue job.
      * @since 3.7.0
@@ -52,6 +100,12 @@ class ResaveController extends Controller
      * @since 3.7.0
      */
     public $provisionalDrafts = false;
+
+    /**
+     * @var bool Whether to resave element revisions.
+     * @since 3.7.35
+     */
+    public $revisions = false;
 
     /**
      * @var int|string The ID(s) of the elements to resave.
@@ -84,14 +138,15 @@ class ResaveController extends Controller
     public $limit;
 
     /**
-     * @var bool Whether to save the elements across all their enabled sites.
-     */
-    public $propagate = true;
-
-    /**
      * @var bool Whether to update the search indexes for the resaved elements.
      */
     public $updateSearchIndex = false;
+
+    /**
+     * @var bool Whether to update the `dateUpdated` timestamp for the elements.
+     * @since 3.7.54
+     */
+    public $touch = false;
 
     /**
      * @var string|null The group handle(s) to save categories/tags/users from. Can be set to multiple comma-separated groups.
@@ -158,8 +213,8 @@ class ResaveController extends Controller
         $options[] = 'status';
         $options[] = 'offset';
         $options[] = 'limit';
-        $options[] = 'propagate';
         $options[] = 'updateSearchIndex';
+        $options[] = 'touch';
 
         switch ($actionID) {
             case 'assets':
@@ -175,6 +230,7 @@ class ResaveController extends Controller
                 $options[] = 'type';
                 $options[] = 'drafts';
                 $options[] = 'provisionalDrafts';
+                $options[] = 'revisions';
                 break;
             case 'matrix-blocks':
                 $options[] = 'field';
@@ -313,6 +369,10 @@ class ResaveController extends Controller
             Queue::push(new ResaveElements([
                 'elementType' => $elementType,
                 'criteria' => $criteria,
+                'set' => $this->set,
+                'to' => $this->to,
+                'ifEmpty' => $this->ifEmpty,
+                'touch' => $this->touch,
                 'updateSearchIndex' => $this->updateSearchIndex,
             ]));
             $this->stdout($elementType::pluralDisplayName() . ' queued to be resaved.' . PHP_EOL);
@@ -357,6 +417,10 @@ class ResaveController extends Controller
             $criteria['provisionalDrafts'] = true;
         }
 
+        if ($this->revisions) {
+            $criteria['revisions'] = true;
+        }
+
         if ($this->elementId) {
             $criteria['id'] = is_int($this->elementId) ? $this->elementId : explode(',', $this->elementId);
         }
@@ -371,7 +435,7 @@ class ResaveController extends Controller
 
         if ($this->status === 'any') {
             $criteria['status'] = null;
-        } else if ($this->status) {
+        } elseif ($this->status) {
             $criteria['status'] = explode(',', $this->status);
         }
 
@@ -401,11 +465,15 @@ class ResaveController extends Controller
             return ExitCode::OK;
         }
 
+        if ($query->offset) {
+            $count = max($count - (int)$query->offset, 0);
+        }
+
         if ($query->limit) {
             $count = min($count, (int)$query->limit);
         }
 
-        $to = $this->set ? $this->_normalizeTo() : null;
+        $to = $this->set ? self::normalizeTo($this->to) : null;
 
         $elementsText = $count === 1 ? $elementType::lowerDisplayName() : $elementType::pluralLowerDisplayName();
         $this->stdout("Resaving {$count} {$elementsText} ..." . PHP_EOL, Console::FG_YELLOW);
@@ -418,8 +486,12 @@ class ResaveController extends Controller
                 $element = $e->element;
                 $this->stdout("    - [{$e->position}/{$count}] Resaving {$element} ({$element->id}) ... ");
 
-                if ($this->set && (!$this->ifEmpty || $this->_isSetAttributeEmpty($element))) {
-                    $element->{$this->set} = $to($element);
+                try {
+                    if ($this->set && (!$this->ifEmpty || ElementHelper::isAttributeEmpty($element, $this->set))) {
+                        $element->{$this->set} = $to($element);
+                    }
+                } catch (Throwable $e) {
+                    throw new InvalidElementException($element, $e->getMessage());
                 }
             }
         };
@@ -430,7 +502,7 @@ class ResaveController extends Controller
                 if ($e->exception) {
                     $this->stderr('error: ' . $e->exception->getMessage() . PHP_EOL, Console::FG_RED);
                     $fail = true;
-                } else if ($element->hasErrors()) {
+                } elseif ($element->hasErrors()) {
                     $this->stderr('failed: ' . implode(', ', $element->getErrorSummary(true)) . PHP_EOL, Console::FG_RED);
                     $fail = true;
                 } else {
@@ -442,73 +514,12 @@ class ResaveController extends Controller
         $elementsService->on(Elements::EVENT_BEFORE_RESAVE_ELEMENT, $beforeCallback);
         $elementsService->on(Elements::EVENT_AFTER_RESAVE_ELEMENT, $afterCallback);
 
-        $elementsService->resaveElements($query, true, true, $this->updateSearchIndex);
+        $elementsService->resaveElements($query, true, !$this->revisions, $this->updateSearchIndex, $this->touch);
 
         $elementsService->off(Elements::EVENT_BEFORE_RESAVE_ELEMENT, $beforeCallback);
         $elementsService->off(Elements::EVENT_AFTER_RESAVE_ELEMENT, $afterCallback);
 
         $this->stdout("Done resaving {$elementsText}." . PHP_EOL . PHP_EOL, Console::FG_YELLOW);
         return $fail ? ExitCode::UNSPECIFIED_ERROR : ExitCode::OK;
-    }
-
-    /**
-     * Returns [[to]] normalized to a callable.
-     *
-     * @return callable
-     */
-    private function _normalizeTo(): callable
-    {
-        // empty
-        if ($this->to === ':empty:') {
-            return function() {
-                return null;
-            };
-        }
-
-        // object template
-        if (StringHelper::startsWith($this->to, '=')) {
-            $template = substr($this->to, 1);
-            $view = Craft::$app->getView();
-            return function(ElementInterface $element) use ($template, $view) {
-                return $view->renderObjectTemplate($template, $element);
-            };
-        }
-
-        // PHP arrow function
-        if (preg_match('/^fn\s*\(\s*\$(\w+)\s*\)\s*=>\s*(.+)/', $this->to, $match)) {
-            $var = $match[1];
-            $php = sprintf('return %s;', StringHelper::removeLeft(rtrim($match[2], ';'), 'return '));
-            return function(ElementInterface $element) use ($var, $php) {
-                $$var = $element;
-                return eval($php);
-            };
-        }
-
-        // attribute name
-        return function(ElementInterface $element) {
-            return $element->{$this->to};
-        };
-    }
-
-    /**
-     * Returns whether the [[set]] attribute on the given element is empty.
-     *
-     * @param ElementInterface $element
-     * @return bool
-     */
-    private function _isSetAttributeEmpty(ElementInterface $element): bool
-    {
-        // See if we're setting a custom field
-        if ($fieldLayout = $element->getFieldLayout()) {
-            foreach ($fieldLayout->getTabs() as $tab) {
-                foreach ($tab->elements as $layoutElement) {
-                    if ($layoutElement instanceof CustomField && $layoutElement->attribute() === $this->set) {
-                        return $layoutElement->getField()->isValueEmpty($element->getFieldValue($this->set), $element);
-                    }
-                }
-            }
-        }
-
-        return empty($element->{$this->set});
     }
 }

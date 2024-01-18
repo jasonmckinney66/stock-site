@@ -9,6 +9,7 @@ namespace craft\web\assets\cp;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\FieldInterface;
 use craft\config\GeneralConfig;
 use craft\elements\User;
 use craft\helpers\Assets;
@@ -25,7 +26,6 @@ use craft\web\assets\datepickeri18n\DatepickerI18nAsset;
 use craft\web\assets\elementresizedetector\ElementResizeDetectorAsset;
 use craft\web\assets\fabric\FabricAsset;
 use craft\web\assets\fileupload\FileUploadAsset;
-use craft\web\assets\focusvisible\FocusVisibleAsset;
 use craft\web\assets\garnish\GarnishAsset;
 use craft\web\assets\iframeresizer\IframeResizerAsset;
 use craft\web\assets\jquerypayment\JqueryPaymentAsset;
@@ -55,7 +55,6 @@ class CpAsset extends AssetBundle
         AxiosAsset::class,
         D3Asset::class,
         ElementResizeDetectorAsset::class,
-        FocusVisibleAsset::class,
         GarnishAsset::class,
         JqueryAsset::class,
         JqueryTouchEventsAsset::class,
@@ -97,7 +96,7 @@ class CpAsset extends AssetBundle
         }
 
         // Define the Craft object
-        $craftJson = Json::encode($this->_craftData(), JSON_UNESCAPED_UNICODE);
+        $craftJson = Json::encode($this->_craftData());
         $js = <<<JS
 window.Craft = {$craftJson};
 JS;
@@ -120,6 +119,8 @@ JS;
             'Are you sure you want to delete “{name}”?',
             'Are you sure you want to discard your changes?',
             'Are you sure you want to transfer your license to this domain?',
+            'Assets',
+            'Breadcrumbs',
             'Buy {name}',
             'Cancel',
             'Choose a user',
@@ -166,6 +167,10 @@ JS;
             'Export',
             'Export…',
             'Failed',
+            'Folder actions',
+            'Folder created.',
+            'Folder deleted.',
+            'Folder renamed.',
             'Format',
             'From {date}',
             'From',
@@ -191,10 +196,14 @@ JS;
             'Make required',
             'Matrix block could not be added. Maximum number of blocks reached.',
             'Merge the folder (any conflicting files will be replaced)',
+            'More items',
             'More',
+            'More…',
             'Move down',
+            'Move folder',
             'Move to the left',
             'Move to the right',
+            'Move to',
             'Move up',
             'Move',
             'Name',
@@ -223,6 +232,7 @@ JS;
             'Previous Page',
             'Really delete folder “{folder}”?',
             'Refresh',
+            'Remove {label}',
             'Remove',
             'Rename folder',
             'Rename',
@@ -230,6 +240,8 @@ JS;
             'Replace it',
             'Replace the folder (all existing files will be deleted)',
             'Rotate',
+            'Row could not be added. Maximum number of rows reached.',
+            'Row could not be deleted. Minimum number of rows reached.',
             'Save as a new asset',
             'Save',
             'Saved {timestamp} by {creator}',
@@ -238,7 +250,9 @@ JS;
             'Score',
             'Search in subfolders',
             'Select all',
+            'Select element',
             'Select transform',
+            'Select {element}',
             'Select',
             'Settings',
             'Show nav',
@@ -261,6 +275,7 @@ JS;
             'This month',
             'This week',
             'This year',
+            'Tip',
             'To {date}',
             'To',
             'Today',
@@ -271,6 +286,8 @@ JS;
             'Upload failed for {filename}',
             'Upload files',
             'View',
+            'Volume path',
+            'Warning',
             'What do you want to do with their content?',
             'What do you want to do?',
             'Your changes could not be stored.',
@@ -291,8 +308,10 @@ JS;
             '{ctrl}C to copy.',
             '{first, number}-{last, number} of {total, number} {total, plural, =1{{item}} other{{items}}}',
             '{first}-{last} of {total}',
+            '{name} folder',
             '{num, number} {num, plural, =1{Available Update} other{Available Updates}}',
             '{total, number} {total, plural, =1{{item}} other{{items}}}',
+            '{totalItems, plural, =1{Item} other{Items}} moved.',
             '{type} saved.',
             '“{name}” deleted.',
         ]);
@@ -312,6 +331,52 @@ JS;
         $primarySite = $upToDate ? $sitesService->getPrimarySite() : null;
         $view = Craft::$app->getView();
 
+        $data = [
+            'actionTrigger' => $generalConfig->actionTrigger,
+            'actionUrl' => UrlHelper::actionUrl(),
+            'announcements' => $upToDate ? $this->_announcements() : [],
+            'asciiCharMap' => StringHelper::asciiCharMap(true, Craft::$app->language),
+            'baseApiUrl' => Craft::$app->baseApiUrl,
+            'baseCpUrl' => UrlHelper::cpUrl(),
+            'baseSiteUrl' => UrlHelper::siteUrl(),
+            'baseUrl' => UrlHelper::url(),
+            'clientOs' => $request->getClientOs(),
+            'cpTrigger' => $generalConfig->cpTrigger,
+            'datepickerOptions' => $this->_datepickerOptions($formattingLocale, $locale, $currentUser, $generalConfig),
+            'defaultCookieOptions' => $this->_defaultCookieOptions(),
+            'fileKinds' => Assets::getFileKinds(),
+            'language' => Craft::$app->language,
+            'left' => $orientation === 'ltr' ? 'left' : 'right',
+            'omitScriptNameInUrls' => (bool)$generalConfig->omitScriptNameInUrls,
+            'orientation' => $orientation,
+            'pageNum' => $request->getPageNum(),
+            'pageTrigger' => 'p',
+            'path' => $request->getPathInfo(),
+            'pathParam' => $generalConfig->pathParam,
+            'Pro' => Craft::Pro,
+            'registeredAssetBundles' => ['' => ''], // force encode as JS object
+            'registeredJsFiles' => ['' => ''], // force encode as JS object
+            'right' => $orientation === 'ltr' ? 'right' : 'left',
+            'scriptName' => basename($request->getScriptFile()),
+            'Solo' => Craft::Solo,
+            'systemUid' => Craft::$app->getSystemUid(),
+            'timepickerOptions' => $this->_timepickerOptions($formattingLocale, $orientation),
+            'timezone' => Craft::$app->getTimeZone(),
+            'tokenParam' => $generalConfig->tokenParam,
+            'translations' => ['' => ''], // force encode as JS object
+            'usePathInfo' => (bool)$generalConfig->usePathInfo,
+        ];
+
+        if ($generalConfig->enableCsrfProtection) {
+            $data['csrfTokenName'] = $request->csrfParam;
+            $data['csrfTokenValue'] = $request->getCsrfToken();
+        }
+
+        // If no one's logged in yet, leave it at that
+        if (!$currentUser) {
+            return $data;
+        }
+
         $elementTypeNames = [];
         foreach (Craft::$app->getElements()->getAllElementTypes() as $elementType) {
             /** @var string|ElementInterface $elementType */
@@ -323,77 +388,42 @@ JS;
             ];
         }
 
-        $data = [
-            'actionTrigger' => $generalConfig->actionTrigger,
-            'actionUrl' => UrlHelper::actionUrl(),
+        $data += [
             'allowAdminChanges' => $generalConfig->allowAdminChanges,
             'allowUpdates' => $generalConfig->allowUpdates,
             'allowUppercaseInSlug' => (bool)$generalConfig->allowUppercaseInSlug,
-            'announcements' => $upToDate ? $this->_announcements() : [],
             'apiParams' => Craft::$app->apiParams,
-            'asciiCharMap' => StringHelper::asciiCharMap(true, Craft::$app->language),
             'autosaveDrafts' => (bool)$generalConfig->autosaveDrafts,
-            'baseApiUrl' => Craft::$app->baseApiUrl,
-            'baseCpUrl' => UrlHelper::cpUrl(),
-            'baseSiteUrl' => UrlHelper::siteUrl(),
-            'baseUrl' => UrlHelper::url(),
             'canAccessQueueManager' => $userSession->checkPermission('utility:queue-manager'),
-            'clientOs' => $request->getClientOs(),
-            'cpTrigger' => $generalConfig->cpTrigger,
-            'datepickerOptions' => $this->_datepickerOptions($formattingLocale, $locale, $currentUser, $generalConfig),
-            'defaultCookieOptions' => $this->_defaultCookieOptions(),
             'defaultIndexCriteria' => [],
             'deltaNames' => $view->getDeltaNames(),
             'editableCategoryGroups' => $upToDate ? $this->_editableCategoryGroups() : [],
             'edition' => Craft::$app->getEdition(),
             'elementTypeNames' => $elementTypeNames,
-            'fileKinds' => Assets::getFileKinds(),
+            'fieldsWithoutContent' => array_map(function(FieldInterface $field) {
+                return $field->handle;
+            }, Craft::$app->getFields()->getFieldsWithoutContent(false)),
             'handleCasing' => $generalConfig->handleCasing,
             'httpProxy' => $this->_httpProxy($generalConfig),
             'initialDeltaValues' => $view->getInitialDeltaValues(),
             'isImagick' => Craft::$app->getImages()->getIsImagick(),
             'isMultiSite' => Craft::$app->getIsMultiSite(),
-            'language' => Craft::$app->language,
-            'left' => $orientation === 'ltr' ? 'left' : 'right',
             'limitAutoSlugsToAscii' => (bool)$generalConfig->limitAutoSlugsToAscii,
             'maxUploadSize' => Assets::getMaxUploadSize(),
             'modifiedDeltaNames' => $request->getBodyParam('modifiedDeltaNames', []),
-            'omitScriptNameInUrls' => (bool)$generalConfig->omitScriptNameInUrls,
-            'orientation' => $orientation,
-            'pageNum' => $request->getPageNum(),
-            'pageTrigger' => $generalConfig->getPageTrigger(),
-            'path' => $request->getPathInfo(),
-            'pathParam' => $generalConfig->pathParam,
             'previewIframeResizerOptions' => $this->_previewIframeResizerOptions($generalConfig),
             'primarySiteId' => $primarySite ? (int)$primarySite->id : null,
             'primarySiteLanguage' => $primarySite->language ?? null,
-            'Pro' => Craft::Pro,
-            'publishableSections' => $upToDate && $currentUser ? $this->_publishableSections($currentUser) : [],
-            'registeredAssetBundles' => ['' => ''], // force encode as JS object
-            'registeredJsFiles' => ['' => ''], // force encode as JS object
+            'publishableSections' => $upToDate ? $this->_publishableSections($currentUser) : [],
             'remainingSessionTime' => !in_array($request->getSegment(1), ['updates', 'manualupdate'], true) ? $userSession->getRemainingSessionTime() : 0,
-            'right' => $orientation === 'ltr' ? 'right' : 'left',
             'runQueueAutomatically' => (bool)$generalConfig->runQueueAutomatically,
-            'scriptName' => basename($request->getScriptFile()),
             'siteId' => $upToDate ? (int)$sitesService->currentSite->id : null,
             'sites' => $this->_sites($sitesService),
             'siteToken' => $generalConfig->siteToken,
             'slugWordSeparator' => $generalConfig->slugWordSeparator,
-            'Solo' => Craft::Solo,
-            'systemUid' => Craft::$app->getSystemUid(),
-            'timepickerOptions' => $this->_timepickerOptions($formattingLocale, $orientation),
-            'timezone' => Craft::$app->getTimeZone(),
-            'tokenParam' => $generalConfig->tokenParam,
-            'translations' => ['' => ''], // force encode as JS object
             'useCompressedJs' => (bool)$generalConfig->useCompressedJs,
-            'usePathInfo' => (bool)$generalConfig->usePathInfo,
-            'username' => $currentUser->username ?? null,
+            'username' => $currentUser->username,
         ];
-
-        if ($generalConfig->enableCsrfProtection) {
-            $data['csrfTokenName'] = $request->csrfParam;
-            $data['csrfTokenValue'] = $request->getCsrfToken();
-        }
 
         return $data;
     }
@@ -439,7 +469,7 @@ JS;
                 'handle' => $group->handle,
                 'id' => (int)$group->id,
                 'name' => Craft::t('site', $group->name),
-                'uid' => Craft::t('site', $group->uid),
+                'uid' => $group->uid,
             ];
         }
 

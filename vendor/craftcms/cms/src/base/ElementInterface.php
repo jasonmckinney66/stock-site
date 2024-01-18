@@ -13,10 +13,9 @@ use craft\models\FieldLayout;
 use craft\models\Site;
 use Twig\Markup;
 
-
 /**
  * ElementInterface defines the common interface to be implemented by element classes.
- * A class implementing this interface should also use [[ElementTrait]] and [[ContentTrait]].
+ * A class implementing this interface should also use [[ElementTrait]].
  *
  * @mixin ElementTrait
  * @mixin \craft\behaviors\CustomFieldBehavior
@@ -285,6 +284,27 @@ interface ElementInterface extends ComponentInterface
     public static function sources(string $context = null): array;
 
     /**
+     * Returns a source definition by a given source key/path and context.
+     *
+     * @param string $sourceKey
+     * @param string|null $context
+     * @return array|null
+     * @since 3.8.0
+     */
+    public static function findSource(string $sourceKey, ?string $context = null): ?array;
+
+    /**
+     * Returns the source path for a given source key, step key, and context.
+     *
+     * @param string $sourceKey
+     * @param string $stepKey
+     * @param string|null $context
+     * @return array[]|null
+     * @since 3.8.12
+     */
+    public static function sourcePath(string $sourceKey, string $stepKey, ?string $context): ?array;
+
+    /**
      * Returns all of the field layouts associated with elements from the given source.
      *
      * This is used to determine which custom fields should be included in the element index sort menu,
@@ -372,6 +392,16 @@ interface ElementInterface extends ComponentInterface
      * @return string The element index HTML
      */
     public static function indexHtml(ElementQueryInterface $elementQuery, array $disabledElementIds = null, array $viewState, string $sourceKey = null, string $context = null, bool $includeContainer, bool $showCheckboxes): string;
+
+    /**
+     * Returns the total number of elements that will be shown on an element index, for the given element query.
+     *
+     * @param ElementQueryInterface $elementQuery
+     * @param string|null $sourceKey
+     * @return int
+     * @since 3.8.0
+     */
+    public static function indexElementCount(ElementQueryInterface $elementQuery, ?string $sourceKey): int;
 
     /**
      * Returns the sort options for the element type.
@@ -493,7 +523,7 @@ interface ElementInterface extends ComponentInterface
     /**
      * Returns the GraphQL type name by an element's context.
      *
-     * @param mixed $context The element's context, such as a Volume, Entry Type or Matrix Block Type.
+     * @param mixed $context The element's context, such as a volume, entry type or Matrix block type.
      * @return string
      * @since 3.3.0
      */
@@ -511,7 +541,7 @@ interface ElementInterface extends ComponentInterface
     /**
      * Returns the GraphQL scopes required by element's context.
      *
-     * @param mixed $context The element's context, such as a Volume, Entry Type or Matrix Block Type.
+     * @param mixed $context The element's context, such as a volume, entry type or Matrix block type.
      * @return array
      * @since 3.3.0
      */
@@ -1114,6 +1144,7 @@ interface ElementInterface extends ComponentInterface
      * to the target site.
      *
      * @return string The translation key
+     * @since 3.5.0
      */
     public function getTitleTranslationKey(): string;
 

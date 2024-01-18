@@ -55,6 +55,7 @@ use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Traversable;
 use Twig\Environment as TwigEnvironment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
@@ -247,6 +248,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('kebab', [$this, 'kebabFilter']),
             new TwigFilter('lcfirst', [$this, 'lcfirstFilter']),
             new TwigFilter('literal', [$this, 'literalFilter']),
+            new TwigFilter('map', [$this, 'mapFilter'], ['needs_environment' => true]),
             new TwigFilter('markdown', [$this, 'markdownFilter'], ['is_safe' => ['html']]),
             new TwigFilter('md', [$this, 'markdownFilter'], ['is_safe' => ['html']]),
             new TwigFilter('merge', [$this, 'mergeFilter']),
@@ -264,10 +266,12 @@ class Extension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('prepend', [$this, 'prependFilter'], ['is_safe' => ['html']]),
             new TwigFilter('purify', [$this, 'purifyFilter'], ['is_safe' => ['html']]),
             new TwigFilter('push', [$this, 'pushFilter']),
+            new TwigFilter('reduce', [$this, 'reduceFilter'], ['needs_environment' => true]),
             new TwigFilter('removeClass', [$this, 'removeClassFilter'], ['is_safe' => ['html']]),
             new TwigFilter('replace', [$this, 'replaceFilter']),
             new TwigFilter('rss', [$this, 'rssFilter'], ['needs_environment' => true]),
             new TwigFilter('snake', [$this, 'snakeFilter']),
+            new TwigFilter('sort', [$this, 'sortFilter'], ['needs_environment' => true]),
             new TwigFilter('time', [$this, 'timeFilter'], ['needs_environment' => true]),
             new TwigFilter('timestamp', [$this, 'timestampFilter']),
             new TwigFilter('translate', [$this, 'translateFilter']),
@@ -356,7 +360,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $params = $category;
             $category = 'site';
-        } else if ($category === null) {
+        } elseif ($category === null) {
             $category = 'site';
         }
 
@@ -475,6 +479,56 @@ class Extension extends AbstractExtension implements GlobalsInterface
     {
         return StringHelper::toSnakeCase((string)$string);
     }
+
+    /**
+     * Sorts an array.
+     *
+     * @param TwigEnvironment $env
+     * @param array|Traversable $array
+     * @param string|callable|null $arrow
+     * @return array
+     * @throws RuntimeError
+     * @since 3.7.60
+     */
+    public function sortFilter(TwigEnvironment $env, $array, $arrow = null): array
+    {
+        $this->_checkFilterSupport($arrow);
+        return twig_sort_filter($env, $array, $arrow);
+    }
+
+    /**
+     * Reduces an array.
+     *
+     * @param TwigEnvironment $env
+     * @param $array
+     * @param $arrow
+     * @param $initial
+     * @return mixed
+     * @throws RuntimeError
+     * @since 3.8.16
+     */
+    public function reduceFilter(TwigEnvironment $env, $array, $arrow, $initial = null)
+    {
+        $this->_checkFilterSupport($arrow);
+        return twig_array_reduce($env, $array, $arrow, $initial);
+    }
+
+    /**
+     * Maps an array.
+     *
+     * @param TwigEnvironment $env
+     * @param $array
+     * @param $arrow
+     * @return array
+     * @throws RuntimeError
+     * @since 3.8.16
+     */
+    public function mapFilter(TwigEnvironment $env, $array, $arrow = null): array
+    {
+        $this->_checkFilterSupport($arrow);
+        return twig_array_map($env, $array, $arrow);
+    }
+
 
     /**
      * Formats the value as a currency number.
@@ -615,7 +669,12 @@ class Extension extends AbstractExtension implements GlobalsInterface
             }
         }
 
-        return json_encode($value, $options, $depth);
+        // todo: remove the $depth arg in Craft 5
+        if ($depth !== 512) {
+            return json_encode($value, $options, $depth);
+        }
+
+        return Json::encode($value, $options);
     }
 
     /**
@@ -1014,9 +1073,12 @@ class Extension extends AbstractExtension implements GlobalsInterface
      * @param array|\Traversable $arr
      * @param callable|null $arrow
      * @return array
+     * @throws RuntimeError
      */
     public function filterFilter(TwigEnvironment $env, $arr, $arrow = null)
     {
+        $this->_checkFilterSupport($arrow);
+
         if ($arrow === null) {
             return array_filter($arr);
         }
@@ -1046,7 +1108,6 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function groupFilter($arr, $arrow): array
     {
         if ($arr instanceof ElementQuery) {
-            Craft::$app->getDeprecator()->log('ElementQuery::getIterator()', 'Looping through element queries directly has been deprecated. Use the `all()` function to fetch the query results before looping over them.');
             $arr = $arr->all();
         }
 
@@ -1100,9 +1161,9 @@ class Extension extends AbstractExtension implements GlobalsInterface
     {
         if (is_string($haystack)) {
             $index = strpos($haystack, $needle);
-        } else if (is_array($haystack)) {
+        } elseif (is_array($haystack)) {
             $index = array_search($needle, $haystack, false);
-        } else if (is_object($haystack) && $haystack instanceof \IteratorAggregate) {
+        } elseif (is_object($haystack) && $haystack instanceof \IteratorAggregate) {
             $index = false;
 
             foreach ($haystack as $i => $item) {
@@ -1433,7 +1494,7 @@ class Extension extends AbstractExtension implements GlobalsInterface
                 Craft::$app->getErrorHandler()->logException($e);
                 return '';
             }
-        } else if (stripos($svg, '<svg') === false) {
+        } elseif (stripos($svg, '<svg') === false) {
             // No <svg> tag, so it's probably a file path
             try {
                 $svg = Craft::getAlias($svg);
@@ -1557,8 +1618,23 @@ class Extension extends AbstractExtension implements GlobalsInterface
             'loginUrl' => UrlHelper::siteUrl($generalConfig->getLoginPath()),
             'logoutUrl' => UrlHelper::siteUrl($generalConfig->getLogoutPath()),
             'setPasswordUrl' => $setPasswordRequestPath !== null ? UrlHelper::siteUrl($setPasswordRequestPath) : null,
-            'now' => new DateTime(null, new \DateTimeZone(Craft::$app->getTimeZone())),
+            'now' => new DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone())),
         ];
+    }
+
+    /**
+     * @param mixed $arrow
+     * @throws RuntimeError
+     */
+    private function _checkFilterSupport($arrow): void
+    {
+        if (is_string($arrow) && in_array(ltrim(strtolower($arrow), '\\'), [
+            'system',
+            'passthru',
+            'exec',
+        ])) {
+            throw new RuntimeError('Not supported in this filter.');
+        }
     }
 
     // Deprecated Methods

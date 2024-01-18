@@ -49,6 +49,12 @@ class TemplateCaches extends Component
     private $_enabled;
 
     /**
+     * @var bool Whether global template caches should be enabled for this request
+     * @see _isTemplateCachingEnabled()
+     */
+    private $_enabledGlobally;
+
+    /**
      * @var string|null The current request's path
      * @see _path()
      */
@@ -66,7 +72,7 @@ class TemplateCaches extends Component
     public function getTemplateCache(string $key, bool $global, bool $registerScripts = false)
     {
         // Make sure template caching is enabled
-        if ($this->_isTemplateCachingEnabled() === false) {
+        if ($this->_isTemplateCachingEnabled($global) === false) {
             return null;
         }
 
@@ -97,11 +103,12 @@ class TemplateCaches extends Component
      * [[\craft\web\View::registerScript()]], and [[\craft\web\View::registerCss()]] should be captured and
      * included in the cache. If this is `true`, be sure to pass `$withScripts = true` to [[endTemplateCache()]]
      * as well.
+     * @param bool $global Whether the cache should be stored globally.
      */
-    public function startTemplateCache(bool $withScripts = false)
+    public function startTemplateCache(bool $withScripts = false, bool $global = false)
     {
         // Make sure template caching is enabled
-        if ($this->_isTemplateCachingEnabled() === false) {
+        if ($this->_isTemplateCachingEnabled($global) === false) {
             return;
         }
 
@@ -152,7 +159,7 @@ class TemplateCaches extends Component
     public function endTemplateCache(string $key, bool $global, ?string $duration, $expiration, string $body, bool $withScripts = false)
     {
         // Make sure template caching is enabled
-        if ($this->_isTemplateCachingEnabled() === false) {
+        if ($this->_isTemplateCachingEnabled($global) === false) {
             return;
         }
 
@@ -167,14 +174,14 @@ class TemplateCaches extends Component
 
         // If there are any transform generation URLs in the body, don't cache it.
         // stripslashes($body) in case the URL has been JS-encoded or something.
-        if (StringHelper::contains(stripslashes($body), 'assets/generate-transform')) {
-            return;
+        $saveCache = !StringHelper::contains(stripslashes($body), 'assets/generate-transform');
+
+        if ($saveCache) {
+            // Always add a `template` tag
+            $dep->tags[] = 'template';
+
+            $cacheValue = [$body, $dep->tags];
         }
-
-        // Always add a `template` tag
-        $dep->tags[] = 'template';
-
-        $cacheValue = [$body, $dep->tags];
 
         if ($withScripts) {
             // Parse the JS/CSS code and tag attributes out of the <script> and <style> tags
@@ -189,10 +196,16 @@ class TemplateCaches extends Component
                 return [$tag['children'][0]['value'], $tag['attributes']];
             }, $bufferedCss);
 
-            array_push($cacheValue, $bufferedJs, $bufferedScripts, $bufferedCss);
+            if ($saveCache) {
+                array_push($cacheValue, $bufferedJs, $bufferedScripts, $bufferedCss);
+            }
 
             // Re-register the JS and CSS
             $this->_registerScripts($bufferedJs, $bufferedScripts, $bufferedCss);
+        }
+
+        if (!$saveCache) {
+            return;
         }
 
         $cacheKey = $this->_cacheKey($key, $global);
@@ -386,17 +399,26 @@ class TemplateCaches extends Component
     /**
      * Returns whether template caching is enabled, based on the 'enableTemplateCaching' config setting.
      *
+     * @param bool $global Whether this is for a globally-scoped cache
      * @return bool Whether template caching is enabled
      */
-    private function _isTemplateCachingEnabled(): bool
+    private function _isTemplateCachingEnabled(bool $global): bool
     {
         if ($this->_enabled === null) {
-            $this->_enabled = (
-                Craft::$app->getConfig()->getGeneral()->enableTemplateCaching &&
-                !Craft::$app->getRequest()->getIsConsoleRequest()
-            );
+            if (!Craft::$app->getConfig()->getGeneral()->enableTemplateCaching) {
+                $this->_enabled = $this->_enabledGlobally = false;
+            } else {
+                // Don't enable template caches for tokenized requests
+                $request = Craft::$app->getRequest();
+                if ($request->getHadToken()) {
+                    $this->_enabled = $this->_enabledGlobally = false;
+                } else {
+                    $this->_enabled = !$request->getIsConsoleRequest();
+                    $this->_enabledGlobally = true;
+                }
+            }
         }
-        return $this->_enabled;
+        return $global ? $this->_enabledGlobally : $this->_enabled;
     }
 
     /**
@@ -435,19 +457,22 @@ class TemplateCaches extends Component
             throw new Exception('Not possible to determine the request path for console commands.');
         }
 
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
+        $isCpRequest = $request->getIsCpRequest();
+        if ($isCpRequest) {
             $this->_path = 'cp:';
         } else {
             $this->_path = 'site:';
         }
 
-        $this->_path .= Craft::$app->getRequest()->getPathInfo();
+        $this->_path .= $request->getPathInfo();
         if (Craft::$app->getDb()->getIsMysql()) {
             $this->_path = StringHelper::encodeMb4($this->_path);
         }
 
-        if (($pageNum = Craft::$app->getRequest()->getPageNum()) != 1) {
-            $this->_path .= '/' . Craft::$app->getConfig()->getGeneral()->getPageTrigger() . $pageNum;
+        $pageNum = $request->getPageNum();
+        if ($pageNum !== 1) {
+            $pageTrigger = $isCpRequest ? 'p' : Craft::$app->getConfig()->getGeneral()->getPageTrigger();
+            $this->_path .= sprintf('/%s%s', $pageTrigger, $pageNum);
         }
 
         return $this->_path;

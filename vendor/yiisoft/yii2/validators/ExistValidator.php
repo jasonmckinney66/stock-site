@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\validators;
@@ -49,13 +49,13 @@ use yii\db\QueryInterface;
 class ExistValidator extends Validator
 {
     /**
-     * @var string the name of the ActiveRecord class that should be used to validate the existence
+     * @var string|null the name of the ActiveRecord class that should be used to validate the existence
      * of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
      * @see targetAttribute
      */
     public $targetClass;
     /**
-     * @var string|array the name of the ActiveRecord attribute that should be used to
+     * @var string|array|null the name of the ActiveRecord attribute that should be used to
      * validate the existence of the current attribute value. If not set, it will use the name
      * of the attribute currently being validated. You may use an array to validate the existence
      * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
@@ -153,8 +153,16 @@ class ExistValidator extends Validator
     private function checkTargetAttributeExistence($model, $attribute)
     {
         $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
+        if ($this->skipOnError) {
+            foreach ((array)$targetAttribute as $k => $v) {
+                if ($model->hasErrors(is_int($k) ? $v : $k)) {
+                    return;
+                }
+            }
+        }
+
         $params = $this->prepareConditions($targetAttribute, $model, $attribute);
-        $conditions = [$this->targetAttributeJunction == 'or' ? 'or' : 'and'];
+        $conditions = [$this->targetAttributeJunction === 'or' ? 'or' : 'and'];
 
         if (!$this->allowArray) {
             foreach ($params as $key => $value) {
@@ -181,7 +189,7 @@ class ExistValidator extends Validator
      * Processes attributes' relations described in $targetAttribute parameter into conditions, compatible with
      * [[\yii\db\Query::where()|Query::where()]] key-value format.
      *
-     * @param $targetAttribute array|string $attribute the name of the ActiveRecord attribute that should be used to
+     * @param $targetAttribute array|string|null $attribute the name of the ActiveRecord attribute that should be used to
      * validate the existence of the current attribute value. If not set, it will use the name
      * of the attribute currently being validated. You may use an array to validate the existence
      * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
@@ -256,17 +264,14 @@ class ExistValidator extends Validator
     private function valueExists($targetClass, $query, $value)
     {
         $db = $targetClass::getDb();
-        $exists = false;
 
         if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
-            $exists = $db->useMaster(function () use ($query, $value) {
+            return $db->useMaster(function () use ($query, $value) {
                 return $this->queryValueExists($query, $value);
             });
-        } else {
-            $exists = $this->queryValueExists($query, $value);
         }
 
-        return $exists;
+        return $this->queryValueExists($query, $value);
     }
 
 
@@ -282,6 +287,7 @@ class ExistValidator extends Validator
         if (is_array($value)) {
             return $query->count("DISTINCT [[$this->targetAttribute]]") == count(array_unique($value));
         }
+
         return $query->exists();
     }
 
@@ -308,7 +314,7 @@ class ExistValidator extends Validator
      * Returns conditions with alias.
      * @param ActiveQuery $query
      * @param array $conditions array of condition, keys to be modified
-     * @param null|string $alias set empty string for no apply alias. Set null for apply primary table alias
+     * @param string|null $alias set empty string for no apply alias. Set null for apply primary table alias
      * @return array
      */
     private function applyTableAlias($query, $conditions, $alias = null)
@@ -320,7 +326,7 @@ class ExistValidator extends Validator
         foreach ($conditions as $columnName => $columnValue) {
             if (strpos($columnName, '(') === false) {
                 $prefixedColumn = "{$alias}.[[" . preg_replace(
-                    '/^' . preg_quote($alias) . '\.(.*)$/',
+                    '/^' . preg_quote($alias, '/') . '\.(.*)$/',
                     '$1',
                     $columnName) . ']]';
             } else {

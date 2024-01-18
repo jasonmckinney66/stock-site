@@ -89,7 +89,7 @@ class GraphqlController extends Controller
                     }
                 }
             }
-        } else if ($generalConfig->allowedGraphqlOrigins !== false) {
+        } elseif ($generalConfig->allowedGraphqlOrigins !== false) {
             $headers->setDefault('Access-Control-Allow-Origin', '*');
         }
 
@@ -153,17 +153,27 @@ class GraphqlController extends Controller
             }
         }
 
+        if ($generalConfig->maxGraphqlBatchSize && count($queries) > $generalConfig->maxGraphqlBatchSize) {
+            throw new BadRequestHttpException(sprintf(
+                'No more than %s GraphQL %s can be executed in a single batch.',
+                $generalConfig->maxGraphqlBatchSize,
+                $generalConfig->maxGraphqlBatchSize == 1 ? 'query' : 'queries'
+            ));
+        }
+
+
         // Generate all transforms immediately
-        Craft::$app->getConfig()->getGeneral()->generateTransformsBeforePageLoad = true;
+        $generalConfig->generateTransformsBeforePageLoad = true;
 
         // Check for the cache-bust header
         $gqlCacheHeader = $this->request->getHeaders()->get('x-craft-gql-cache', null, true);
         if ($gqlCacheHeader === 'no-cache') {
-            $cacheSetting = Craft::$app->getConfig()->getGeneral()->enableGraphqlCaching;
-            Craft::$app->getConfig()->getGeneral()->enableGraphqlCaching = false;
+            $cacheSetting = $generalConfig->enableGraphqlCaching;
+            $generalConfig->enableGraphqlCaching = false;
         }
 
         $result = [];
+
         foreach ($queries as $key => [$query, $variables, $operationName]) {
             try {
                 if (empty($query)) {
@@ -185,7 +195,7 @@ class GraphqlController extends Controller
         }
 
         if ($gqlCacheHeader === 'no-cache') {
-            Craft::$app->getConfig()->getGeneral()->enableGraphqlCaching = $cacheSetting;
+            $generalConfig->enableGraphqlCaching = $cacheSetting;
         }
 
         return $this->asJson($singleQuery ? reset($result) : $result);

@@ -33,7 +33,7 @@ class RadioButtons extends BaseOptionsField implements SortableFieldInterface
      */
     public static function valueType(): string
     {
-        return SingleOptionFieldData::class;
+        return sprintf('\\%s', SingleOptionFieldData::class);
     }
 
     /**
@@ -57,8 +57,8 @@ class RadioButtons extends BaseOptionsField implements SortableFieldInterface
         return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup', [
             'describedBy' => $this->describedBy,
             'name' => $this->handle,
-            'value' => $value,
-            'options' => $this->translatedOptions(),
+            'value' => $this->encodeValue($value),
+            'options' => $this->translatedOptions(true),
         ]);
     }
 

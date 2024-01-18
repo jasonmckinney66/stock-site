@@ -17,7 +17,6 @@ use craft\gql\GqlEntityRegistry;
 use craft\gql\interfaces\elements\GlobalSet as GlobalSetInterface;
 use craft\gql\TypeManager;
 use craft\gql\types\elements\GlobalSet;
-use craft\helpers\Gql;
 use craft\helpers\Gql as GqlHelper;
 
 /**
@@ -79,5 +78,4 @@ class GlobalSetType extends Generator implements GeneratorInterface, SingleGener
             },
         ]));
     }
-
 }

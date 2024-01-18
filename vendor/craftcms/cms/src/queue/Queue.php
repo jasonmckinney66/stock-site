@@ -131,9 +131,9 @@ class Queue extends \yii\queue\cli\Queue implements QueueInterface
                     if ($this->handleMessage($payload['id'], $payload['job'], $payload['ttr'], $payload['attempt'])) {
                         $this->release($payload['id']);
                     }
-                } else if (!$repeat) {
+                } elseif (!$repeat) {
                     break;
-                } else if ($timeout) {
+                } elseif ($timeout) {
                     sleep($timeout);
                 }
             }
@@ -458,6 +458,10 @@ class Queue extends \yii\queue\cli\Queue implements QueueInterface
         $info = [];
 
         foreach ($results as $result) {
+            if (!YII_DEBUG && !Craft::$app->getUser()->getIsAdmin()) {
+                $result['error'] = Craft::t('app', 'A server error occurred.');
+            }
+
             $info[] = [
                 'id' => $result['id'],
                 'delay' => max(0, $result['timePushed'] + $result['delay'] - time()),
@@ -526,26 +530,13 @@ class Queue extends \yii\queue\cli\Queue implements QueueInterface
 <script type="text/javascript">
 /*<![CDATA[*/
 (function(){
-    var XMLHttpFactories = [
-        function () {return new XMLHttpRequest()},
-        function () {return new ActiveXObject("Msxml2.XMLHTTP")},
-        function () {return new ActiveXObject("Msxml3.XMLHTTP")},
-        function () {return new ActiveXObject("Microsoft.XMLHTTP")}
-    ];
-    var req = false;
-    for (var i = 0; i < XMLHttpFactories.length; i++) {
-        try {
-            req = XMLHttpFactories[i]();
-        }
-        catch (e) {
-            continue;
-        }
-        break;
-    }
-    if (!req) return;
+  try {
+    var req = new XMLHttpRequest();
     req.open('GET', $url, true);
-    if (req.readyState == 4) return;
+    req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    if (req.readyState === 4) return;
     req.send();
+  } catch (e) {}
 })();
 /*]]>*/
 </script>

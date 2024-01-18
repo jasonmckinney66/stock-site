@@ -9,6 +9,7 @@ namespace craft\services;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\Field;
 use craft\db\Query;
 use craft\db\Table;
 use craft\elements\db\MatrixBlockQuery;
@@ -26,6 +27,7 @@ use craft\models\FieldLayout;
 use craft\models\MatrixBlockType;
 use craft\models\Site;
 use craft\records\MatrixBlockType as MatrixBlockTypeRecord;
+use craft\validators\StringValidator;
 use craft\web\assets\matrix\MatrixAsset;
 use craft\web\View;
 use yii\base\Component;
@@ -193,6 +195,22 @@ class Matrix extends Component
                 } else {
                     $this->_uniqueBlockTypeAndFieldHandles[] = $blockTypeAndFieldHandle;
                 }
+
+                if (!$field->hasErrors('handle')) {
+                    // Make sure the handle isn't too long when including the block type handle as individual fields
+                    // don't account for it.
+                    $maxHandleLength = Craft::$app->getDb()->getSchema()->maxObjectNameLength;
+                    $maxHandleLength -= strlen(Craft::$app->getContent()->fieldColumnPrefix . '_');
+                    $maxHandleLength -= strlen($blockType->handle . '_');
+                    $maxHandleLength -= strlen('_' . $field->columnSuffix);
+
+                    $validator = new StringValidator([
+                        'max' => $maxHandleLength,
+                    ]);
+
+                    /** @var Field $field */
+                    $validator->validateAttribute($field, 'handle');
+                }
             }
 
             if ($field->hasErrors()) {
@@ -316,9 +334,9 @@ class Matrix extends Component
                     $layout->id = $blockTypeRecord->fieldLayoutId;
                     $layout->type = MatrixBlock::class;
                     $layout->uid = key($data['fieldLayouts']);
-                    $fieldsService->saveLayout($layout);
+                    $fieldsService->saveLayout($layout, false);
                     $blockTypeRecord->fieldLayoutId = $layout->id;
-                } else if ($blockTypeRecord->fieldLayoutId) {
+                } elseif ($blockTypeRecord->fieldLayoutId) {
                     // Delete the field layout
                     $fieldsService->deleteLayoutById($blockTypeRecord->fieldLayoutId);
                     $blockTypeRecord->fieldLayoutId = null;
@@ -712,7 +730,7 @@ class Matrix extends Component
                     $block->ownerId = $owner->id;
                     $block->sortOrder = $sortOrder;
                     $elementsService->saveElement($block, false);
-                } else if ((int)$block->sortOrder !== $sortOrder) {
+                } elseif ((int)$block->sortOrder !== $sortOrder) {
                     // Just update its sortOrder
                     $block->sortOrder = $sortOrder;
                     Db::update(Table::MATRIXBLOCKS, [
@@ -795,7 +813,9 @@ class Matrix extends Component
                             // Just resave Matrix blocks for that one site, and let them propagate over to the new site(s) from there
                             $this->saveField($field, $preexistingLocalizedOwner);
                         } else {
-                            $this->duplicateBlocks($field, $owner, $localizedOwner);
+                            // Duplicate the blocks, but **don't track** the duplications, so the edit page doesn’t think
+                            // its blocks have been replaced by the other sites’ blocks
+                            $this->duplicateBlocks($field, $owner, $localizedOwner, false, false);
                         }
 
                         // Make sure we don't duplicate blocks for any of the sites that were just propagated to
@@ -829,11 +849,18 @@ class Matrix extends Component
      * @param ElementInterface $source The source element blocks should be duplicated from
      * @param ElementInterface $target The target element blocks should be duplicated to
      * @param bool $checkOtherSites Whether to duplicate blocks for the source element's other supported sites
+     * @param bool $trackDuplications whether to keep track of the duplications from [[\craft\services\Elements::$duplicatedElementIds]]
+     * and [[\craft\services\Elements::$duplicatedElementSourceIds]]
      * @throws \Throwable if reasons
      * @since 3.2.0
      */
-    public function duplicateBlocks(MatrixField $field, ElementInterface $source, ElementInterface $target, bool $checkOtherSites = false)
-    {
+    public function duplicateBlocks(
+        MatrixField $field,
+        ElementInterface $source,
+        ElementInterface $target,
+        bool $checkOtherSites = false,
+        bool $trackDuplications = true
+    ) {
         $elementsService = Craft::$app->getElements();
         /** @var MatrixBlockQuery $query */
         $query = $source->getFieldValue($field->handle);
@@ -870,7 +897,7 @@ class Matrix extends Component
                     }
                 } else {
                     /** @var MatrixBlock $newBlock */
-                    $newBlock = $elementsService->duplicateElement($block, $newAttributes);
+                    $newBlock = $elementsService->duplicateElement($block, $newAttributes, true, $trackDuplications);
                     $newBlockId = $newBlock->id;
                 }
 
@@ -1008,11 +1035,11 @@ class Matrix extends Component
                         if ($derivativeBlock->dateUpdated == $derivativeBlock->dateCreated) {
                             $elementsService->deleteElement($derivativeBlock);
                         }
-                    } else if (!$derivativeBlock->trashed && ElementHelper::isOutdated($derivativeBlock)) {
+                    } elseif (!$derivativeBlock->trashed && ElementHelper::isOutdated($derivativeBlock)) {
                         // Merge the upstream changes into the derivative block
                         $elementsService->mergeCanonicalChanges($derivativeBlock);
                     }
-                } else if (!$canonicalBlock->trashed && $canonicalBlock->dateCreated > $owner->dateCreated) {
+                } elseif (!$canonicalBlock->trashed && $canonicalBlock->dateCreated > $owner->dateCreated) {
                     // This is a new block, so duplicate it into the derivative owner
                     $elementsService->duplicateElement($canonicalBlock, [
                         'canonicalId' => $canonicalBlock->id,

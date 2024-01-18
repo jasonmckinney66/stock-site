@@ -10,27 +10,28 @@ namespace craft\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\VolumeInterface;
-use craft\db\Table as DbTable;
 use craft\elements\Asset;
 use craft\elements\db\AssetQuery;
 use craft\elements\db\ElementQuery;
 use craft\errors\InvalidSubpathException;
 use craft\errors\InvalidVolumeException;
 use craft\errors\VolumeObjectNotFoundException;
+use craft\events\LocateUploadedFilesEvent;
 use craft\gql\arguments\elements\Asset as AssetArguments;
 use craft\gql\interfaces\elements\Asset as AssetInterface;
 use craft\gql\resolvers\elements\Asset as AssetResolver;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\Cp;
-use craft\helpers\Db;
 use craft\helpers\ElementHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\Gql;
 use craft\helpers\Gql as GqlHelper;
 use craft\helpers\Html;
 use craft\models\GqlSchema;
+use craft\models\VolumeFolder;
 use craft\services\Gql as GqlService;
+use craft\volumes\Temp;
 use craft\web\UploadedFile;
 use GraphQL\Type\Definition\Type;
 use Twig\Error\RuntimeError;
@@ -52,6 +53,13 @@ class Assets extends BaseRelationField
      * @since 3.5.11
      */
     const PREVIEW_MODE_THUMBS = 'thumbs';
+
+    /**
+     * @event LocateUploadedFilesEvent The event that is triggered when identifying any uploaded files that
+     * should be stored as assets and related by the field.
+     * @since 3.7.72
+     */
+    const EVENT_LOCATE_UPLOADED_FILES = 'locateUploadedFiles';
 
     /**
      * @inheritdoc
@@ -82,7 +90,7 @@ class Assets extends BaseRelationField
      */
     public static function valueType(): string
     {
-        return AssetQuery::class;
+        return sprintf('\\%s|\\%s[]', AssetQuery::class, Asset::class);
     }
 
     /**
@@ -177,11 +185,6 @@ class Assets extends BaseRelationField
      * @var array|null References for files uploaded as data strings for this field.
      */
     private $_uploadedDataFiles;
-
-    /**
-     * @var string|null The default upload location for this field to open in modal
-     */
-    private $_defaultUploadLocation;
 
     /**
      * @inheritdoc
@@ -373,14 +376,18 @@ class Assets extends BaseRelationField
         // Get any uploaded filenames
         $uploadedFiles = $this->_getUploadedFiles($element);
         foreach ($uploadedFiles as $file) {
-            if ($file['type'] === 'data') {
-                if (strlen($file['data']) > $maxSize) {
-                    $filenames[] = $file['filename'];
-                }
-            } else {
-                if (file_exists($file['location']) && (filesize($file['location']) > $maxSize)) {
-                    $filenames[] = $file['filename'];
-                }
+            switch ($file['type']) {
+                case 'data':
+                    if (strlen($file['data']) > $maxSize) {
+                        $filenames[] = $file['filename'];
+                    }
+                    break;
+                case 'file':
+                case 'upload':
+                    if (file_exists($file['path']) && (filesize($file['path']) > $maxSize)) {
+                        $filenames[] = $file['filename'];
+                    }
+                    break;
             }
         }
 
@@ -449,7 +456,7 @@ class Assets extends BaseRelationField
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
-        return $this->_determineUploadFolderId($element, true);
+        return $this->_uploadFolder($element, true)->id;
     }
 
     /**
@@ -492,13 +499,14 @@ class Assets extends BaseRelationField
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
         // Figure out what we're working with and set up some initial variables.
-        $isCanonical = $element->id && ElementHelper::isCanonical($element);
+        $isCanonical = ElementHelper::isCanonical($element);
         $query = $element->getFieldValue($this->handle);
         $assetsService = Craft::$app->getAssets();
 
         $getTargetFolderId = function() use ($element, $isCanonical): int {
-            static $targetFolderId;
-            return $targetFolderId = $targetFolderId ?? $this->_determineUploadFolderId($element, $isCanonical);
+            static $targetFolder;
+            $targetFolder = $targetFolder ?? $this->_uploadFolder($element, $isCanonical);
+            return $targetFolder->id;
         };
 
         // Folder creation and file uploads have been handles for propagating elements already.
@@ -514,11 +522,16 @@ class Assets extends BaseRelationField
 
                 foreach ($uploadedFiles as $file) {
                     $tempPath = AssetsHelper::tempFilePath($file['filename']);
-                    if ($file['type'] === 'upload') {
-                        move_uploaded_file($file['location'], $tempPath);
-                    }
-                    if ($file['type'] === 'data') {
-                        FileHelper::writeToFile($tempPath, $file['data']);
+                    switch ($file['type']) {
+                        case 'data':
+                            FileHelper::writeToFile($tempPath, $file['data']);
+                            break;
+                        case 'file':
+                            rename($file['path'], $tempPath);
+                            break;
+                        case 'upload':
+                            move_uploaded_file($file['path'], $tempPath);
+                            break;
                     }
 
                     $folder = $assetsService->getFolderById($targetFolderId);
@@ -568,9 +581,8 @@ class Assets extends BaseRelationField
                 });
             } else {
                 // Find the files with temp sources and just move those.
-                $assetsToMove = Asset::find()
+                $assetsToMove = $assetsService->createTempAssetQuery()
                     ->id(ArrayHelper::getColumn($assets, 'id'))
-                    ->volumeId(':empty:')
                     ->all();
             }
 
@@ -601,15 +613,21 @@ class Assets extends BaseRelationField
     public function getEagerLoadingGqlConditions()
     {
         $allowedEntities = Gql::extractAllowedEntitiesFromSchema();
-        $allowedVolumeUids = $allowedEntities['volumes'] ?? [];
+        $volumeUids = $allowedEntities['volumes'] ?? [];
 
-        if (empty($allowedVolumeUids)) {
+        if (empty($volumeUids)) {
             return false;
         }
 
-        $volumeIds = Db::idsByUids(DbTable::VOLUMES, $allowedVolumeUids);
+        $volumesService = Craft::$app->getVolumes();
+        $volumeIds = array_filter(array_map(function(string $uid) use ($volumesService) {
+            $volume = $volumesService->getVolumeByUid($uid);
+            return $volume->id ?? null;
+        }, $volumeUids));
 
-        return ['volumeId' => array_values($volumeIds)];
+        return [
+            'volumeId' => $volumeIds,
+        ];
     }
 
     /**
@@ -617,25 +635,20 @@ class Assets extends BaseRelationField
      */
     protected function inputSources(ElementInterface $element = null)
     {
-        $folderId = $this->_determineUploadFolderId($element, false);
-        Craft::$app->getSession()->authorize('saveAssetInVolume:' . $folderId);
-
-        $assetsService = Craft::$app->getAssets();
+        $folder = $this->_uploadFolder($element, false);
+        Craft::$app->getSession()->authorize('saveAssetInVolume:' . $folder->getVolume()->uid);
 
         if ($this->useSingleFolder) {
             if (!$this->showUnpermittedVolumes) {
                 // Make sure they have permission to view the volume
                 // (Use singleUploadLocationSource here because the actual folder could belong to a temp volume)
-                $volumeId = $this->_volumeIdBySourceKey($this->singleUploadLocationSource);
-                $volume = $volumeId ? Craft::$app->getVolumes()->getVolumeById($volumeId) : null;
+                $volume = $this->_volumeBySourceKey($this->singleUploadLocationSource);
                 if (!$volume || !Craft::$app->getUser()->checkPermission("viewVolume:{$volume->uid}")) {
                     return [];
                 }
             }
 
-            $folderPath = $this->_getSourcePathByFolderId($folderId);
-
-            return [$folderPath];
+            return [$this->_sourceKeyByFolder($folder)];
         }
 
         $sources = [];
@@ -660,6 +673,7 @@ class Assets extends BaseRelationField
 
         // Now enforce the showUnpermittedVolumes setting
         if (!$this->showUnpermittedVolumes && !empty($sources)) {
+            $assetsService = Craft::$app->getAssets();
             $userService = Craft::$app->getUser();
             return ArrayHelper::where($sources, function(string $source) use ($assetsService, $userService) {
                 // If it's not a volume folder, let it through
@@ -684,14 +698,27 @@ class Assets extends BaseRelationField
         $variables = parent::inputTemplateVariables($value, $element);
 
         $uploadVolume = $this->_uploadVolume();
-        $variables['hideSidebar'] = $this->useSingleFolder;
+        $variables['showFolders'] = !$this->useSingleFolder;
         $variables['canUpload'] = (
             $this->allowUploads &&
             $uploadVolume &&
             Craft::$app->getUser()->checkPermission("saveAssetInVolume:$uploadVolume->uid")
         );
         $variables['defaultFieldLayoutId'] = $uploadVolume->fieldLayoutId ?? null;
-        $variables['defaultUploadLocation'] = $this->_defaultUploadLocation;
+
+        if ($this->useSingleFolder) {
+            $variables['showSourcePath'] = false;
+        } else {
+            $uploadFolder = $this->_uploadFolder($element, false);
+            if ($uploadFolder->volumeId) {
+                $folders = $this->_folderWithAncestors($uploadFolder);
+                $variables['defaultSource'] = $this->_sourceKeyByFolder($folders[0]);
+                $variables['defaultSourcePath'] = array_map(function(VolumeFolder $folder) {
+                    return $folder->getSourcePathInfo();
+                }, $folders);
+                $variables['preferStoredSource'] = true;
+            }
+        }
 
         return $variables;
     }
@@ -719,10 +746,10 @@ class Assets extends BaseRelationField
      */
     private function _getUploadedFiles(ElementInterface $element): array
     {
-        $uploadedFiles = [];
+        $files = [];
 
         if (ElementHelper::isRevision($element)) {
-            return $uploadedFiles;
+            return $files;
         }
 
         // Grab data strings
@@ -748,7 +775,7 @@ class Assets extends BaseRelationField
                         $filename = 'Uploaded_file.' . reset($extensions);
                     }
 
-                    $uploadedFiles[] = [
+                    $files[] = [
                         'filename' => $filename,
                         'data' => $data,
                         'type' => 'data',
@@ -761,49 +788,60 @@ class Assets extends BaseRelationField
         $paramName = $this->requestParamName($element);
 
         if ($paramName !== null) {
-            $files = UploadedFile::getInstancesByName($paramName);
+            $uploadedFiles = UploadedFile::getInstancesByName($paramName);
 
-            foreach ($files as $file) {
-                $uploadedFiles[] = [
-                    'filename' => $file->name,
-                    'location' => $file->tempName,
+            foreach ($uploadedFiles as $uploadedFile) {
+                $files[] = [
+                    'filename' => $uploadedFile->name,
+                    'path' => $uploadedFile->tempName,
                     'type' => 'upload',
                 ];
             }
         }
 
-        return $uploadedFiles;
+        $event = new LocateUploadedFilesEvent([
+            'element' => $element,
+            'files' => $files,
+        ]);
+        $this->trigger(self::EVENT_LOCATE_UPLOADED_FILES, $event);
+        return $event->files;
     }
 
     /**
-     * Resolve a source path to it's folder ID by the source path and the matched source beginning.
+     * Finds a volume folder by a source key and (dynamic?) subpath.
      *
-     * @param string $uploadSource
+     * @param string $sourceKey
      * @param string $subpath
      * @param ElementInterface|null $element
      * @param bool $createDynamicFolders whether missing folders should be created in the process
-     * @return int
+     * @return VolumeFolder
      * @throws InvalidSubpathException if the subpath cannot be parsed in full
      * @throws InvalidVolumeException if the volume root folder doesn’t exist
      */
-    private function _resolveVolumePathToFolderId(string $uploadSource, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): int
+    private function _findFolder(string $sourceKey, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): VolumeFolder
     {
-        $assetsService = Craft::$app->getAssets();
-
-        $volumeId = $this->_volumeIdBySourceKey($uploadSource);
-
-        // Make sure the volume and root folder actually exists
-        if ($volumeId === null || ($rootFolder = $assetsService->getRootFolderByVolumeId($volumeId)) === null) {
-            throw new InvalidVolumeException();
+        // Make sure the volume and root folder exist
+        $volume = $this->_volumeBySourceKey($sourceKey);
+        if (!$volume) {
+            throw new InvalidVolumeException("Invalid source key: $sourceKey");
         }
 
-        // Are we looking for a subfolder?
-        $subpath = is_string($subpath) ? trim($subpath, '/') : '';
+        $assetsService = Craft::$app->getAssets();
+        $rootFolder = $assetsService->getRootFolderByVolumeId($volume->id);
+        if (!$rootFolder) {
+            $rootFolderId = Craft::$app->getVolumes()->ensureTopFolder($volume);
+            $rootFolder = $assetsService->getFolderById($rootFolderId);
+        }
 
+        // Are we looking for the root folder?
+        $subpath = trim($subpath, '/');
         if ($subpath === '') {
-            // Get the root folder in the source
-            $folderId = $rootFolder->id;
-        } else {
+            return $rootFolder;
+        }
+
+        $isDynamic = preg_match('/\{|\}/', $subpath);
+
+        if ($isDynamic) {
             // Prepare the path by parsing tokens and normalizing slashes.
             try {
                 $renderedSubpath = Craft::$app->getView()->renderObjectTemplate($subpath, $element);
@@ -831,26 +869,24 @@ class Assets extends BaseRelationField
                 ]);
             }, $segments);
             $subpath = implode('/', $segments);
-
-            $folder = $assetsService->findFolder([
-                'volumeId' => $volumeId,
-                'path' => $subpath . '/',
-            ]);
-
-            // Ensure that the folder exists
-            if (!$folder) {
-                if (!$createDynamicFolders) {
-                    throw new InvalidSubpathException($subpath);
-                }
-
-                $volume = Craft::$app->getVolumes()->getVolumeById($volumeId);
-                $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
-            } else {
-                $folderId = $folder->id;
-            }
         }
 
-        return $folderId;
+        $folder = $assetsService->findFolder([
+            'volumeId' => $volume->id,
+            'path' => $subpath . '/',
+        ]);
+
+        // Ensure that the folder exists
+        if (!$folder) {
+            if (!$isDynamic && !$createDynamicFolders) {
+                throw new InvalidSubpathException($subpath);
+            }
+
+            $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
+            $folder = $assetsService->getFolderById($folderId);
+        }
+
+        return $folder;
     }
 
     /**
@@ -877,110 +913,93 @@ class Assets extends BaseRelationField
     }
 
     /**
-     * Determine an upload folder id by looking at the settings and whether Element this field belongs to is new or not.
+     * Returns the upload folder that should be used for an element.
      *
      * @param ElementInterface|null $element
      * @param bool $createDynamicFolders whether missing folders should be created in the process
-     * @return int
+     * @return VolumeFolder
      * @throws InvalidSubpathException if the folder subpath is not valid
      * @throws InvalidVolumeException if there's a problem with the field's volume configuration
      */
-    private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
+    private function _uploadFolder(ElementInterface $element = null, bool $createDynamicFolders = true): VolumeFolder
     {
-        $userFolder = null;
-        $folderId = null;
-
         if ($this->useSingleFolder) {
-            $uploadVolume = $this->singleUploadLocationSource;
+            $sourceKey = $this->singleUploadLocationSource;
             $subpath = $this->singleUploadLocationSubpath;
-            $settingName = Craft::t('app', 'Asset Location');
+            $settingName = function() {
+                return Craft::t('app', 'Asset Location');
+            };
         } else {
-            $uploadVolume = $this->defaultUploadLocationSource;
+            $sourceKey = $this->defaultUploadLocationSource;
             $subpath = $this->defaultUploadLocationSubpath;
-            $settingName = Craft::t('app', 'Default Asset Location');
+            $settingName = function() {
+                return Craft::t('app', 'Default Asset Location');
+            };
         }
 
-        $assets = Craft::$app->getAssets();
+        $assetsService = Craft::$app->getAssets();
 
         try {
-            if (!$uploadVolume) {
+            if (!$sourceKey) {
                 throw new InvalidVolumeException();
             }
 
-            $folderId = $this->_resolveVolumePathToFolderId($uploadVolume, $subpath, $element, $createDynamicFolders);
+            return $this->_findFolder($sourceKey, $subpath, $element, $createDynamicFolders);
         } catch (InvalidVolumeException $e) {
             throw new InvalidVolumeException(Craft::t('app', 'The {field} field’s {setting} setting is set to an invalid volume.', [
                 'field' => $this->name,
-                'setting' => $settingName,
+                'setting' => $settingName(),
             ]), 0, $e);
         } catch (InvalidSubpathException $e) {
-            // If this is a static path, go ahead and create it
-            if (!preg_match('/\{|\}/', $subpath)) {
-                $volumeId = $this->_volumeIdBySourceKey($uploadVolume);
-                $folderId = $assets->ensureFolderByFullPathAndVolume($subpath, Craft::$app->getVolumes()->getVolumeById($volumeId), false);
-            }
-
-            // If this is a new/disabled element, the subpath probably just contained a token that returned null, like {id}
+            // If this is a new/disabled/draft element, the subpath probably just contained a token that returned null, like {id}
             // so use the user's upload folder instead
-            if ($element === null || !$element->id || !$element->enabled || !$createDynamicFolders) {
-                $userFolder = $assets->getUserTemporaryUploadFolder();
+            if (
+                $element === null ||
+                !$element->id ||
+                !$element->enabled ||
+                !$createDynamicFolders ||
+                ElementHelper::isDraft($element)
+            ) {
+                return $assetsService->getUserTemporaryUploadFolder();
             } else {
                 // Existing element, so this is just a bad subpath
                 throw new InvalidSubpathException($e->subpath, Craft::t('app', 'The {field} field’s {setting} setting has an invalid subpath (“{subpath}”).', [
                     'field' => $this->name,
-                    'setting' => $settingName,
+                    'setting' => $settingName(),
                     'subpath' => $e->subpath,
                 ]), 0, $e);
             }
         }
-
-        // If we have resolved everything to a temporary user folder, fine
-        if ($userFolder !== null) {
-            $folderId = $userFolder->id;
-            // But in all other cases, make it the default upload location, too
-        } else if (!$this->useSingleFolder) {
-            $this->_defaultUploadLocation = $this->_getSourcePathByFolderId($folderId);
-        }
-
-        return $folderId;
     }
 
     /**
-     * Returns a volume ID from an upload source key.
-     *
-     * @param string $sourceKey
-     * @return int|null
+     * Returns a volume via its source key.
      */
-    public function _volumeIdBySourceKey(string $sourceKey)
+    public function _volumeBySourceKey(?string $sourceKey): ?VolumeInterface
     {
+        if (!$sourceKey) {
+            return null;
+        }
+
         $parts = explode(':', $sourceKey, 2);
 
         if (count($parts) !== 2) {
             return null;
         }
 
-        $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
-        return $volume ? $volume->id : null;
+        return Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
     }
 
     /**
      * Returns the target upload volume for the field.
-     *
-     * @return VolumeInterface|null
      */
-    private function _uploadVolume()
+    private function _uploadVolume(): ?VolumeInterface
     {
         if ($this->useSingleFolder) {
-            $sourceKey = $this->singleUploadLocationSource;
-        } else {
-            $sourceKey = $this->defaultUploadLocationSource;
+            return $this->_volumeBySourceKey($this->singleUploadLocationSource);
         }
 
-        if (($volumeId = $this->_volumeIdBySourceKey($sourceKey)) === null) {
-            return null;
-        }
-
-        return Craft::$app->getVolumes()->getVolumeById($volumeId);
+        return $this->_volumeBySourceKey($this->defaultUploadLocationSource);
     }
 
     /**
@@ -1029,23 +1048,31 @@ class Assets extends BaseRelationField
     }
 
     /**
-     * Generate the full path for a folder in a volume in the form of folder:UID/folder:UID... based on a folder id.
-     *
-     * @param int $folderId
-     * @return string
+     * Returns the full source key for a folder, in the form of `volume:UID/folder:UID/...`.
      */
-    private function _getSourcePathByFolderId(int $folderId): string
+    private function _sourceKeyByFolder(VolumeFolder $folder): string
     {
-        $folder = Craft::$app->getAssets()->getFolderById($folderId);
-        $folderPath = 'folder:' . $folder->uid;
+        $segments = array_map(function(VolumeFolder $folder) {
+            return "folder:$folder->uid";
+        }, $this->_folderWithAncestors($folder));
 
-        // Construct the path
+        return implode('/', $segments);
+    }
+
+    /**
+     * Returns the given folder along with each of its ancestors.
+     *
+     * @return VolumeFolder[]
+     */
+    private function _folderWithAncestors(VolumeFolder $folder): array
+    {
+        $folders = [$folder];
+
         while ($folder->parentId && $folder->volumeId !== null) {
-            $parent = $folder->getParent();
-            $folderPath = 'folder:' . $parent->uid . '/' . $folderPath;
-            $folder = $parent;
+            $folder = $folder->getParent();
+            array_unshift($folders, $folder);
         }
 
-        return $folderPath;
+        return $folders;
     }
 }

@@ -49,7 +49,7 @@ class Date extends Field implements PreviewableFieldInterface, SortableFieldInte
      */
     public static function valueType(): string
     {
-        return DateTime::class . '|null';
+        return sprintf('\\%s|null', DateTime::class);
     }
 
     /**
@@ -195,7 +195,7 @@ class Date extends Field implements PreviewableFieldInterface, SortableFieldInte
     {
         if ($this->showDate && !$this->showTime) {
             $dateTimeValue = 'showDate';
-        } else if ($this->showTime && !$this->showDate) {
+        } elseif ($this->showTime && !$this->showDate) {
             $dateTimeValue = 'showTime';
         } else {
             $dateTimeValue = 'showBoth';
@@ -246,37 +246,57 @@ class Date extends Field implements PreviewableFieldInterface, SortableFieldInte
     protected function inputHtml($value, ElementInterface $element = null): string
     {
         /** @var DateTime|null $value */
+        $view = Craft::$app->getView();
+        $timezone = $this->showTimeZone && $value ? $value->getTimezone()->getName() : Craft::$app->getTimeZone();
+
+        if ($value === null) {
+            // Override the initial value being set to null by CustomField::inputHtml()
+            $initialValue = [];
+            if ($this->showDate) {
+                $initialValue['date'] = '';
+            }
+            if ($this->showTime) {
+                $initialValue['time'] = '';
+            }
+            $initialValue['timezone'] = $timezone;
+            $view->setInitialDeltaValue($this->handle, $initialValue);
+        }
+
+        $components = [];
+
         $variables = [
             'id' => parent::getInputId(), // can't use $this->getInputId() here because the template adds the "-date"
             'describedBy' => $this->describedBy,
             'name' => $this->handle,
             'value' => $value,
+            'timeZone' => $this->showTimeZone ? false : null,
+            'outputTzParam' => false,
             'minuteIncrement' => $this->minuteIncrement,
             'isDateTime' => $this->showTime,
             'hasOuterContainer' => true,
         ];
 
-        $view = Craft::$app->getView();
-        $input = Html::beginTag('div', ['class' => 'datetimewrapper']);
-
         if ($this->showDate) {
-            $input .= $view->renderTemplate('_includes/forms/date', $variables);
+            $components[] = $view->renderTemplate('_includes/forms/date', $variables);
         }
 
         if ($this->showTime) {
-            $input .= ' ' . $view->renderTemplate('_includes/forms/time', $variables);
+            $components[] = $view->renderTemplate('_includes/forms/time', $variables);
         }
 
         if ($this->showTimeZone) {
-            $input .= ' ' . $view->renderTemplate('_includes/forms/timeZone', [
+            $components[] = $view->renderTemplate('_includes/forms/timeZone', [
                     'describedBy' => $this->describedBy,
                     'name' => "$this->handle[timezone]",
-                    'value' => $value ? $value->getTimezone()->getName() : Craft::$app->getTimeZone(),
+                    'value' => $timezone,
                 ]);
+        } else {
+            $components[] = Html::hiddenInput("$this->handle[timezone]", $timezone);
         }
 
-        $input .= Html::endTag('div');
-        return $input;
+        return Html::tag('div', implode("\n", $components), [
+            'class' => 'datetimewrapper',
+        ]);
     }
 
     /**
@@ -306,19 +326,34 @@ class Date extends Field implements PreviewableFieldInterface, SortableFieldInte
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
+        /** @var DateTime|null $value */
         if (!$value) {
             return '';
         }
 
+        $formatter = Craft::$app->getFormatter();
+
         if ($this->showDate && $this->showTime) {
-            return Craft::$app->getFormatter()->asDatetime($value, Locale::LENGTH_SHORT);
+            if ($this->showTimeZone) {
+                $timeZone = $formatter->timeZone;
+                $formatter->timeZone = $value->getTimezone()->getName();
+                $html = sprintf(
+                    '%s %s',
+                    $formatter->asDatetime($value, Locale::LENGTH_SHORT),
+                    $value->format('T')
+                );
+                $formatter->timeZone = $timeZone;
+                return $html;
+            }
+
+            return $formatter->asDatetime($value, Locale::LENGTH_SHORT);
         }
 
         if ($this->showDate) {
-            return Craft::$app->getFormatter()->asDate($value, Locale::LENGTH_SHORT);
+            return $formatter->asDate($value, Locale::LENGTH_SHORT);
         }
 
-        return Craft::$app->getFormatter()->asTime($value, Locale::LENGTH_SHORT);
+        return $formatter->asTime($value, Locale::LENGTH_SHORT);
     }
 
     /**

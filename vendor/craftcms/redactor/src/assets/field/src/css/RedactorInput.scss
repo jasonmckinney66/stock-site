@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/craftcms-sass/mixins";
+@import '@craftcms/sass/mixins';
 
 #redactor-overlay {
   filter: alpha(opacity=100);
@@ -163,7 +163,6 @@
   }
 }
 
-
 .redactor-box,
 .redactor-toolbar,
 .redactor-box textarea {
@@ -171,10 +170,6 @@
 }
 
 .redactor-box {
-  &.redactor-box-fullscreen {
-    z-index: 100 !important;
-  }
-
   .redactor-toolbar,
   .redactor-air {
     a {
@@ -282,7 +277,13 @@
       text-transform: none;
     }
 
-    pre, time, small, var, code, kbd, mark {
+    pre,
+    time,
+    small,
+    var,
+    code,
+    kbd,
+    mark {
       color: $textColor;
     }
 
@@ -309,7 +310,7 @@
 .redactor-dropdown {
   @include menu-styles;
   padding: 0;
-  z-index: 100;
+  z-index: 102;
 
   li {
     border-bottom: none;
@@ -346,7 +347,7 @@ body.redactor-element-editor-open .redactor-context-toolbar {
   border-radius: 0 !important;
 }
 
-.redactor-source-view [contenteditable="true"] {
+.redactor-source-view [contenteditable='true'] {
   display: block !important;
   height: 0 !important;
   min-height: 0 !important;

@@ -147,7 +147,7 @@ class Console extends \yii\helpers\Console
      * @param string[]|array[] $headers The table headers
      * @param array[] $data The table data
      * @param array $options
-     * @throwns InvalidValueException if an `align` value is invalid
+     * @throws InvalidValueException if an `align` value is invalid
      * @since 3.7.23
      */
     public static function table(array $headers, array $data, array $options = []): void
@@ -221,7 +221,7 @@ class Console extends \yii\helpers\Console
                 }
 
                 $value = str_pad($value, $size, ' ', $padType ?? STR_PAD_RIGHT);
-            } else if ($len > $size) {
+            } elseif ($len > $size) {
                 $value = substr($value, 0, $size - 1) . '…';
             }
 

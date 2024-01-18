@@ -209,6 +209,17 @@ abstract class Field extends SavableComponent implements FieldInterface
     /**
      * @inheritdoc
      */
+    public function attributeLabels()
+    {
+        return [
+            'handle' => Craft::t('app', 'Handle'),
+            'name' => Craft::t('app', 'Name'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function defineRules(): array
     {
         $rules = parent::defineRules();
@@ -248,30 +259,44 @@ abstract class Field extends SavableComponent implements FieldInterface
                 'archived',
                 'attributeLabel',
                 'attributes',
+                'awaitingFieldValues',
                 'behavior',
                 'behaviors',
                 'canSetProperties',
+                'canonical',
                 'children',
+                'contentId',
                 'contentTable',
                 'dateCreated',
+                'dateDeleted',
+                'dateLastMerged',
                 'dateUpdated',
                 'descendants',
+                'draftId',
+                'duplicateOf',
                 'enabled',
                 'enabledForSite',
                 'error',
-                'errors',
                 'errorSummary',
+                'errors',
+                'fieldLayoutId',
                 'fieldValue',
                 'fieldValues',
+                'firstSave',
+                'hardDelete',
                 'hasMethods',
                 'id',
+                'isNewForSite',
+                'isProvisionalDraft',
                 'language',
                 'level',
-                'localized',
                 'lft',
                 'link',
                 'localized',
+                'localized',
+                'mergingCanonicalChanges',
                 'name', // global set-specific
+                'newSiteIds',
                 'next',
                 'nextSibling',
                 'owner',
@@ -280,18 +305,29 @@ abstract class Field extends SavableComponent implements FieldInterface
                 'postDate', // entry-specific
                 'prev',
                 'prevSibling',
+                'previewing',
+                'propagateAll',
+                'propagating',
                 'ref',
+                'resaving',
+                'revisionId',
                 'rgt',
                 'root',
                 'scenario',
                 'searchScore',
                 'siblings',
                 'site',
+                'siteId',
+                'siteSettingsId',
                 'slug',
                 'sortOrder',
                 'status',
+                'structureId',
+                'tempId',
                 'title',
+                'trashed',
                 'uid',
+                'updatingFromDerivative',
                 'uri',
                 'url',
                 'username', // user-specific
@@ -333,7 +369,7 @@ abstract class Field extends SavableComponent implements FieldInterface
         if (!Craft::$app->getIsMultiSite()) {
             // Only one site so use its language
             $locale = Craft::$app->getSites()->getPrimarySite()->getLocale();
-        } else if (!$element || !$this->getIsTranslatable($element)) {
+        } elseif (!$element || !$this->getIsTranslatable($element)) {
             // Not translatable, so use the user’s language
             $locale = Craft::$app->getLocale();
         } else {
@@ -826,16 +862,7 @@ abstract class Field extends SavableComponent implements FieldInterface
      */
     protected function requestParamName(ElementInterface $element)
     {
-        if (!$element) {
-            return null;
-        }
-
         $namespace = $element->getFieldParamNamespace();
-
-        if (!$namespace === null) {
-            return null;
-        }
-
         return ($namespace ? $namespace . '.' : '') . $this->handle;
     }
 

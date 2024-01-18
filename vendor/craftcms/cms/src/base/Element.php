@@ -67,6 +67,7 @@ use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\base\UnknownPropertyException;
+use yii\db\Expression;
 use yii\db\ExpressionInterface;
 use yii\validators\NumberValidator;
 use yii\validators\Validator;
@@ -74,6 +75,7 @@ use yii\validators\Validator;
 /**
  * Element is the base class for classes representing elements in terms of objects.
  *
+ * @mixin CustomFieldBehavior
  * @property int|null $canonicalId The element’s canonical ID
  * @property-read string $canonicalUid The element’s canonical UID
  * @property-read $isCanonical Whether this is the canonical element
@@ -676,6 +678,22 @@ abstract class Element extends Component implements ElementInterface
 
     /**
      * @inheritdoc
+     */
+    public static function findSource(string $sourceKey, ?string $context = null): ?array
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function sourcePath(string $sourceKey, string $stepKey, ?string $context): ?array
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
      * @since 3.5.0
      */
     public static function fieldLayouts(string $source): array
@@ -831,7 +849,7 @@ abstract class Element extends Component implements ElementInterface
                 } else {
                     unset($viewState['order']);
                 }
-            } else if ($orderBy = self::_indexOrderBy($sourceKey, $viewState['order'], $viewState['sort'] ?? 'asc')) {
+            } elseif ($orderBy = self::_indexOrderBy($sourceKey, $viewState['order'], $viewState['sort'] ?? 'asc')) {
                 $elementQuery->orderBy($orderBy);
 
                 if ((!is_array($orderBy) || !isset($orderBy['score'])) && !empty($viewState['orderHistory'])) {
@@ -865,7 +883,12 @@ abstract class Element extends Component implements ElementInterface
             }
         }
 
-        $variables['elements'] = $elementQuery->cache()->all();
+        // Only cache if there's no search term
+        if (!$elementQuery->search) {
+            $elementQuery->cache();
+        }
+
+        $variables['elements'] = static::indexElements($elementQuery, $sourceKey);
 
         $template = '_elements/' . $viewState['mode'] . 'view/' . ($includeContainer ? 'container' : 'elements');
 
@@ -873,7 +896,7 @@ abstract class Element extends Component implements ElementInterface
     }
 
     /**
-     * Preps the element criteria for a given table attribute
+     * Prepares an element query for an element index that includes a given table attribute.
      *
      * @param ElementQueryInterface $elementQuery
      * @param string $attribute
@@ -890,6 +913,29 @@ abstract class Element extends Component implements ElementInterface
                 $field->modifyElementIndexQuery($elementQuery);
             }
         }
+    }
+
+    /**
+     * Returns the resulting elements for an element index.
+     *
+     * @param ElementQueryInterface $elementQuery
+     * @param string|null $sourceKey
+     * @return ElementInterface[]
+     * @since 3.8.0
+     */
+    protected static function indexElements(ElementQueryInterface $elementQuery, ?string $sourceKey): array
+    {
+        return $elementQuery->all();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function indexElementCount(ElementQueryInterface $elementQuery, ?string $sourceKey): int
+    {
+        return (int)$elementQuery
+            ->select(new Expression('1'))
+            ->count();
     }
 
     /**
@@ -1020,6 +1066,19 @@ abstract class Element extends Component implements ElementInterface
         // (Leave it up to the extended class to set the field context, if it shouldn't be 'global')
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
         if ($field && $field instanceof EagerLoadingFieldInterface) {
+            // filter out elements, if field is not part of its layout
+            // https://github.com/craftcms/cms/issues/12539
+            $sourceElements = array_values(
+                array_filter($sourceElements, function($sourceElement) use ($handle) {
+                    $fieldLayout = $sourceElement->getFieldLayout();
+                    return !$fieldLayout || $fieldLayout->getFieldByHandle($handle) !== null;
+                })
+            );
+
+            if (empty($sourceElements)) {
+                return false;
+            }
+
             return $field->getEagerLoadingMap($sourceElements);
         }
 
@@ -1264,7 +1323,7 @@ abstract class Element extends Component implements ElementInterface
         // Get the source element IDs
         $sourceElementIds = ArrayHelper::getColumn($sourceElements, 'id');
 
-        $map = (new Query)
+        $map = (new Query())
             ->select([
                 'source' => 'se.id',
                 'target' => 're.id',
@@ -1279,7 +1338,7 @@ abstract class Element extends Component implements ElementInterface
         return [
             'elementType' => static::class,
             'map' => $map,
-            'criteria' => ['revisions' => true],
+            'criteria' => ['revisions' => true, 'status' => null],
         ];
     }
 
@@ -1453,7 +1512,7 @@ abstract class Element extends Component implements ElementInterface
             if ($i === 0) {
                 // The first column's sort direction is always user-defined
                 $result[$column] = $dir;
-            } else if (preg_match('/^(.*?)\s+(asc|desc)$/i', $column, $matches)) {
+            } elseif (preg_match('/^(.*?)\s+(asc|desc)$/i', $column, $matches)) {
                 $result[$matches[1]] = strcasecmp($matches[2], 'desc') ? SORT_ASC : SORT_DESC;
             } else {
                 $result[$column] = SORT_ASC;
@@ -1488,7 +1547,7 @@ abstract class Element extends Component implements ElementInterface
                     }
                     return $sortOption['orderBy'];
                 }
-            } else if ($key === $attribute) {
+            } elseif ($key === $attribute) {
                 return $key;
             }
         }
@@ -1525,13 +1584,13 @@ abstract class Element extends Component implements ElementInterface
     private $_canonicalId;
 
     /**
-     * @var static|null
+     * @var static|false|null
      * @see getCanonical()
      */
     private $_canonical;
 
     /**
-     * @var static|null
+     * @var static|false|null
      * @see getCanonical()
      */
     private $_canonicalAnySite;
@@ -1805,7 +1864,6 @@ abstract class Element extends Component implements ElementInterface
         $behaviors = parent::behaviors();
         $behaviors['customFields'] = [
             'class' => CustomFieldBehavior::class,
-            'canSetProperties' => false,
         ];
         return $behaviors;
     }
@@ -1830,7 +1888,7 @@ abstract class Element extends Component implements ElementInterface
         $this->lft = (int)$this->lft ?: null;
         $this->rgt = (int)$this->rgt ?: null;
         $this->level = (int)$this->level ?: null;
-        $this->searchScore = (int)$this->searchScore ?: null;
+        $this->searchScore = $this->searchScore ? ((int)round($this->searchScore)) : null;
         $this->trashed = (bool)$this->trashed;
 
         parent::init();
@@ -1844,6 +1902,11 @@ abstract class Element extends Component implements ElementInterface
         }
 
         $this->_initialized = true;
+
+        // Stop allowing setting custom field values directly on the behavior
+        /** @var CustomFieldBehavior $behavior */
+        $behavior = $this->getBehavior('customFields');
+        $behavior->canSetProperties = false;
     }
 
     /**
@@ -1971,7 +2034,7 @@ abstract class Element extends Component implements ElementInterface
         $rules[] = [
             ['siteId'],
             SiteIdValidator::class,
-            'allowDisabled' => $this->propagating ?: null,
+            'allowDisabled' => true,
             'on' => [self::SCENARIO_DEFAULT, self::SCENARIO_LIVE, self::SCENARIO_ESSENTIALS],
         ];
         $rules[] = [['dateCreated', 'dateUpdated'], DateTimeValidator::class, 'on' => [self::SCENARIO_DEFAULT, self::SCENARIO_LIVE]];
@@ -2396,7 +2459,7 @@ abstract class Element extends Component implements ElementInterface
      */
     public function mergeCanonicalChanges(): void
     {
-        if (($canonical = $this->getCanonical()) === null) {
+        if (($canonical = $this->getCanonical()) === $this) {
             return;
         }
 
@@ -2643,7 +2706,7 @@ abstract class Element extends Component implements ElementInterface
         if ($cpEditUrl !== null) {
             if ($this->getIsDraft() && !$this->isProvisionalDraft) {
                 $cpEditUrl = UrlHelper::urlWithParams($cpEditUrl, ['draftId' => $this->draftId]);
-            } else if ($this->getIsRevision()) {
+            } elseif ($this->getIsRevision()) {
                 $cpEditUrl = UrlHelper::urlWithParams($cpEditUrl, ['revisionId' => $this->revisionId]);
             }
         }
@@ -2677,7 +2740,7 @@ abstract class Element extends Component implements ElementInterface
                 $this->trigger(self::EVENT_REGISTER_PREVIEW_TARGETS, $event);
                 $previewTargets = $event->previewTargets;
             }
-        } else if ($url = $this->getUrl()) {
+        } elseif ($url = $this->getUrl()) {
             $previewTargets = [
                 [
                     'label' => Craft::t('app', 'Primary {type} page', [
@@ -3135,7 +3198,7 @@ abstract class Element extends Component implements ElementInterface
     /**
      * @inheritdoc
      */
-    function getAttributeStatus(string $attribute)
+    public function getAttributeStatus(string $attribute)
     {
         if ($this->isAttributeModified($attribute)) {
             return [
@@ -3373,7 +3436,7 @@ abstract class Element extends Component implements ElementInterface
      * @since 3.4.0
      * @deprecated in 3.7.0. Use [[FieldInterface::getStatus()]] instead.
      */
-    function getFieldStatus(string $fieldHandle)
+    public function getFieldStatus(string $fieldHandle)
     {
         if (($field = $this->fieldByHandle($fieldHandle)) !== null) {
             return $field->getStatus($this);
@@ -3538,7 +3601,7 @@ abstract class Element extends Component implements ElementInterface
             // Do we have any post data for this field?
             if (isset($values[$field->handle])) {
                 $value = $values[$field->handle];
-            } else if (!empty($this->_fieldParamNamePrefix) && UploadedFile::getInstancesByName($this->_fieldParamNamePrefix . '.' . $field->handle)) {
+            } elseif (!empty($this->_fieldParamNamePrefix) && UploadedFile::getInstancesByName($this->_fieldParamNamePrefix . '.' . $field->handle)) {
                 // A file was uploaded for this field
                 $value = null;
             } else {
@@ -3736,6 +3799,7 @@ abstract class Element extends Component implements ElementInterface
         if ($this->_currentRevision === null) {
             $canonical = $this->getCanonical(true);
             $this->_currentRevision = static::find()
+                ->siteId($canonical->siteId)
                 ->revisionOf($canonical->id)
                 ->dateCreated($canonical->dateUpdated)
                 ->anyStatus()
@@ -3802,7 +3866,7 @@ abstract class Element extends Component implements ElementInterface
      * attribute, rather than simply showing the attribute’s raw value.
      *
      * For example, if your elements have an `email` attribute that you want to wrap in a `mailto:` link, your
-     * getTableAttributesHtml() method could do this:
+     * `tableAttributeHtml()` method could do this:
      *
      * ```php
      * switch ($attribute) {
@@ -4068,7 +4132,7 @@ abstract class Element extends Component implements ElementInterface
             Craft::t('app', 'Notes') => function() {
                 if ($this->getIsRevision()) {
                     $revision = $this;
-                } else if ($this->getIsCanonical() || $this->isProvisionalDraft) {
+                } elseif ($this->getIsCanonical() || $this->isProvisionalDraft) {
                     $element = $this->getCanonical(true);
                     $revision = $element->getCurrentRevision();
                 }
@@ -4077,7 +4141,10 @@ abstract class Element extends Component implements ElementInterface
                 }
                 /** @var RevisionBehavior $behavior */
                 $behavior = $revision->getBehavior('revision');
-                return $behavior->revisionNotes ?: false;
+                if ($behavior->revisionNotes === null || $behavior->revisionNotes === '') {
+                    return false;
+                }
+                return Html::encode($behavior->revisionNotes);
             },
         ]);
     }
@@ -4326,6 +4393,11 @@ abstract class Element extends Component implements ElementInterface
      */
     protected function fieldByHandle(string $handle)
     {
+        // ignore if it's not a custom field handle
+        if (!isset(CustomFieldBehavior::$fieldHandles[$handle])) {
+            return null;
+        }
+
         if ($this->_fieldsByHandle !== null && array_key_exists($handle, $this->_fieldsByHandle)) {
             return $this->_fieldsByHandle[$handle];
         }
@@ -4335,6 +4407,16 @@ abstract class Element extends Component implements ElementInterface
         $contentService->fieldContext = $this->getFieldContext();
         $fieldLayout = $this->getFieldLayout();
         $this->_fieldsByHandle[$handle] = $fieldLayout ? $fieldLayout->getFieldByHandle($handle) : null;
+
+        // nullify values for custom fields that are not part of this layout
+        // https://github.com/craftcms/cms/issues/12539
+        if ($fieldLayout && $this->_fieldsByHandle[$handle] === null) {
+            $behavior = $this->getBehavior('customFields');
+            if (isset($behavior->$handle)) {
+                $behavior->$handle = null;
+            }
+        }
+
         $contentService->fieldContext = $originalFieldContext;
 
         return $this->_fieldsByHandle[$handle];
@@ -4347,7 +4429,11 @@ abstract class Element extends Component implements ElementInterface
      */
     protected function fieldLayoutFields(): array
     {
-        $fieldLayout = $this->getFieldLayout();
+        try {
+            $fieldLayout = $this->getFieldLayout();
+        } catch (InvalidConfigException $e) {
+            return [];
+        }
 
         if ($fieldLayout) {
             return $fieldLayout->getFields();

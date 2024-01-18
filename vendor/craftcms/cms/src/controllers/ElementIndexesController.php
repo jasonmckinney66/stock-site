@@ -18,9 +18,9 @@ use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\exporters\Raw;
 use craft\events\ElementActionEvent;
+use craft\helpers\Component;
 use craft\helpers\ElementHelper;
 use yii\base\InvalidValueException;
-use yii\db\Expression;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
@@ -101,7 +101,11 @@ class ElementIndexesController extends BaseElementsController
         $this->paginated = (bool)$this->request->getParam('paginated');
         $this->elementQuery = $this->elementQuery();
 
-        if ($this->includeActions() && $this->sourceKey !== null) {
+        if (
+            in_array($action->id, ['get-elements', 'get-more-elements', 'perform-action', 'export']) &&
+            $this->includeActions() &&
+            $this->sourceKey !== null
+        ) {
             $this->actions = $this->availableActions();
             $this->exporters = $this->availableExporters();
         }
@@ -124,6 +128,24 @@ class ElementIndexesController extends BaseElementsController
     {
         return $this->elementQuery;
     }
+
+    /**
+     * Returns the source path for the given source key, step key, and context.
+     *
+     * @since 3.8.12
+     */
+    public function actionSourcePath(): Response
+    {
+        /** @var string|ElementInterface $elementType */
+        $elementType = $this->elementType;
+        $stepKey = $this->request->getRequiredBodyParam('stepKey');
+        $sourcePath = $elementType::sourcePath($this->sourceKey, $stepKey, $this->context);
+
+        return $this->asJson([
+            'sourcePath' => $sourcePath,
+        ]);
+    }
+
 
     /**
      * Renders and returns an element index container, plus its first batch of elements.
@@ -155,11 +177,11 @@ class ElementIndexesController extends BaseElementsController
      */
     public function actionCountElements(): Response
     {
+        /** @var string|ElementInterface $elementType */
+        $elementType = $this->elementType;
         return $this->asJson([
             'resultSet' => $this->request->getParam('resultSet'),
-            'count' => (int)$this->elementQuery
-                ->select(new Expression('1'))
-                ->count(),
+            'count' => $elementType::indexElementCount($this->elementQuery, $this->sourceKey),
         ]);
     }
 
@@ -337,7 +359,7 @@ class ElementIndexesController extends BaseElementsController
                     $this->response->formatters[Response::FORMAT_XML]['rootTag'] = $elementType::pluralLowerDisplayName();
                     break;
             }
-        } else if (
+        } elseif (
             is_callable($export) ||
             is_resource($export) ||
             (is_array($export) && isset($export[0]) && is_resource($export[0]))
@@ -459,7 +481,7 @@ class ElementIndexesController extends BaseElementsController
                     $criteria['draftOf'] = filter_var($criteria['draftOf'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 }
             }
-            Craft::configure($query, $criteria);
+            Craft::configure($query, Component::cleanseConfig($criteria));
         }
 
         // Exclude descendants of the collapsed element IDs
@@ -587,10 +609,10 @@ class ElementIndexesController extends BaseElementsController
             if ($this->elementQuery->trashed) {
                 if ($action instanceof DeleteActionInterface && $action->canHardDelete()) {
                     $action->hard = true;
-                } else if (!$action instanceof Restore) {
+                } elseif (!$action instanceof Restore) {
                     unset($actions[$i]);
                 }
-            } else if ($action instanceof Restore) {
+            } elseif ($action instanceof Restore) {
                 unset($actions[$i]);
             }
         }

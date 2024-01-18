@@ -11,6 +11,8 @@ namespace craft\htmlfield;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\Volume;
+use craft\elements\Asset;
 use craft\helpers\FileHelper;
 use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
@@ -91,7 +93,9 @@ abstract class HtmlField extends Field
             return $value;
         }
 
-        if (in_array($value, ['<p><br></p>', '<p>&nbsp;</p>'], true)) {
+        $value = trim($value);
+
+        if (in_array($value, ['<p><br></p>', '<p>&nbsp;</p>', '<p></p>', ''], true)) {
             return null;
         }
 
@@ -262,31 +266,48 @@ abstract class HtmlField extends Field
 
         // Swap any regular URLS with element refs, too
 
-        // Get all URLs, sort by longest first.
-        $sortArray = [];
-        $siteUrlsById = [];
+        // Get all base URLs, sorted by longest first
+        $baseUrls = [];
+        $baseUrlLengths = [];
+        $siteIds = [];
+        $volumeIds = [];
+
         foreach (Craft::$app->getSites()->getAllSites(false) as $site) {
-            if ($site->hasUrls) {
-                $siteUrlsById[$site->id] = $site->getBaseUrl();
-                $sortArray[$site->id] = strlen($siteUrlsById[$site->id]);
+            if ($site->hasUrls && ($baseUrl = $site->getBaseUrl())) {
+                $baseUrls[] = $baseUrl;
+                $siteIds[] = $site->id;
+                $volumeIds[] = null;
             }
         }
-        arsort($sortArray);
+
+        foreach (Craft::$app->getVolumes()->getAllVolumes() as $volume) {
+            /** @var Volume $volume */
+            if ($volume->hasUrls && ($baseUrl = $volume->getRootUrl())) {
+                $baseUrls[] = $baseUrl;
+                $siteIds[] = null;
+                $volumeIds[] = $volume->id;
+            }
+        }
+
+        foreach ($baseUrls as &$baseUrl) {
+            // just to be safe
+            $baseUrl = StringHelper::ensureRight($baseUrl, '/');
+            $baseUrlLengths[] = strlen($baseUrl);
+        }
+
+        array_multisort($baseUrlLengths, SORT_DESC, SORT_NUMERIC, $baseUrls, $siteIds, $volumeIds);
 
         $value = preg_replace_callback(
-            '/(href=|src=)([\'"])(http.*?)\2/',
-            function($matches) use ($sortArray, $siteUrlsById) {
+            '/(href=|src=)([\'"])((?:\/|http).*?)\2/',
+            function($matches) use ($baseUrls, $siteIds, $volumeIds) {
                 $url = $matches[3] ?? null;
 
                 if (!$url) {
                     return '';
                 }
 
-                // Longest URL first
-                foreach ($sortArray as $siteId => $bogus) {
-                    // Starts with a site URL
-
-                    if (StringHelper::startsWith($url, $siteUrlsById[$siteId])) {
+                foreach ($baseUrls as $key => $baseUrl) {
+                    if (StringHelper::startsWith($url, $baseUrl)) {
                         // Drop query
                         $query = parse_url($url, PHP_URL_QUERY);
 
@@ -303,13 +324,34 @@ abstract class HtmlField extends Field
                             $uri = preg_replace("/^(?:(.*)\/)?$pageTrigger(\d+)$/", '', $uri);
                         }
 
-                        // Drop site URL.
-                        $uri = StringHelper::removeLeft($uri, $siteUrlsById[$siteId]);
+                        // Drop the base URL
+                        $uri = StringHelper::removeLeft($uri, $baseUrl);
 
-                        if ($element = Craft::$app->getElements()->getElementByUri($uri, $siteId, true)) {
-                            $refHandle = $element::refHandle();
-                            $url = '{' . $refHandle . ':' . $element->id . '@' . $siteId . ':url||' . $url . '}';
-                            break;
+                        if ($siteIds[$key] !== null) {
+                            // site URL
+                            if ($element = Craft::$app->getElements()->getElementByUri($uri, $siteIds[$key], true)) {
+                                $refHandle = $element::refHandle();
+                                if ($refHandle) {
+                                    $url = sprintf('{%s:%s@%s:url||%s}', $refHandle, $element->id, $siteIds[$key], $url);
+                                }
+                                break;
+                            }
+                        } else {
+                            // volume URL
+                            $filename = basename($uri);
+                            $folderPath = dirname($uri);
+
+                            $assetId = Asset::find()
+                                ->volumeId($volumeIds[$key])
+                                ->filename($filename)
+                                ->andWhere(['volumeFolders.path' => $folderPath !== '.' ? $folderPath : ''])
+                                ->select(['elements.id'])
+                                ->scalar();
+
+                            if ($assetId) {
+                                $url = sprintf('{asset:%s:url||%s}', $assetId, $url);
+                                break;
+                            }
                         }
                     }
                 }
@@ -414,7 +456,7 @@ abstract class HtmlField extends Field
         if (is_dir($path)) {
             $files = FileHelper::findFiles($path, [
                 'only' => ['*.json'],
-                'recursive' => false
+                'recursive' => false,
             ]);
 
             foreach ($files as $file) {
@@ -459,7 +501,7 @@ abstract class HtmlField extends Field
     /**
      * Returns the allowed inline CSS styles, based on the plugins that are enabled.
      *
-     * @return string[]
+     * @return array<string,bool>
      */
     protected function allowedStyles(): array
     {

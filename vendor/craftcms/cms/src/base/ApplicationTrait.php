@@ -25,7 +25,6 @@ use craft\errors\WrongEditionException;
 use craft\events\DefineFieldLayoutFieldsEvent;
 use craft\events\DeleteSiteEvent;
 use craft\events\EditionChangeEvent;
-use craft\events\FieldEvent;
 use craft\fieldlayoutelements\AssetTitleField;
 use craft\fieldlayoutelements\EntryTitleField;
 use craft\fieldlayoutelements\TitleField;
@@ -35,6 +34,9 @@ use craft\helpers\Session;
 use craft\i18n\Formatter;
 use craft\i18n\I18N;
 use craft\i18n\Locale;
+use craft\markdown\GithubMarkdown;
+use craft\markdown\Markdown;
+use craft\markdown\MarkdownExtra;
 use craft\models\FieldLayout;
 use craft\models\Info;
 use craft\queue\Queue;
@@ -65,6 +67,7 @@ use yii\caching\Cache;
 use yii\db\ColumnSchemaBuilder;
 use yii\db\Exception as DbException;
 use yii\db\Expression;
+use yii\helpers\Markdown as MarkdownHelper;
 use yii\mutex\Mutex;
 use yii\web\ServerErrorHttpException;
 
@@ -306,7 +309,7 @@ trait ApplicationTrait
         if ($strict) {
             $this->_isInstalled = null;
             $this->_info = null;
-        } else if ($this->_isInstalled !== null) {
+        } elseif ($this->_isInstalled !== null) {
             return $this->_isInstalled;
         }
 
@@ -394,7 +397,7 @@ trait ApplicationTrait
             // (https://stackoverflow.com/a/14916838/1688568)
             return $this->_isMultiSiteWithTrashed = (new Query())
                     ->from([
-                        'x' => (new Query)
+                        'x' => (new Query())
                             ->select([new Expression('1')])
                             ->from([Table::SITES])
                             ->limit(2),
@@ -435,6 +438,18 @@ trait ApplicationTrait
     }
 
     /**
+     * Returns the handle of the Craft edition.
+     *
+     * @return string
+     * @since 3.8.0
+     */
+    public function getEditionHandle(): string
+    {
+        /** @var WebApplication|ConsoleApplication $this */
+        return App::editionHandle($this->getEdition());
+    }
+
+    /**
      * Returns the edition Craft is actually licensed to run in.
      *
      * @return int|null
@@ -442,13 +457,13 @@ trait ApplicationTrait
     public function getLicensedEdition()
     {
         /** @var WebApplication|ConsoleApplication $this */
-        $licensedEdition = $this->getCache()->get('licensedEdition');
+        $licenseInfo = $this->getCache()->get('licenseInfo') ?: [];
 
-        if ($licensedEdition !== false) {
-            return (int)$licensedEdition;
+        if (!isset($licenseInfo['craft']['edition'])) {
+            return null;
         }
 
-        return null;
+        return App::editionIdByHandle($licenseInfo['craft']['edition']);
     }
 
     /**
@@ -561,6 +576,10 @@ trait ApplicationTrait
     public function getCanTestEditions(): bool
     {
         /** @var WebApplication|ConsoleApplication $this */
+        if (App::env('CRAFT_NO_TRIALS')) {
+            return false;
+        }
+
         $request = $this->getRequest();
         if ($request->getIsConsoleRequest()) {
             return false;
@@ -754,7 +773,7 @@ trait ApplicationTrait
         /** @var WebApplication|ConsoleApplication $this */
 
         if ($attributeNames === null) {
-            $attributeNames = ['version', 'schemaVersion', 'maintenance', 'fieldVersion'];
+            $attributeNames = ['version', 'schemaVersion', 'maintenance', 'configVersion', 'fieldVersion'];
         }
 
         if (!$info->validate($attributeNames)) {
@@ -1470,6 +1489,20 @@ trait ApplicationTrait
         if ($request->getIsCpRequest()) {
             $this->getResponse()->setNoCacheHeaders();
         }
+
+        // Use our own Markdown parser classes
+        $flavors = [
+            'original' => Markdown::class,
+            'gfm' => GithubMarkdown::class,
+            'gfm-comment' => GithubMarkdown::class,
+            'extra' => MarkdownExtra::class,
+        ];
+
+        foreach ($flavors as $flavor => $class) {
+            if (isset(MarkdownHelper::$flavors[$flavor]) && !is_object(MarkdownHelper::$flavors[$flavor])) {
+                MarkdownHelper::$flavors[$flavor]['class'] = $class;
+            }
+        }
     }
 
     /**
@@ -1647,21 +1680,13 @@ trait ApplicationTrait
             ->onAdd(Gql::CONFIG_GQL_PUBLIC_TOKEN_KEY, $this->_proxy('gql', 'handleChangedPublicToken'))
             ->onUpdate(Gql::CONFIG_GQL_PUBLIC_TOKEN_KEY, $this->_proxy('gql', 'handleChangedPublicToken'));
 
-        // Prune deleted fields from their layouts
-        Event::on(Fields::class, Fields::EVENT_AFTER_DELETE_FIELD, function(FieldEvent $event) {
-            $this->getVolumes()->pruneDeletedField($event);
-            $this->getTags()->pruneDeletedField($event);
-            $this->getCategories()->pruneDeletedField($event);
-            $this->getUsers()->pruneDeletedField($event);
-            $this->getGlobals()->pruneDeletedField($event);
-            $this->getSections()->pruneDeletedField($event);
-        });
-
         // Prune deleted sites from site settings
         Event::on(Sites::class, Sites::EVENT_AFTER_DELETE_SITE, function(DeleteSiteEvent $event) {
-            $this->getRoutes()->handleDeletedSite($event);
-            $this->getCategories()->pruneDeletedSite($event);
-            $this->getSections()->pruneDeletedSite($event);
+            if (!Craft::$app->getProjectConfig()->getIsApplyingYamlChanges()) {
+                $this->getRoutes()->handleDeletedSite($event);
+                $this->getCategories()->pruneDeletedSite($event);
+                $this->getSections()->pruneDeletedSite($event);
+            }
         });
     }
 

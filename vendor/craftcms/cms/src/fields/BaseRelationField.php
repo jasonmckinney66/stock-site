@@ -30,11 +30,12 @@ use craft\helpers\Queue;
 use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
 use craft\services\Elements;
-use craft\validators\ArrayValidator;
 use GraphQL\Type\Definition\Type;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
+use yii\db\Expression;
+use yii\validators\NumberValidator;
 
 /**
  * BaseRelationField is the base class for classes representing a relational field.
@@ -95,7 +96,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
      */
     public static function valueType(): string
     {
-        return ElementQueryInterface::class;
+        return sprintf('\\%s|\\%s[]', ElementQueryInterface::class, ElementInterface::class);
     }
 
     /**
@@ -283,11 +284,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
     public function getElementValidationRules(): array
     {
         $rules = [
-            [
-                ArrayValidator::class,
-                'max' => $this->allowLimit && $this->limit ? $this->limit : null,
-                'tooMany' => Craft::t('app', '{attribute} should contain at most {max, number} {max, plural, one{selection} other{selections}}.'),
-            ],
+            ['validateRelationCount', 'on' => [Element::SCENARIO_LIVE]],
         ];
 
         if ($this->validateRelatedElements) {
@@ -295,6 +292,32 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
         }
 
         return $rules;
+    }
+
+    /**
+     * Validates that the number of related elements are within the min/max relation bounds.
+     *
+     * @param ElementInterface $element
+     */
+    public function validateRelationCount(ElementInterface $element): void
+    {
+        if ($this->allowLimit && $this->limit) {
+            /** @var ElementQueryInterface|ElementInterface[] $value */
+            $value = $element->getFieldValue($this->handle);
+
+            $arrayValidator = new NumberValidator([
+                'max' => $this->limit,
+                'tooBig' => Craft::t('app', '{attribute} should contain at most {max, number} {max, plural, one{selection} other{selections}}.', [
+                    'attribute' => Craft::t('site', $this->name),
+                    'max' => $this->limit, // Need to pass this in now
+                ]),
+                'skipOnEmpty' => false,
+            ]);
+
+            if (!$arrayValidator->validate($value->count(), $error)) {
+                $element->addError($this->handle, $error);
+            }
+        }
     }
 
     /**
@@ -389,7 +412,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
             return $value;
         }
 
-        /** @var ElementInterface $class */
+        /** @var ElementInterface|string $class */
         $class = static::elementType();
         /** @var ElementQuery $query */
         $query = $class::find()
@@ -400,7 +423,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
             $query
                 ->id(array_values(array_filter($value)))
                 ->fixedOrder();
-        } else if ($value !== '' && $element && $element->id) {
+        } elseif ($value !== '' && $element && $element->id) {
             $query->innerJoin(
                 ['relations' => DbTable::RELATIONS],
                 [
@@ -423,7 +446,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
             }
 
             if (!$this->allowMultipleSources && $this->source) {
-                $source = ElementHelper::findSource($class, $this->source);
+                $source = ElementHelper::findSource($class, $this->source, 'field');
 
                 // Does the source specify any criteria attributes?
                 if (isset($source['criteria'])) {
@@ -477,18 +500,20 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
                 'exists', (new Query())
                     ->from(["relations_$ns" => DbTable::RELATIONS])
                     ->innerJoin(["elements_$ns" => DbTable::ELEMENTS], "[[elements_$ns.id]] = [[relations_$ns.targetId]]")
-                    ->leftJoin(["elements_sites_$ns" => DbTable::ELEMENTS_SITES], [
-                        'and',
-                        "[[elements_sites_$ns.elementId]] = [[elements_$ns.id]]",
-                        ["elements_sites_$ns.siteId" => $query->siteId],
-                    ])
+                    ->leftJoin(["elements_sites_$ns" => DbTable::ELEMENTS_SITES], "[[elements_sites_$ns.elementId]] = [[elements_$ns.id]]")
                     ->where("[[relations_$ns.sourceId]] = [[elements.id]]")
+                    ->andWhere([
+                        'or',
+                        ["relations_$ns.sourceSiteId" => null],
+                        ["relations_$ns.sourceSiteId" => new Expression('[[elements_sites.siteId]]')],
+                    ])
                     ->andWhere([
                         "relations_$ns.fieldId" => $this->id,
                         "elements_$ns.enabled" => true,
                         "elements_$ns.dateDeleted" => null,
-                    ])
-                    ->andWhere(['not', ["elements_sites_$ns.enabled" => false]]),
+                        "elements_sites_$ns.siteId" => $this->_targetSiteId() ?? new Expression('[[elements_sites.siteId]]'),
+                        "elements_sites_$ns.enabled" => true,
+                    ]),
             ];
 
             if ($emptyCondition === ':notempty:') {
@@ -597,12 +622,19 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
             return '<p class="light">' . Craft::t('app', 'Nothing selected.') . '</p>';
         }
 
+        $size = Cp::ELEMENT_SIZE_SMALL;
+        $viewMode = $this->viewMode();
+        if ($viewMode == 'large') {
+            $size = Cp::ELEMENT_SIZE_LARGE;
+        }
+
         $view = Craft::$app->getView();
         $id = $this->getInputId();
-        $html = "<div id='{$id}' class='elementselect'><div class='elements'>";
+        $html = "<div id='$id' class='elementselect'>" .
+            "<div class='elements" . ($size === Cp::ELEMENT_SIZE_LARGE ? ' flex-row flex-wrap' : '') . "'>";
 
         foreach ($value as $relatedElement) {
-            $html .= Cp::elementHtml($relatedElement);
+            $html .= Cp::elementHtml($relatedElement, 'index', $size);
         }
 
         $html .= '</div></div>';
@@ -744,8 +776,8 @@ JS;
             /** @var int|int[]|false|null $targetIds */
             Craft::$app->getRelations()->saveRelations($this, $element, $targetIds);
 
-            // Reset the field value if this is a new element
-            if ($isNew) {
+            // Reset the field value?
+            if ($element->duplicateOf !== null || $element->mergingCanonicalChanges || $isNew) {
                 $element->setFieldValue($this->handle, null);
             }
 
@@ -928,7 +960,7 @@ JS;
     {
         if ($value instanceof ElementQueryInterface) {
             $value = $value->all();
-        } else if (!is_array($value)) {
+        } elseif (!is_array($value)) {
             $value = [];
         }
 
@@ -1041,21 +1073,20 @@ JS;
      */
     protected function targetSiteId(ElementInterface $element = null): int
     {
-        if (Craft::$app->getIsMultiSite()) {
-            if ($this->targetSiteId) {
-                try {
-                    return Craft::$app->getSites()->getSiteByUid($this->targetSiteId)->id;
-                } catch (SiteNotFoundException $exception) {
-                    Craft::warning($exception->getMessage(), __METHOD__);
-                }
-            }
+        return $this->_targetSiteId() ?? $element->siteId ?? Craft::$app->getSites()->getCurrentSite()->id;
+    }
 
-            if ($element !== null) {
-                return $element->siteId;
+    private function _targetSiteId(): ?int
+    {
+        if ($this->targetSiteId && Craft::$app->getIsMultiSite()) {
+            try {
+                return Craft::$app->getSites()->getSiteByUid($this->targetSiteId)->id;
+            } catch (SiteNotFoundException $exception) {
+                Craft::warning($exception->getMessage(), __METHOD__);
             }
         }
 
-        return Craft::$app->getSites()->getCurrentSite()->id;
+        return null;
     }
 
     /**

@@ -33,7 +33,7 @@ class Checkboxes extends BaseOptionsField
      */
     public static function valueType(): string
     {
-        return MultiOptionsFieldData::class;
+        return sprintf('\\%s', MultiOptionsFieldData::class);
     }
 
     /**
@@ -71,8 +71,8 @@ class Checkboxes extends BaseOptionsField
         return Craft::$app->getView()->renderTemplate('_includes/forms/checkboxGroup', [
             'describedBy' => $this->describedBy,
             'name' => $this->handle,
-            'values' => $value,
-            'options' => $this->translatedOptions(),
+            'values' => $this->encodeValue($value),
+            'options' => $this->translatedOptions(true),
         ]);
     }
 

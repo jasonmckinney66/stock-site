@@ -9,6 +9,8 @@ namespace craft\web\twig\variables;
 
 use Craft;
 use craft\base\UtilityInterface;
+use craft\enums\LicenseKeyStatus;
+use craft\errors\InvalidPluginException;
 use craft\events\FormActionsEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterCpSettingsEvent;
@@ -136,7 +138,7 @@ class Cp extends Component
     const EVENT_REGISTER_CP_SETTINGS = 'registerCpSettings';
 
     /**
-     * Returns the Craft ID account URL.
+     * Returns the Craft Console account URL.
      *
      * @return string
      */
@@ -219,7 +221,7 @@ class Cp extends Component
             $navItems[] = [
                 'label' => Craft::t('app', 'Categories'),
                 'url' => 'categories',
-                'fontIcon' => 'categories',
+                'fontIcon' => 'tree',
             ];
         }
 
@@ -275,7 +277,7 @@ class Cp extends Component
                 ];
 
                 $navItems[] = [
-                    'label' => Craft::t('app', 'GraphQL'),
+                    'label' => 'GraphQL',
                     'url' => 'graphql',
                     'icon' => '@appicons/graphql.svg',
                     'subnav' => $subNavItems,
@@ -422,7 +424,7 @@ class Cp extends Component
             'label' => Craft::t('app', 'Globals'),
         ];
         $settings[$label]['categories'] = [
-            'iconMask' => '@appicons/folder-open.svg',
+            'iconMask' => '@appicons/tree.svg',
             'label' => Craft::t('app', 'Categories'),
         ];
         $settings[$label]['tags'] = [
@@ -461,7 +463,7 @@ class Cp extends Component
     public function areAlertsCached(): bool
     {
         // The license key status gets cached on each Craftnet request
-        return (Craft::$app->getCache()->get('licenseKeyStatus') !== false);
+        return (Craft::$app->getCache()->get('licenseInfo') !== false);
     }
 
     /**
@@ -472,6 +474,104 @@ class Cp extends Component
     public function getAlerts(): array
     {
         return CpHelper::alerts(Craft::$app->getRequest()->getPathInfo());
+    }
+
+    /**
+     * Returns info about the active trials.
+     *
+     * @return array|null
+     * @since 3.8.15
+     */
+    public function trialInfo(): ?array
+    {
+        $cache = Craft::$app->getCache();
+        $updatesService = Craft::$app->getUpdates();
+
+        if (!$cache->exists('licenseInfo') && $updatesService->getIsUpdateInfoCached()) {
+            return null;
+        }
+
+        $resolvableLicenseItems = [];
+        $hasCraftTrial = false;
+        $trialPluginCount = 0;
+        $trialPluginNames = [];
+        $allLicenseInfo = $cache->get('licenseInfo') ?: [];
+        $pluginsService = Craft::$app->getPlugins();
+
+        foreach ($allLicenseInfo as $handle => $licenseInfo) {
+            $isCraft = $handle === 'craft';
+
+            if ($isCraft) {
+                $editions = ['solo', 'pro'];
+                $currentEdition = Craft::$app->getEditionHandle();
+            } else {
+                if (!str_starts_with($handle, 'plugin-')) {
+                    continue;
+                }
+                $handle = StringHelper::removeLeft($handle, 'plugin-');
+
+                try {
+                    $pluginInfo = $pluginsService->getPluginInfo($handle);
+                } catch (InvalidPluginException $e) {
+                    continue;
+                }
+
+                $plugin = $pluginsService->getPlugin($handle);
+                if (!$plugin) {
+                    continue;
+                }
+
+                $pluginName = $plugin->name;
+                $editions = $plugin::editions();
+                $currentEdition = $pluginInfo['edition'];
+            }
+
+            $resolvableLicenseItem = null;
+
+            if ($licenseInfo['status'] === LicenseKeyStatus::Trial) {
+                $resolvableLicenseItem = array_filter([
+                    'type' => $isCraft ? 'cms-edition' : 'plugin-edition',
+                    'plugin' => !$isCraft ? $handle : null,
+                    'licenseId' => $licenseInfo['id'],
+                    'edition' => $currentEdition,
+                ]);
+            } elseif ($licenseInfo['edition'] !== $currentEdition) {
+                $currentEditionIdx = array_search($currentEdition, $editions);
+                $licenseEditionIdx = array_search($licenseInfo['edition'], $editions);
+                if ($currentEditionIdx !== false && $licenseEditionIdx !== false && $currentEditionIdx > $licenseEditionIdx) {
+                    $resolvableLicenseItem = [
+                        'type' => $isCraft ? 'cms-edition' : 'plugin-edition',
+                        'edition' => $currentEdition,
+                        'licenseId' => $licenseInfo['id'],
+                    ];
+                }
+            }
+
+            if ($resolvableLicenseItem) {
+                $resolvableLicenseItems[] = $resolvableLicenseItem;
+                if ($isCraft) {
+                    $hasCraftTrial = true;
+                } else {
+                    $trialPluginCount++;
+                    $trialPluginNames[] = $pluginName;
+                }
+            }
+        }
+
+        if (empty($resolvableLicenseItems)) {
+            return null;
+        }
+
+        $consoleUrl = rtrim(Craft::$app->getPluginStore()->craftIdEndpoint, '/');
+
+        return [
+            'hasCraftTrial' => $hasCraftTrial,
+            'trialPluginCount' => $trialPluginCount,
+            'trialPluginNames' => $trialPluginNames,
+            'cartUrl' => UrlHelper::urlWithParams("$consoleUrl/cart/new", [
+                'items' => $resolvableLicenseItems,
+            ]),
+        ];
     }
 
     /**
@@ -490,7 +590,7 @@ class Cp extends Component
 
         $envSuggestions = [];
         foreach (array_keys($_SERVER) as $var) {
-            if (is_string($var) && is_string($env = App::env($var))) {
+            if (is_string($var) && !StringHelper::startsWith($var, 'HTTP_') && is_string($env = App::env($var))) {
                 $envSuggestions[] = [
                     'name' => '$' . $var,
                     'hint' => $security->redactIfSensitive($var, Craft::getAlias($env, false)),
@@ -549,6 +649,7 @@ class Cp extends Component
         foreach (array_keys($_SERVER) as $var) {
             if (
                 is_string($var) &&
+                !StringHelper::startsWith($var, 'HTTP_') &&
                 is_string($value = App::env($var)) &&
                 ($allowedValues === null || isset($allowedValues[$value]))
             ) {

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\behaviors;
@@ -121,7 +121,7 @@ class AttributeTypecastBehavior extends Behavior
      */
     public $owner;
     /**
-     * @var array attribute typecast map in format: attributeName => type.
+     * @var array|null attribute typecast map in format: attributeName => type.
      * Type can be set via PHP callable, which accept raw value as an argument and should return
      * typecast result.
      * For example:
@@ -214,7 +214,7 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Typecast owner attributes according to [[attributeTypes]].
-     * @param array $attributeNames list of attribute names that should be type-casted.
+     * @param array|null $attributeNames list of attribute names that should be type-casted.
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
      */
@@ -293,9 +293,7 @@ class AttributeTypecastBehavior extends Behavior
             }
 
             if ($type !== null) {
-                foreach ((array) $validator->attributes as $attribute) {
-                    $attributeTypes[ltrim($attribute, '!')] = $type;
-                }
+                $attributeTypes += array_fill_keys($validator->getAttributeNames(), $type);
             }
         }
 
@@ -364,5 +362,20 @@ class AttributeTypecastBehavior extends Behavior
     public function afterFind($event)
     {
         $this->typecastAttributes();
+
+        $this->resetOldAttributes();
+    }
+
+    private function resetOldAttributes()
+    {
+        if ($this->attributeTypes === null) {
+            return;
+        }
+
+        $attributes = array_keys($this->attributeTypes);
+
+        foreach ($attributes as $attribute) {
+            $this->owner->setOldAttribute($attribute, $this->owner->{$attribute});
+        }
     }
 }

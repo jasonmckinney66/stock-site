@@ -61,9 +61,9 @@ class SystemReport extends Utility
             }
             if ($module instanceof Module) {
                 $modules[$id] = get_class($module);
-            } else if (is_string($module)) {
+            } elseif (is_string($module)) {
                 $modules[$id] = $module;
-            } else if (is_array($module) && isset($module['class'])) {
+            } elseif (is_array($module) && isset($module['class'])) {
                 $modules[$id] = $module['class'];
             } else {
                 $modules[$id] = Craft::t('app', 'Unknown type');
@@ -148,14 +148,9 @@ class SystemReport extends Utility
     private static function _dbDriver(): string
     {
         $db = Craft::$app->getDb();
-
-        if ($db->getIsMysql()) {
-            $driverName = 'MySQL';
-        } else {
-            $driverName = 'PostgreSQL';
-        }
-
-        return $driverName . ' ' . App::normalizeVersion($db->getSchema()->getServerVersion());
+        $label = $db->getDriverLabel();
+        $version = App::normalizeVersion($db->getSchema()->getServerVersion());
+        return "$label $version";
     }
 
     /**

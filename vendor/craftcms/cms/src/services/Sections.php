@@ -18,7 +18,6 @@ use craft\errors\SectionNotFoundException;
 use craft\events\ConfigEvent;
 use craft\events\DeleteSiteEvent;
 use craft\events\EntryTypeEvent;
-use craft\events\FieldEvent;
 use craft\events\SectionEvent;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
@@ -466,7 +465,7 @@ class Sections extends Component
 
         if ($isNewSection) {
             $section->uid = StringHelper::UUID();
-        } else if (!$section->uid) {
+        } elseif (!$section->uid) {
             $section->uid = Db::uidById(Table::SECTIONS, $section->id);
         }
 
@@ -727,7 +726,7 @@ class Sections extends Component
                             'structureId' => $sectionRecord->structureId,
                         ],
                     ]));
-                } else if ($this->autoResaveEntries) {
+                } elseif ($this->autoResaveEntries) {
                     Queue::push(new ResaveElements([
                         'description' => Craft::t('app', 'Resaving {section} entries', [
                             'section' => $sectionRecord->name,
@@ -739,6 +738,8 @@ class Sections extends Component
                             'preferSites' => [Craft::$app->getSites()->getPrimarySite()->id],
                             'unique' => true,
                             'status' => null,
+                            'drafts' => null,
+                            'provisionalDrafts' => null,
                         ],
                         'updateSearchIndex' => $hasNewSite,
                     ]));
@@ -870,6 +871,7 @@ class Sections extends Component
             $elementsService = Craft::$app->getElements();
             foreach (Craft::$app->getSites()->getAllSiteIds() as $siteId) {
                 foreach (Db::each($entryQuery->siteId($siteId)) as $entry) {
+                    /** @var Entry $entry */
                     $elementsService->deleteElement($entry);
                 }
             }
@@ -925,44 +927,10 @@ class Sections extends Component
     }
 
     /**
-     * Prune a deleted field from entry type layouts.
-     *
-     * @param FieldEvent $event
-     * @since 3.1.20
+     * @deprecated in 3.7.51. Unused fields will be pruned automatically as field layouts are resaved.
      */
-    public function pruneDeletedField(FieldEvent $event)
+    public function pruneDeletedField()
     {
-        $field = $event->field;
-        $fieldUid = $field->uid;
-
-        $projectConfig = Craft::$app->getProjectConfig();
-        $entryTypes = $projectConfig->get(self::CONFIG_ENTRYTYPES_KEY);
-
-        // Engage stealth mode
-        $projectConfig->muteEvents = true;
-
-        // Loop through the tag groups and prune the UID from field layouts.
-        if (is_array($entryTypes)) {
-            foreach ($entryTypes as $entryTypeUid => $entryType) {
-                if (!empty($entryType['fieldLayouts'])) {
-                    foreach ($entryType['fieldLayouts'] as $layoutUid => $layout) {
-                        if (!empty($layout['tabs'])) {
-                            foreach ($layout['tabs'] as $tabUid => $tab) {
-                                $projectConfig->remove(self::CONFIG_ENTRYTYPES_KEY . '.' . $entryTypeUid . '.fieldLayouts.' . $layoutUid . '.tabs.' . $tabUid . '.fields.' . $fieldUid, 'Prune deleted field');
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Nuke all the layout fields from the DB
-        Db::delete(Table::FIELDLAYOUTFIELDS, [
-            'fieldId' => $field->id,
-        ]);
-
-        // Allow events again
-        $projectConfig->muteEvents = false;
     }
 
     /**
@@ -1069,6 +1037,18 @@ class Sections extends Component
     public function getEntryTypeById(int $entryTypeId)
     {
         return $this->_entryTypes()->firstWhere('id', $entryTypeId);
+    }
+
+    /**
+     * Returns an entry type by its UID.
+     *
+     * @param string $uid
+     * @return EntryType|null
+     * @since 3.7.39
+     */
+    public function getEntryTypeByUid(string $uid): ?EntryType
+    {
+        return $this->_entryTypes()->firstWhere('uid', $uid);
     }
 
     /**
@@ -1180,9 +1160,9 @@ class Sections extends Component
                 $layout->id = $entryTypeRecord->fieldLayoutId;
                 $layout->type = Entry::class;
                 $layout->uid = key($data['fieldLayouts']);
-                Craft::$app->getFields()->saveLayout($layout);
+                Craft::$app->getFields()->saveLayout($layout, false);
                 $entryTypeRecord->fieldLayoutId = $layout->id;
-            } else if ($entryTypeRecord->fieldLayoutId) {
+            } elseif ($entryTypeRecord->fieldLayoutId) {
                 // Delete the field layout
                 Craft::$app->getFields()->deleteLayoutById($entryTypeRecord->fieldLayoutId);
                 $entryTypeRecord->fieldLayoutId = null;
@@ -1234,7 +1214,7 @@ class Sections extends Component
         // If this is for a Single section, ensure its entry exists
         if ($section->type === Section::TYPE_SINGLE) {
             $this->_ensureSingleEntry($section);
-        } else if (!$isNewEntryType && $resaveEntries && $this->autoResaveEntries) {
+        } elseif (!$isNewEntryType && $resaveEntries && $this->autoResaveEntries) {
             // Re-save the entries of this type
             Queue::push(new ResaveElements([
                 'description' => Craft::t('app', 'Resaving {type} entries', [
@@ -1325,7 +1305,7 @@ class Sections extends Component
      * ---
      *
      * ```php
-     * $success = Craft::$app->sections->deleteEntry($entryType);
+     * $success = Craft::$app->sections->deleteEntryType($entryType);
      * ```
      *
      * @param EntryType $entryType
@@ -1334,7 +1314,7 @@ class Sections extends Component
      */
     public function deleteEntryType(EntryType $entryType): bool
     {
-        // Fire a 'beforeSaveEntryType' event
+        // Fire a 'beforeDeleteEntryType' event
         if ($this->hasEventHandlers(self::EVENT_BEFORE_DELETE_ENTRY_TYPE)) {
             $this->trigger(self::EVENT_BEFORE_DELETE_ENTRY_TYPE, new EntryTypeEvent([
                 'entryType' => $entryType,
@@ -1581,6 +1561,7 @@ class Sections extends Component
             ->anyStatus();
 
         foreach (Db::each($otherEntriesQuery) as $entryToDelete) {
+            /** @var Entry $entryToDelete */
             if (!$entryToDelete->getIsDraft() || $entry->canonicalId != $entry->id) {
                 $elementsService->deleteElement($entryToDelete, true);
             }
@@ -1611,8 +1592,8 @@ class Sections extends Component
 
         $structuresService = Craft::$app->getStructures();
 
-        /** @var Entry $entry */
         foreach (Db::each($query) as $entry) {
+            /** @var Entry $entry */
             $structuresService->appendToRoot($sectionRecord->structureId, $entry, Structures::MODE_INSERT);
         }
     }

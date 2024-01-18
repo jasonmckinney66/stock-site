@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\queue;
@@ -18,9 +18,6 @@ use yii\queue\serializers\SerializerInterface;
 
 /**
  * Base Queue.
- *
- * @property null|int $workerPid
- * @since 2.0.2
  *
  * @author Roman Zhuravlev <zhuravljov@gmail.com>
  */

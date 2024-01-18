@@ -4,23 +4,6 @@ $vendorDir = dirname(__DIR__);
 $rootDir = dirname(dirname(__DIR__));
 
 return array (
-  'craftcms/redactor' => 
-  array (
-    'class' => 'craft\\redactor\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/redactor/src',
-    'handle' => 'redactor',
-    'aliases' => 
-    array (
-      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
-    ),
-    'name' => 'Redactor',
-    'version' => '2.10.4',
-    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
-  ),
   'carlcs/craft-redactorcustomstyles' => 
   array (
     'class' => 'carlcs\\redactorcustomstyles\\Plugin',
@@ -157,22 +140,22 @@ return array (
     'documentationUrl' => 'https://github.com/verbb/default-dashboard',
     'changelogUrl' => 'https://raw.githubusercontent.com/verbb/default-dashboard/master/CHANGELOG.md',
   ),
-  'craftcms/feed-me' => 
+  'craftcms/redactor' => 
   array (
-    'class' => 'craft\\feedme\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/feed-me/src',
-    'handle' => 'feed-me',
+    'class' => 'craft\\redactor\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/redactor/src',
+    'handle' => 'redactor',
     'aliases' => 
     array (
-      '@craft/feedme' => $vendorDir . '/craftcms/feed-me/src',
+      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
     ),
-    'name' => 'Feed Me',
-    'version' => '4.5.3',
-    'description' => 'Import content from XML, RSS, CSV or JSON feeds into entries, categories, Craft Commerce products, and more.',
+    'name' => 'Redactor',
+    'version' => '2.10.12',
+    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
     'developer' => 'Pixel & Tonic',
     'developerUrl' => 'https://pixelandtonic.com/',
     'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://docs.craftcms.com/feed-me/v4/',
+    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
   ),
   'craftcms/contact-form' => 
   array (
@@ -184,7 +167,7 @@ return array (
       '@craft/contactform' => $vendorDir . '/craftcms/contact-form/src',
     ),
     'name' => 'Contact Form',
-    'version' => '2.5.1',
+    'version' => '2.5.2',
     'description' => 'Add a simple contact form to your Craft CMS site',
     'developer' => 'Pixel & Tonic',
     'developerUrl' => 'https://pixelandtonic.com/',
@@ -194,5 +177,22 @@ return array (
     array (
       'mailer' => 'craft\\contactform\\Mailer',
     ),
+  ),
+  'craftcms/feed-me' => 
+  array (
+    'class' => 'craft\\feedme\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/feed-me/src',
+    'handle' => 'feed-me',
+    'aliases' => 
+    array (
+      '@craft/feedme' => $vendorDir . '/craftcms/feed-me/src',
+    ),
+    'name' => 'Feed Me',
+    'version' => '4.8.0',
+    'description' => 'Import content from XML, RSS, CSV or JSON feeds into entries, categories, Craft Commerce products, and more.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/feed-me/v4/',
   ),
 );

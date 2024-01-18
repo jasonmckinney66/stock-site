@@ -284,9 +284,9 @@ class Entry extends Element
         $sections = [];
         if ($source === '*') {
             $sections = Craft::$app->getSections()->getAllSections();
-        } else if ($source === 'singles') {
+        } elseif ($source === 'singles') {
             $sections = Craft::$app->getSections()->getSectionsByType(Section::TYPE_SINGLE);
-        } else if (
+        } elseif (
             preg_match('/^section:(.+)$/', $source, $matches) &&
             $section = Craft::$app->getSections()->getSectionByUid($matches[1])
         ) {
@@ -332,7 +332,7 @@ class Entry extends Element
                     if (($section = Craft::$app->getSections()->getSectionById($matches[1])) !== null) {
                         $sections = [$section];
                     }
-                } else if (preg_match('/^section:(.+)$/', $source, $matches)) {
+                } elseif (preg_match('/^section:(.+)$/', $source, $matches)) {
                     if (($section = Craft::$app->getSections()->getSectionByUid($matches[1])) !== null) {
                         $sections = [$section];
                     }
@@ -377,7 +377,9 @@ class Entry extends Element
             if ($canEdit) {
                 $actions[] = $elementsService->createAction([
                     'type' => Edit::class,
-                    'label' => Craft::t('app', 'Edit entry'),
+                    'label' => Craft::t('app', 'Edit {type}', [
+                        'type' => static::lowerDisplayName(),
+                    ]),
                 ]);
             }
 
@@ -395,14 +397,16 @@ class Entry extends Element
                 // View
                 $actions[] = $elementsService->createAction([
                     'type' => View::class,
-                    'label' => Craft::t('app', 'View entry'),
+                    'label' => Craft::t('app', 'View {type}', [
+                        'type' => static::lowerDisplayName(),
+                    ]),
                 ]);
             }
 
             if ($source === '*') {
                 // Delete
                 $actions[] = Delete::class;
-            } else if ($source !== 'singles') {
+            } elseif ($source !== 'singles') {
                 // Channel/Structure-only actions
                 $section = $sections[0];
 
@@ -418,20 +422,26 @@ class Entry extends Element
 
                     $actions[] = $elementsService->createAction([
                         'type' => NewSiblingBefore::class,
-                        'label' => Craft::t('app', 'Create a new entry before'),
+                        'label' => Craft::t('app', 'Create a new {type} before', [
+                            'type' => static::lowerDisplayName(),
+                        ]),
                         'newSiblingUrl' => $newEntryUrl,
                     ]);
 
                     $actions[] = $elementsService->createAction([
                         'type' => NewSiblingAfter::class,
-                        'label' => Craft::t('app', 'Create a new entry after'),
+                        'label' => Craft::t('app', 'Create a new {type} after', [
+                            'type' => static::lowerDisplayName(),
+                        ]),
                         'newSiblingUrl' => $newEntryUrl,
                     ]);
 
                     if ($section->maxLevels != 1) {
                         $actions[] = $elementsService->createAction([
                             'type' => NewChild::class,
-                            'label' => Craft::t('app', 'Create a new child entry'),
+                            'label' => Craft::t('app', 'Create a new child {type}', [
+                                'type' => static::lowerDisplayName(),
+                            ]),
                             'maxLevels' => $section->maxLevels,
                             'newChildUrl' => $newEntryUrl,
                         ]);
@@ -478,9 +488,15 @@ class Entry extends Element
         // Restore
         $actions[] = $elementsService->createAction([
             'type' => Restore::class,
-            'successMessage' => Craft::t('app', 'Entries restored.'),
-            'partialSuccessMessage' => Craft::t('app', 'Some entries restored.'),
-            'failMessage' => Craft::t('app', 'Entries not restored.'),
+            'successMessage' => Craft::t('app', '{type} restored.', [
+                'type' => static::pluralDisplayName(),
+            ]),
+            'partialSuccessMessage' => Craft::t('app', 'Some {type} restored.', [
+                'type' => static::pluralLowerDisplayName(),
+            ]),
+            'failMessage' => Craft::t('app', '{type} not restored.', [
+                'type' => static::pluralDisplayName(),
+            ]),
         ]);
 
         return $actions;
@@ -606,7 +622,7 @@ class Entry extends Element
             $map = array_map(function(Entry $entry) {
                 return [
                     'source' => $entry->id,
-                    'target' => $entry->authorId
+                    'target' => $entry->authorId,
                 ];
             }, $sourceElementsWithAuthors);
 
@@ -1248,15 +1264,20 @@ class Entry extends Element
         $userSession = Craft::$app->getUser();
 
         // Cover the basics
-        if (
-            !$userSession->checkPermission("editEntries:$section->uid") ||
-            ($this->enabled && !$userSession->checkPermission("publishEntries:$section->uid"))
-        ) {
+        if (!$userSession->checkPermission("editEntries:$section->uid")) {
             return false;
         }
 
+        $userId = $userSession->getId();
+
+        if ($this->getIsDraft() && !$this->getIsCanonical()) {
+            /** @var DraftBehavior $behavior */
+            $behavior = $this->getBehavior('draft');
+            return $behavior->creatorId == $userId || $userSession->checkPermission("editPeerEntryDrafts:$section->uid");
+        }
+
         if ($section->type === Section::TYPE_SINGLE) {
-            return true;
+            return $userSession->checkPermission("publishEntries:$section->uid");
         }
 
         // Is this a new entry?
@@ -1264,16 +1285,19 @@ class Entry extends Element
             return $userSession->checkPermission("createEntries:$section->uid");
         }
 
-        // Is this their own entry?
-        if (!$this->authorId || $this->authorId == $userSession->getId()) {
-            return true;
-        }
-
-        if (!$this->enabled) {
+        // Is this another author's entry?
+        if ($this->authorId && $this->authorId != $userId) {
+            if ($this->enabled) {
+                return $userSession->checkPermission("publishPeerEntries:$section->uid");
+            }
             return $userSession->checkPermission("editPeerEntries:$section->uid");
         }
 
-        return $userSession->checkPermission("publishPeerEntries:$section->uid");
+        if ($this->enabled) {
+            return $userSession->checkPermission("publishEntries:$section->uid");
+        }
+
+        return true;
     }
 
     /**
@@ -1319,7 +1343,7 @@ class Entry extends Element
 
         // The slug *might* not be set if this is a Draft and they've deleted it for whatever reason
         $path = 'entries/' . $section->handle . '/' . $this->getCanonicalId() .
-            ($this->slug && strpos($this->slug, '__') !== 0 ? '-' . $this->slug : '');
+            ($this->slug && strpos($this->slug, '__') !== 0 ? sprintf('-%s', str_replace('/', '-', $this->slug)) : '');
 
         $params = [];
         if (Craft::$app->getIsMultiSite()) {
@@ -1522,12 +1546,20 @@ EOD;
             Craft::$app->getLocale();
             // Set Craft to the entry's site's language, in case the title format has any static translations
             $language = Craft::$app->language;
-            Craft::$app->language = $this->getSite()->language;
+            $locale = Craft::$app->getLocale();
+            $formattingLocale = Craft::$app->getFormattingLocale();
+            $site = $this->getSite();
+            $tempLocale = Craft::$app->getI18n()->getLocaleById($site->language);
+            Craft::$app->language = $site->language;
+            Craft::$app->set('locale', $tempLocale);
+            Craft::$app->set('formattingLocale', $tempLocale);
             $title = Craft::$app->getView()->renderObjectTemplate($entryType->titleFormat, $this);
             if ($title !== '') {
                 $this->title = $title;
             }
             Craft::$app->language = $language;
+            Craft::$app->set('locale', $locale);
+            Craft::$app->set('formattingLocale', $formattingLocale);
         }
     }
 

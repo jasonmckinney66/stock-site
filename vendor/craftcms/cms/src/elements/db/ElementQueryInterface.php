@@ -14,6 +14,7 @@ use craft\db\Query;
 use craft\models\Site;
 use craft\search\SearchQuery;
 use IteratorAggregate;
+use ReturnTypeWillChange;
 use yii\base\Arrayable;
 use yii\db\Connection;
 use yii\db\QueryInterface;
@@ -28,6 +29,12 @@ use yii\db\QueryInterface;
  */
 interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, Countable, IteratorAggregate
 {
+    /**
+     * @inheritdoc
+     */
+    #[ReturnTypeWillChange]
+    public function count($q = '*', $db = null);
+    
     /**
      * Causes the query results to be returned in reverse order.
      *
@@ -93,7 +100,7 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
      *
      * ```twig
      * {# Fetch a draft {element} #}
-     * {% set {elements-var} = {twig-function}
+     * {% set {elements-var} = {twig-method}
      *   .drafts()
      *   .id(123)
      *   .one() %}
@@ -244,7 +251,7 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
      *
      * ```twig
      * {# Fetch saved, unpublished draft {elements} #}
-     * {% set {elements-var} = {twig-function}
+     * {% set {elements-var} = {twig-method}
      *   .draftOf(false)
      *   .savedDraftsOnly()
      *   .all() %}
@@ -271,7 +278,7 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
      *
      * ```twig
      * {# Fetch a revision {element} #}
-     * {% set {elements-var} = {twig-function}
+     * {% set {elements-var} = {twig-method}
      *   .revisions()
      *   .id(123)
      *   .one() %}
@@ -485,6 +492,10 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
 
     /**
      * Causes the query results to be returned in the order specified by [[id()]].
+     *
+     * ::: tip
+     * If no IDs were passed to [[id()]], setting this to `true` will result in an empty result set.
+     * :::
      *
      * ---
      *
@@ -758,8 +769,8 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
      * If [[unique()]] is set, this determines which site should be selected when querying multi-site elements.
      *
      * For example, if element “Foo” exists in Site A and Site B, and element “Bar” exists in Site B and Site C,
-     * and this is set to `['c', 'b', 'a']`, then Foo will be returned for Site C, and Bar will be returned
-     * for Site B.
+     * and this is set to `['c', 'b', 'a']`, then Foo will be returned for Site B, and Bar will be returned
+     * for Site C.
      *
      * If this isn’t set, then preference goes to the current site.
      *
@@ -906,6 +917,11 @@ interface ElementQueryInterface extends QueryInterface, ArrayAccess, Arrayable, 
      *     ->title('*Foo*')
      *     ->all();
      * ```
+     *
+     * ::: warning
+     * String values with commas will be treated as arrays, unless they’ve been escaped with the
+     * [`literal`](https://craftcms.com/docs/3.x/dev/filters.html#literal) filter.
+     * :::
      *
      * @param string|string[]|null $value The property value
      * @return static self reference

@@ -126,7 +126,7 @@ class Element extends InterfaceType
             'status' => [
                 'name' => 'status',
                 'type' => Type::string(),
-                'description' => 'The element\'s status.',
+                'description' => 'The element’s status.',
             ],
             'dateCreated' => [
                 'name' => 'dateCreated',
@@ -163,6 +163,11 @@ class Element extends InterfaceType
                 'name' => 'revisionId',
                 'type' => Type::int(),
                 'description' => 'The revision ID (from the `revisions` table).',
+            ],
+            'revisionNotes' => [
+                'name' => 'revisionNotes',
+                'type' => Type::String(),
+                'description' => 'The revision notes (from the `revisions` table).',
             ],
             'draftId' => [
                 'name' => 'draftId',

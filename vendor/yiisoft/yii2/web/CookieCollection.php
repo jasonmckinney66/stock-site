@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\web;
@@ -18,7 +18,6 @@ use yii\base\InvalidCallException;
  * For more details and usage information on CookieCollection, see the [guide article on handling cookies](guide:runtime-sessions-cookies).
  *
  * @property-read int $count The number of cookies in the collection.
- * @property-read ArrayIterator $iterator An iterator for traversing the cookies in the collection.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -212,7 +211,7 @@ class CookieCollection extends BaseObject implements \IteratorAggregate, \ArrayA
      * It is implicitly called when you use something like `$cookie = $collection[$name];`.
      * This is equivalent to [[get()]].
      * @param string $name the cookie name
-     * @return Cookie the cookie with the specified name, null if the named cookie does not exist.
+     * @return Cookie|null the cookie with the specified name, null if the named cookie does not exist.
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($name)

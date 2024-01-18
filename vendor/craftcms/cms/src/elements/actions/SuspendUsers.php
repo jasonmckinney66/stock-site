@@ -39,7 +39,7 @@ class SuspendUsers extends ElementAction
 (() => {
     new Craft.ElementActionTrigger({
         type: $type,
-        batch: true,
+        bulk: true,
         validateSelection: \$selectedItems => {
             for (let i = 0; i < \$selectedItems.length; i++) {
                 const \$element = \$selectedItems.eq(i).find('.element');
@@ -95,7 +95,7 @@ JS;
             return false;
         }
 
-        $this->setMessage(Craft::t('app', 'Users Suspended.'));
+        $this->setMessage(Craft::t('app', 'Users suspended.'));
         return true;
     }
 }

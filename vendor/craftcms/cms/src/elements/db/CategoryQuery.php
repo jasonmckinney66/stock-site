@@ -124,23 +124,29 @@ class CategoryQuery extends ElementQuery
      *     ->all();
      * ```
      *
-     * @param string|string[]|CategoryGroup|null $value The property value
+     * @param string|string[]|CategoryGroup|CategoryGroup[]|null $value The property value
      * @return static self reference
      * @uses $groupId
      */
     public function group($value)
     {
         if ($value instanceof CategoryGroup) {
+            // Special case for a single category group, since we also want to capture the structure ID
             $this->structureId = ($value->structureId ?: false);
             $this->groupId = [$value->id];
-        } else if ($value !== null) {
+        } elseif (Db::normalizeParam($value, function($item) {
+            if (is_string($item)) {
+                $item = Craft::$app->getCategories()->getGroupByHandle($item);
+            }
+            return $item instanceof CategoryGroup ? $item->id : null;
+        })) {
+            $this->groupId = $value;
+        } else {
             $this->groupId = (new Query())
                 ->select(['id'])
                 ->from(Table::CATEGORYGROUPS)
                 ->where(Db::parseParam('handle', $value))
                 ->column();
-        } else {
-            $this->groupId = null;
         }
 
         return $this;
@@ -251,9 +257,9 @@ class CategoryQuery extends ElementQuery
     {
         if (empty($this->groupId)) {
             $this->groupId = is_array($this->groupId) ? [] : null;
-        } else if (is_numeric($this->groupId)) {
+        } elseif (is_numeric($this->groupId)) {
             $this->groupId = [$this->groupId];
-        } else if (!is_array($this->groupId) || !ArrayHelper::isNumeric($this->groupId)) {
+        } elseif (!is_array($this->groupId) || !ArrayHelper::isNumeric($this->groupId)) {
             $this->groupId = (new Query())
                 ->select(['id'])
                 ->from([Table::CATEGORYGROUPS])

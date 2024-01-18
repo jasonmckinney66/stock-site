@@ -36,6 +36,7 @@ use craft\models\AssetTransform;
 use craft\models\AssetTransformIndex;
 use craft\records\AssetTransform as AssetTransformRecord;
 use DateTime;
+use Imagine\Image\Format;
 use yii\base\Application;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
@@ -72,7 +73,7 @@ class AssetTransforms extends Component
     const EVENT_AFTER_DELETE_ASSET_TRANSFORM = 'afterDeleteAssetTransform';
 
     /**
-     * @event GenerateTransformEvent The event that is triggered when a transform is being generated for an Asset.
+     * @event GenerateTransformEvent The event that is triggered when a transform is being generated for an asset.
      */
     const EVENT_GENERATE_TRANSFORM = 'generateTransform';
 
@@ -231,7 +232,7 @@ class AssetTransforms extends Component
 
         if ($isNewTransform) {
             $transform->uid = StringHelper::UUID();
-        } else if (!$transform->uid) {
+        } elseif (!$transform->uid) {
             $transform->uid = Db::uidById(Table::ASSETTRANSFORMS, $transform->id, $this->db);
         }
 
@@ -461,6 +462,7 @@ class AssetTransforms extends Component
                 [$sizeValue, $sizeUnit] = AssetsHelper::parseSrcsetSize($transform);
             } catch (InvalidArgumentException $e) {
                 // All good.
+                $sizeValue = $sizeUnit = null;
             }
 
             if (isset($sizeValue, $sizeUnit)) {
@@ -468,19 +470,26 @@ class AssetTransforms extends Component
                     throw new InvalidArgumentException("Can’t eager-load transform “{$transform}” without a prior transform that specifies the base width");
                 }
 
-                $transform = [];
+                $transform = new AssetTransform($refTransform->toArray([
+                    'format',
+                    'interlace',
+                    'mode',
+                    'position',
+                    'quality',
+                ]));
+
                 if ($sizeUnit === 'w') {
-                    $transform['width'] = (int)$sizeValue;
+                    $transform->width = (int)$sizeValue;
                 } else {
-                    $transform['width'] = (int)ceil($refTransform->width * $sizeValue);
+                    $transform->width = (int)ceil($refTransform->width * $sizeValue);
                 }
 
                 // Only set the height if the reference transform has a height set on it
-                if ($refTransform && $refTransform->height) {
+                if ($refTransform->height) {
                     if ($sizeUnit === 'w') {
-                        $transform['height'] = (int)ceil($refTransform->height * $transform['width'] / $refTransform->width);
+                        $transform->height = (int)ceil($refTransform->height * $transform->width / $refTransform->width);
                     } else {
-                        $transform['height'] = (int)ceil($refTransform->height * $sizeValue);
+                        $transform->height = (int)ceil($refTransform->height * $sizeValue);
                     }
                 }
             }
@@ -665,7 +674,6 @@ class AssetTransforms extends Component
         // Make sure we're not in the middle of working on this transform from a separate request
         if ($index->inProgress) {
             for ($safety = 0; $safety < 100; $safety++) {
-
                 if ($index->error) {
                     throw new AssetTransformException(Craft::t('app',
                         'Failed to generate transform with id of {id}.',
@@ -722,9 +730,7 @@ class AssetTransforms extends Component
                 $this->storeTransformIndexData($index);
                 Craft::$app->getErrorHandler()->logException($e);
 
-                throw new AssetTransformException(Craft::t('app',
-                    'Failed to generate transform with id of {id}.',
-                    ['id' => $index->id]));
+                throw new AssetTransformException(Craft::t('app', 'Failed to generate transform with id of {id}.', ['id' => $index->id]), 0, $e);
             }
         }
 
@@ -842,10 +848,30 @@ class AssetTransforms extends Component
                 return $this->extendTransform($baseTransform, $transform);
             }
 
+            if (!empty($transform['width']) && !is_numeric($transform['width'])) {
+                Craft::warning("Invalid transform width: {$transform['width']}", __METHOD__);
+                $transform['width'] = null;
+            }
+
+            if (!empty($transform['height']) && !is_numeric($transform['height'])) {
+                Craft::warning("Invalid transform height: {$transform['height']}", __METHOD__);
+                $transform['height'] = null;
+            }
+
             return new AssetTransform($transform);
         }
 
         if (is_object($transform)) {
+            if ($transform->width && !is_numeric($transform->width)) {
+                Craft::warning("Invalid transform width: $transform->width", __METHOD__);
+                $transform->width = null;
+            }
+
+            if ($transform->height && !is_numeric($transform->height)) {
+                Craft::warning("Invalid transform height: $transform->height", __METHOD__);
+                $transform->height = null;
+            }
+
             return new AssetTransform(ArrayHelper::toArray($transform, [
                 'id',
                 'name',
@@ -965,7 +991,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Get a transform index model by a row id.
+     * Returns a transform index model by its ID.
      *
      * @param int $transformId
      * @return AssetTransformIndex|null
@@ -980,7 +1006,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Get a transform index model by a row id.
+     * Returns a transform index model by an asset ID and transform handle.
      *
      * @param int $assetId
      * @param string $transformHandle
@@ -1026,7 +1052,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Delete transform records by an Asset id
+     * Deletes transform records by an asset ID.
      *
      * @param int $assetId
      */
@@ -1193,7 +1219,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Detect the auto web-safe format for the Asset. Returns null, if the Asset is not an image.
+     * Detect the auto web-safe format for as asset. Returns `null` if the asset is not an image.
      *
      * @param Asset $asset
      * @return mixed|string
@@ -1201,8 +1227,10 @@ class AssetTransforms extends Component
      */
     public function detectAutoTransformFormat(Asset $asset)
     {
-        if (in_array(mb_strtolower($asset->getExtension()), Image::webSafeFormats(), true)) {
-            return $asset->getExtension();
+        $extension = $asset->getExtension();
+
+        if (Image::isWebSafe($extension)) {
+            return $extension;
         }
 
         if ($asset->kind === Asset::KIND_IMAGE) {
@@ -1215,7 +1243,7 @@ class AssetTransforms extends Component
 
             $volume = $asset->getVolume();
 
-            $tempFilename = uniqid(pathinfo($asset->filename, PATHINFO_FILENAME), true) . '.' . $asset->getExtension();
+            $tempFilename = uniqid(pathinfo($asset->filename, PATHINFO_FILENAME), true) . ".$extension";
             $tempPath = Craft::$app->getPath()->getTempPath() . DIRECTORY_SEPARATOR . $tempFilename;
             $volume->saveFileLocally($asset->getPath(), $tempPath);
 
@@ -1244,7 +1272,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Return a subfolder used by the Transform Index for the Asset.
+     * Returns a subfolder used by the transform index for an asset.
      *
      * @param Asset $asset
      * @param AssetTransformIndex $index
@@ -1262,7 +1290,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Return the filename used by the Transform Index for the Asset.
+     * Returns the filename used by the transform index for an asset.
      *
      * @param Asset $asset
      * @param AssetTransformIndex $index
@@ -1304,7 +1332,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Delete *ALL* transform data (including thumbs and sources) associated with the Asset.
+     * Deletes all transform data (including thumbs and sources) associated with an asset.
      *
      * @param Asset $asset
      */
@@ -1322,7 +1350,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Delete all the generated thumbnails for the Asset.
+     * Deletes all the generated thumbnails for an asset.
      *
      * @param Asset $asset
      */
@@ -1352,7 +1380,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Delete created transforms for an Asset.
+     * Deletes transforms for an asset.
      *
      * @param Asset $asset
      * @throws VolumeException if something went very wrong when deleting a transform
@@ -1385,7 +1413,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Get an array of AssetTransformIndex models for all created transforms for an Asset.
+     * Returns an array of [[AssetTransformIndex]] objects for all created transforms for an asset.
      *
      * @param Asset $asset
      * @return array
@@ -1513,7 +1541,7 @@ class AssetTransforms extends Component
     }
 
     /**
-     * Create a transform for the Asset by the transform index.
+     * Creates a transform for an asset by a transform index object.
      *
      * @param Asset $asset
      * @param AssetTransformIndex $index
@@ -1532,12 +1560,16 @@ class AssetTransforms extends Component
             $index->detectedFormat = $index->format ?: $this->detectAutoTransformFormat($asset);
         }
 
-        if ($index->format === 'webp' && !$images->getSupportsWebP()) {
-            throw new AssetTransformException("The `webp` format is not supported on this server!");
+        if ($index->format === Format::ID_WEBP && !$images->getSupportsWebP()) {
+            throw new AssetTransformException('The `webp` format is not supported on this server.');
         }
 
-        if ($index->format === 'avif' && !$images->getSupportsAvif()) {
-            throw new AssetTransformException("The `avif` format is not supported on this server!");
+        if ($index->format === Format::ID_AVIF && !$images->getSupportsAvif()) {
+            throw new AssetTransformException('The `avif` format is not supported on this server.');
+        }
+
+        if ($index->format === Format::ID_HEIC && !$images->getSupportsHeic()) {
+            throw new AssetTransformException('The `heic` format is not supported on this server.');
         }
 
         $volume = $asset->getVolume();
@@ -1564,7 +1596,8 @@ class AssetTransforms extends Component
         $quality = $transform->quality ?: Craft::$app->getConfig()->getGeneral()->defaultImageQuality;
 
         if (strtolower($asset->getExtension()) === 'svg' && $index->detectedFormat !== 'svg') {
-            $image = $images->loadImage($imageSource, true, max($transform->width, $transform->height));
+            $size = max($transform->width, $transform->height) ?? 1000;
+            $image = $images->loadImage($imageSource, true, $size);
         } else {
             $image = $images->loadImage($imageSource);
         }
@@ -1586,7 +1619,7 @@ class AssetTransforms extends Component
             default:
                 if ($asset->getHasFocalPoint()) {
                     $position = $asset->getFocalPoint();
-                } else if (!preg_match('/(top|center|bottom)-(left|center|right)/', $transform->position)) {
+                } elseif (!preg_match('/(top|center|bottom)-(left|center|right)/', $transform->position)) {
                     $position = 'center-center';
                 } else {
                     $position = $transform->position;

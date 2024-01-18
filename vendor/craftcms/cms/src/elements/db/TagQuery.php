@@ -7,6 +7,7 @@
 
 namespace craft\elements\db;
 
+use Craft;
 use craft\db\Query;
 use craft\db\QueryAbortedException;
 use craft\db\Table;
@@ -106,22 +107,25 @@ class TagQuery extends ElementQuery
      *     ->all();
      * ```
      *
-     * @param string|string[]|TagGroup|null $value The property value
+     * @param string|string[]|TagGroup|TagGroup[]|null $value The property value
      * @return static self reference
      * @uses $groupId
      */
     public function group($value)
     {
-        if ($value instanceof TagGroup) {
-            $this->groupId = [$value->id];
-        } else if ($value !== null) {
+        if (Db::normalizeParam($value, function($item) {
+            if (is_string($item)) {
+                $item = Craft::$app->getTags()->getTagGroupByHandle($item);
+            }
+            return $item instanceof TagGroup ? $item->id : null;
+        })) {
+            $this->groupId = $value;
+        } else {
             $this->groupId = (new Query())
                 ->select(['id'])
                 ->from([Table::TAGGROUPS])
                 ->where(Db::parseParam('handle', $value))
                 ->column() ?: false;
-        } else {
-            $this->groupId = null;
         }
 
         return $this;
@@ -198,9 +202,9 @@ class TagQuery extends ElementQuery
 
         if (empty($this->groupId)) {
             $this->groupId = null;
-        } else if (is_numeric($this->groupId)) {
+        } elseif (is_numeric($this->groupId)) {
             $this->groupId = [$this->groupId];
-        } else if (!is_array($this->groupId) || !ArrayHelper::isNumeric($this->groupId)) {
+        } elseif (!is_array($this->groupId) || !ArrayHelper::isNumeric($this->groupId)) {
             $this->groupId = (new Query())
                 ->select(['id'])
                 ->from([Table::TAGGROUPS])

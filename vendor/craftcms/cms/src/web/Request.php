@@ -305,19 +305,13 @@ class Request extends \yii\web\Request
             }
         }
 
-        if ($this->_isCpRequest) {
-            // Force 'p' pageTrigger
-            // (all that really matters is that it doesn't have a trailing slash, but whatever.)
-            $this->generalConfig->pageTrigger = 'p';
-        }
-
         // Is this a paginated request?
-        $pageTrigger = $this->generalConfig->getPageTrigger();
+        $pageTrigger = $this->_isCpRequest ? 'p' : $this->generalConfig->getPageTrigger();
 
         // Is this query string-based pagination?
         if (strpos($pageTrigger, '?') === 0) {
             $this->_pageNum = (int)$this->getQueryParam(trim($pageTrigger, '?='), '1');
-        } else if ($this->_path !== '') {
+        } elseif ($this->_path !== '') {
             // Match against the entire path string as opposed to just the last segment so that we can support
             // "/page/2"-style pagination URLs
             $pageTrigger = preg_quote($pageTrigger, '/');
@@ -578,6 +572,21 @@ class Request extends \yii\web\Request
     public function getSiteToken(): ?string
     {
         return $this->getQueryParam($this->generalConfig->siteToken) ?? $this->getHeaders()->get('X-Craft-Site-Token');
+    }
+
+    /**
+     * Returns whether the request has a valid site token.
+     *
+     * @return bool
+     * @since 3.8.6
+     */
+    public function hasValidSiteToken(): bool
+    {
+        try {
+            return $this->_validateSiteToken() !== null;
+        } catch (BadRequestHttpException $e) {
+            return false;
+        }
     }
 
     /**
@@ -1448,18 +1457,8 @@ class Request extends \yii\web\Request
     private function _requestedSite(int &$siteScore = null): Site
     {
         // Was a site token provided?
-        $siteId = $this->getQueryParam($this->generalConfig->siteToken)
-            ?? $this->getHeaders()->get('X-Craft-Site-Token')
-            ?? false;
-        if ($siteId) {
-            $siteId = Craft::$app->getSecurity()->validateData($siteId);
-            if ($siteId === false) {
-                throw new BadRequestHttpException('Invalid site token');
-            }
-            $site = $this->sites->getSiteById($siteId, true);
-            if (!$site) {
-                throw new BadRequestHttpException('Invalid site ID: ' . $siteId);
-            }
+        $site = $this->_validateSiteToken();
+        if ($site !== null) {
             return $site;
         }
 
@@ -1479,6 +1478,27 @@ class Request extends \yii\web\Request
         $first = ArrayHelper::firstKey($scores);
         $siteScore = reset($scores);
         return $sites[$first];
+    }
+
+    /**
+     * @return Site|null
+     * @throws BadRequestHttpException
+     */
+    private function _validateSiteToken(): ?Site
+    {
+        $siteToken = $this->getSiteToken();
+        if ($siteToken === null) {
+            return null;
+        }
+        $siteId = Craft::$app->getSecurity()->validateData($siteToken);
+        if ($siteId === false) {
+            throw new BadRequestHttpException('Invalid site token');
+        }
+        $site = $this->sites->getSiteById($siteId, true);
+        if (!$site) {
+            throw new BadRequestHttpException('Invalid site token');
+        }
+        return $site;
     }
 
     /**
@@ -1616,7 +1636,7 @@ class Request extends \yii\web\Request
                     $setPasswordPath = self::CP_PATH_SET_PASSWORD;
                     $verifyEmailPath = self::CP_PATH_VERIFY_EMAIL;
                     $updatePath = self::CP_PATH_UPDATE;
-                } else if (!$this->generalConfig->headlessMode) {
+                } elseif (!$this->generalConfig->headlessMode) {
                     if (is_string($loginPath = $this->generalConfig->getLoginPath())) {
                         $loginPath = trim($loginPath, '/');
                     }
@@ -1659,7 +1679,7 @@ class Request extends \yii\web\Request
                 if ($hasTriggerMatch) {
                     $this->_actionSegments = array_slice($this->getSegments(), 1);
                     $this->_isSingleActionRequest = true;
-                } else if ($hasActionParam) {
+                } elseif ($hasActionParam) {
                     $this->_actionSegments = array_values(array_filter(explode('/', $actionParam)));
                     $this->_isSingleActionRequest = empty($this->_path);
                 } else {

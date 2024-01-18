@@ -255,50 +255,48 @@ class Number extends Field implements PreviewableFieldInterface, SortableFieldIn
      */
     protected function inputHtml($value, ElementInterface $element = null): string
     {
+        $view = Craft::$app->getView();
         $formatter = Craft::$app->getFormatter();
-        $formatNumber = !$formatter->willBeMisrepresented($value);
 
-        if ($formatNumber && $value !== null) {
-            if ($this->previewFormat !== self::FORMAT_NONE) {
-                try {
-                    $value = Craft::$app->getFormatter()->asDecimal($value, $this->decimals);
-                } catch (InvalidArgumentException $e) {
+        try {
+            $formatNumber = !$formatter->willBeMisrepresented($value);
+        } catch (InvalidArgumentException $e) {
+            $formatNumber = false;
+        }
+
+        if ($formatNumber) {
+            if ($value !== null) {
+                if ($this->previewFormat !== self::FORMAT_NONE) {
+                    try {
+                        $value = Craft::$app->getFormatter()->asDecimal($value, $this->decimals);
+                    } catch (InvalidArgumentException $e) {
+                    }
+                } elseif ($this->decimals) {
+                    // Just make sure we're using the right decimal symbol
+                    $decimalSeparator = Craft::$app->getFormattingLocale()->getNumberSymbol(Locale::SYMBOL_DECIMAL_SEPARATOR);
+                    try {
+                        $value = number_format($value, $this->decimals, $decimalSeparator, '');
+                    } catch (\Throwable $e) {
+                        // NaN
+                    }
                 }
-            } else if ($this->decimals) {
-                // Just make sure we're using the right decimal symbol
-                $decimalSeparator = Craft::$app->getFormattingLocale()->getNumberSymbol(Locale::SYMBOL_DECIMAL_SEPARATOR);
-                try {
-                    $value = number_format($value, $this->decimals, $decimalSeparator, '');
-                } catch (\Throwable $e) {
-                    // NaN
-                }
+            } else {
+                // Override the initial value being set to null by CustomField::inputHtml()
+                $view->setInitialDeltaValue($this->handle, [
+                    'locale' => Craft::$app->getFormattingLocale()->id,
+                    'value' => '',
+                ]);
             }
         }
 
         $id = $this->getInputId();
-        $view = Craft::$app->getView();
         $namespacedId = $view->namespaceInputId($id);
 
         $js = <<<JS
 (function() {
-    \$('#$namespacedId').on('keydown', ev => {
-        if (
-            !Garnish.isCtrlKeyPressed(ev) &&
-            ![
-                9, // tab,
-                13, // return / enter
-                27, // esc
-                8, 46, // backspace, delete
-                37, 38, 39, 40, // arrows
-                173, 189, 109, // minus, subtract
-                190, 110, // period, decimal
-                188, // comma
-                48, 49, 50, 51, 52, 53, 54, 55, 56, 57, // 0-9
-                96, 97, 98, 99, 100, 101, 102, 103, 104, 105, // numpad 0-9
-            ].includes(ev.which)
-        ) {
-            ev.preventDefault();
-        }
+    const input = \$('#$namespacedId');
+    input.on('input', () => {
+        Craft.filterNumberInputVal(input);
     });
 })();
 JS;

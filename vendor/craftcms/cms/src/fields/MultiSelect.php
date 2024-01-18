@@ -33,7 +33,7 @@ class MultiSelect extends BaseOptionsField
      */
     public static function valueType(): string
     {
-        return MultiOptionsFieldData::class;
+        return sprintf('\\%s', MultiOptionsFieldData::class);
     }
 
     /**
@@ -60,8 +60,8 @@ class MultiSelect extends BaseOptionsField
             'id' => $this->getInputId(),
             'describedBy' => $this->describedBy,
             'name' => $this->handle,
-            'values' => $value,
-            'options' => $this->translatedOptions(),
+            'values' => $this->encodeValue($value),
+            'options' => $this->translatedOptions(true),
         ]);
     }
 

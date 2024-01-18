@@ -15,16 +15,14 @@ use craft\helpers\Component;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
-use craft\i18n\Locale;
 use craft\models\CraftSupport;
 use craft\web\assets\dashboard\DashboardAsset;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Symfony\Component\Yaml\Yaml;
+use Throwable;
 use yii\base\Exception;
-use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use ZipArchive;
@@ -269,40 +267,9 @@ class DashboardController extends Controller
     {
         $this->requireAcceptsJson();
 
-        $formatter = Craft::$app->getFormatter();
-
-        $url = $this->request->getRequiredParam('url');
-        $limit = $this->request->getParam('limit');
-
-        $feed = Craft::$app->getFeeds()->getFeed($url);
-
-        $locale = null;
-        if ($feed['language'] !== null) {
-            try {
-                $locale = new Locale($feed['language']);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if ($locale === null) {
-            $locale = new Locale('en-US');
-        }
-
-
-        if ($limit) {
-            $feed['items'] = array_slice($feed['items'], 0, $limit);
-        }
-
-        foreach ($feed['items'] as &$item) {
-            if ($item['date'] !== null) {
-                $item['date'] = $formatter->asTimestamp($item['date'], Locale::LENGTH_SHORT);
-            } else {
-                unset($item['date']);
-            }
-        }
-
         return $this->asJson([
-            'dir' => $locale->getOrientation(),
-            'items' => $feed['items'],
+            'dir' => 'ltr',
+            'items' => [],
         ]);
     }
 
@@ -426,7 +393,7 @@ class DashboardController extends Controller
                 try {
                     $backupPath = Craft::$app->getDb()->backup();
                     $zip->addFile($backupPath, basename($backupPath));
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     Craft::warning('Error adding database backup to support request: ' . $e->getMessage(), __METHOD__);
                     $getHelpModel->message .= "\n\n---\n\nError adding database backup: " . $e->getMessage();
                 }
@@ -450,7 +417,7 @@ class DashboardController extends Controller
                 'contents' => fopen($zipPath, 'rb'),
                 'filename' => 'SupportAttachment-' . FileHelper::sanitizeFilename(Craft::$app->getSites()->getPrimarySite()->getName()) . '.zip',
             ];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Craft::warning('Error creating support zip: ' . $e->getMessage(), __METHOD__);
             $getHelpModel->message .= "\n\n---\n\nError creating zip: " . $e->getMessage();
         }
@@ -468,7 +435,9 @@ class DashboardController extends Controller
             Craft::$app->getApi()->request('POST', 'support', [
                 RequestOptions::MULTIPART => $parts,
             ]);
-        } catch (RequestException $requestException) {
+        } catch (Throwable $requestException) {
+            Craft::error("Unable to send support request: {$requestException->getMessage()}", __METHOD__);
+            Craft::$app->getErrorHandler()->logException($requestException);
         }
 
         // Delete the zip file
@@ -481,7 +450,9 @@ class DashboardController extends Controller
                 'widgetId' => $widgetId,
                 'success' => false,
                 'errors' => [
-                    'Support' => [$requestException->getMessage()],
+                    'Support' => [
+                        Craft::t('app', 'A server error occurred.'),
+                    ],
                 ],
             ]);
         }

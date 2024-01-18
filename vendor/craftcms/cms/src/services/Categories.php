@@ -332,9 +332,9 @@ class Categories extends Component
                 $layout->id = $groupRecord->fieldLayoutId;
                 $layout->type = Category::class;
                 $layout->uid = key($data['fieldLayouts']);
-                Craft::$app->getFields()->saveLayout($layout);
+                Craft::$app->getFields()->saveLayout($layout, false);
                 $groupRecord->fieldLayoutId = $layout->id;
-            } else if ($groupRecord->fieldLayoutId) {
+            } elseif ($groupRecord->fieldLayoutId) {
                 // Delete the field layout
                 Craft::$app->getFields()->deleteLayoutById($groupRecord->fieldLayoutId);
                 $groupRecord->fieldLayoutId = null;
@@ -431,7 +431,7 @@ class Categories extends Component
                             'elementId' => $categoryIds,
                             'siteId' => $sitesNowWithoutUrls,
                         ]);
-                    } else if (!empty($sitesWithNewUriFormats)) {
+                    } elseif (!empty($sitesWithNewUriFormats)) {
                         foreach ($categoryIds as $categoryId) {
                             App::maxPowerCaptain();
 
@@ -617,43 +617,10 @@ class Categories extends Component
     }
 
     /**
-     * Prune a deleted field from category group layouts.
-     *
-     * @param FieldEvent $event
+     * @deprecated in 3.7.51. Unused fields will be pruned automatically as field layouts are resaved.
      */
     public function pruneDeletedField(FieldEvent $event)
     {
-        $field = $event->field;
-        $fieldUid = $field->uid;
-
-        $projectConfig = Craft::$app->getProjectConfig();
-        $categoryGroups = $projectConfig->get(self::CONFIG_CATEGORYROUP_KEY);
-
-        // Engage stealth mode
-        $projectConfig->muteEvents = true;
-
-        // Loop through the category groups and prune the UID from field layouts.
-        if (is_array($categoryGroups)) {
-            foreach ($categoryGroups as $categoryGroupUid => $categoryGroup) {
-                if (!empty($categoryGroup['fieldLayouts'])) {
-                    foreach ($categoryGroup['fieldLayouts'] as $layoutUid => $layout) {
-                        if (!empty($layout['tabs'])) {
-                            foreach ($layout['tabs'] as $tabUid => $tab) {
-                                $projectConfig->remove(self::CONFIG_CATEGORYROUP_KEY . '.' . $categoryGroupUid . '.fieldLayouts.' . $layoutUid . '.tabs.' . $tabUid . '.fields.' . $fieldUid, 'Prune deleted field');
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Nuke all the layout fields from the DB
-        Db::delete(Table::FIELDLAYOUTFIELDS, [
-            'fieldId' => $field->id,
-        ]);
-
-        // Allow events again
-        $projectConfig->muteEvents = false;
     }
 
     /**

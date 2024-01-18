@@ -112,7 +112,7 @@ class Deprecator extends Component
             'file' => $file,
             'line' => $line,
             'message' => $message,
-            'traces' => $this->_cleanTraces($traces),
+            'traces' => $this->_processStackTrace($traces),
         ]);
     }
 
@@ -265,35 +265,41 @@ class Deprecator extends Component
      */
     private function _findOrigin(array $traces): array
     {
-        // Should we be treating this as as template deprecation log?
+        // Should we be treating this as a template deprecation log?
         if (empty($traces[2]['class']) && isset($traces[2]['function']) && $traces[2]['function'] === 'twig_get_attribute') {
             // came through twig_get_attribute()
             $templateTrace = 3;
-        } else if ($this->_isTemplateAttributeCall($traces, 4)) {
+        } elseif ($this->_isTemplateAttributeCall($traces, 4)) {
             // came through Template::attribute()
             $templateTrace = 4;
-        } else if ($this->_isTemplateAttributeCall($traces, 2)) {
+        } elseif ($this->_isTemplateAttributeCall($traces, 2)) {
             // special case for "deprecated" date functions the Template helper pretends still exist
             $templateTrace = 2;
-        } else if (
+        } elseif (
             isset($traces[1]['class'], $traces[1]['function']) &&
-            (
-                ($traces[1]['class'] === ElementQuery::class && $traces[1]['function'] === 'getIterator') ||
-                (
-                    $traces[1]['class'] === Extension::class &&
-                    in_array($traces[1]['function'], [
-                        'getCsrfInput',
-                        'getFootHtml',
-                        'getHeadHtml',
-                        'groupFilter',
-                        'roundFunction',
-                        'svgFunction',
-                        'ucwordsFilter',
-                    ], true)
-                )
-            )
+            ($traces[1]['class'] === ElementQuery::class && $traces[1]['function'] === 'getIterator')
         ) {
-            // special case for deprecated looping through element queries
+            // looping through element queries
+            if (isset($traces[4]['function']) && $traces[4]['function'] === 'twig_array_batch') {
+                // |batch filter
+                $templateTrace = 4;
+            } else {
+                $templateTrace = 1;
+            }
+        } elseif (
+            isset($traces[1]['class'], $traces[1]['function']) &&
+            $traces[1]['class'] === Extension::class &&
+            in_array($traces[1]['function'], [
+                'getCsrfInput',
+                'getFootHtml',
+                'getHeadHtml',
+                'groupFilter',
+                'roundFunction',
+                'svgFunction',
+                'ucwordsFilter',
+            ], true)
+        ) {
+            // deprecated function
             $templateTrace = 1;
         }
 
@@ -348,15 +354,23 @@ class Deprecator extends Component
      * @param array $traces debug_backtrace() results leading up to [[log()]]
      * @return array
      */
-    private function _cleanTraces(array $traces): array
+    private function _processStackTrace(array $traces): array
     {
         $logTraces = [];
 
-        foreach ($traces as $i => $trace) {
+        foreach ($traces as $trace) {
+            $file = $trace['file'] ?? null;
+            $line = $trace['line'] ?? null;
+            $templateInfo = Template::resolveTemplatePathAndLine($file ?? '', $line);
+
+            if ($templateInfo !== false) {
+                [$file, $line] = $templateInfo;
+            }
+
             $logTraces[] = [
                 'objectClass' => !empty($trace['object']) ? get_class($trace['object']) : null,
-                'file' => !empty($trace['file']) ? $trace['file'] : null,
-                'line' => !empty($trace['line']) ? $trace['line'] : null,
+                'file' => $file,
+                'line' => $line,
                 'class' => !empty($trace['class']) ? $trace['class'] : null,
                 'method' => !empty($trace['function']) ? $trace['function'] : null,
                 'args' => !empty($trace['args']) ? $this->_argsToString($trace['args']) : null,
@@ -415,19 +429,19 @@ class Deprecator extends Component
 
             if (is_object($value)) {
                 $strValue = get_class($value);
-            } else if (is_bool($value)) {
+            } elseif (is_bool($value)) {
                 $strValue = $value ? 'true' : 'false';
-            } else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 if (strlen($value) > 64) {
                     $strValue = '"' . StringHelper::substr($value, 0, 64) . '..."';
                 } else {
                     $strValue = '"' . $value . '"';
                 }
-            } else if (is_array($value)) {
+            } elseif (is_array($value)) {
                 $strValue = '[' . $this->_argsToString($value) . ']';
-            } else if ($value === null) {
+            } elseif ($value === null) {
                 $strValue = 'null';
-            } else if (is_resource($value)) {
+            } elseif (is_resource($value)) {
                 $strValue = 'resource';
             } else {
                 $strValue = $value;
@@ -435,7 +449,7 @@ class Deprecator extends Component
 
             if (is_string($key)) {
                 $strArgs[] = '"' . $key . '" => ' . $strValue;
-            } else if ($isAssoc) {
+            } elseif ($isAssoc) {
                 $strArgs[] = $key . ' => ' . $strValue;
             } else {
                 $strArgs[] = $strValue;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of Composer.
@@ -22,13 +22,18 @@ use Composer\Util\Url;
  */
 class ProxyManager
 {
-    private $error;
+    /** @var ?string */
+    private $error = null;
+    /** @var array{http: ?string, https: ?string} */
     private $fullProxy;
+    /** @var array{http: ?string, https: ?string} */
     private $safeProxy;
+    /** @var array{http: array{options: mixed[]|null}, https: array{options: mixed[]|null}} */
     private $streams;
+    /** @var bool */
     private $hasProxy;
-    private $info;
-    private $lastProxy;
+    /** @var ?string */
+    private $info = null;
     /** @var ?NoProxyPattern */
     private $noProxyHandler = null;
 
@@ -37,23 +42,20 @@ class ProxyManager
 
     private function __construct()
     {
-        $this->fullProxy = $this->safeProxy = array(
+        $this->fullProxy = $this->safeProxy = [
             'http' => null,
             'https' => null,
-        );
+        ];
 
-        $this->streams['http'] = $this->streams['https'] = array(
+        $this->streams['http'] = $this->streams['https'] = [
             'options' => null,
-        );
+        ];
 
         $this->hasProxy = false;
         $this->initProxyData();
     }
 
-    /**
-     * @return ProxyManager
-     */
-    public static function getInstance()
+    public static function getInstance(): ProxyManager
     {
         if (!self::$instance) {
             self::$instance = new self();
@@ -65,7 +67,7 @@ class ProxyManager
     /**
      * Clears the persistent instance
      */
-    public static function reset()
+    public static function reset(): void
     {
         self::$instance = null;
     }
@@ -73,10 +75,9 @@ class ProxyManager
     /**
      * Returns a RequestProxy instance for the request url
      *
-     * @param  string       $requestUrl
-     * @return RequestProxy
+     * @param non-empty-string $requestUrl
      */
-    public function getProxyForRequest($requestUrl)
+    public function getProxyForRequest(string $requestUrl): RequestProxy
     {
         if ($this->error) {
             throw new TransportException('Unable to use a proxy: '.$this->error);
@@ -84,10 +85,10 @@ class ProxyManager
 
         $scheme = parse_url($requestUrl, PHP_URL_SCHEME) ?: 'http';
         $proxyUrl = '';
-        $options = array();
+        $options = [];
         $formattedProxyUrl = '';
 
-        if ($this->hasProxy && in_array($scheme, array('http', 'https'), true) && $this->fullProxy[$scheme]) {
+        if ($this->hasProxy && in_array($scheme, ['http', 'https'], true) && $this->fullProxy[$scheme]) {
             if ($this->noProxy($requestUrl)) {
                 $formattedProxyUrl = 'excluded by no_proxy';
             } else {
@@ -106,7 +107,7 @@ class ProxyManager
      *
      * @return bool If false any error will be in $message
      */
-    public function isProxying()
+    public function isProxying(): bool
     {
         return $this->hasProxy;
     }
@@ -116,7 +117,7 @@ class ProxyManager
      *
      * @return string|null Safe proxy URL or an error message if setting up proxy failed or null if no proxy was configured
      */
-    public function getFormattedProxy()
+    public function getFormattedProxy(): ?string
     {
         return $this->hasProxy ? $this->info : $this->error;
     }
@@ -124,17 +125,17 @@ class ProxyManager
     /**
      * Initializes proxy values from the environment
      */
-    private function initProxyData()
+    private function initProxyData(): void
     {
         try {
-            list($httpProxy, $httpsProxy, $noProxy) = ProxyHelper::getProxyData();
+            [$httpProxy, $httpsProxy, $noProxy] = ProxyHelper::getProxyData();
         } catch (\RuntimeException $e) {
             $this->error = $e->getMessage();
 
             return;
         }
 
-        $info = array();
+        $info = [];
 
         if ($httpProxy) {
             $info[] = $this->setData($httpProxy, 'http');
@@ -153,10 +154,12 @@ class ProxyManager
     /**
      * Sets initial data
      *
-     * @param string $url    Proxy url
-     * @param string $scheme Environment variable scheme
+     * @param non-empty-string $url    Proxy url
+     * @param 'http'|'https'   $scheme Environment variable scheme
+     *
+     * @return non-empty-string
      */
-    private function setData($url, $scheme)
+    private function setData($url, $scheme): string
     {
         $safeProxy = Url::sanitize($url);
         $this->fullProxy[$scheme] = $url;
@@ -169,20 +172,9 @@ class ProxyManager
 
     /**
      * Returns true if a url matches no_proxy value
-     *
-     * @param  string $requestUrl
-     * @return bool
      */
-    private function noProxy($requestUrl)
+    private function noProxy(string $requestUrl): bool
     {
-        if ($this->noProxyHandler) {
-            if ($this->noProxyHandler->test($requestUrl)) {
-                $this->lastProxy = 'excluded by no_proxy';
-
-                return true;
-            }
-        }
-
-        return false;
+        return $this->noProxyHandler && $this->noProxyHandler->test($requestUrl);
     }
 }

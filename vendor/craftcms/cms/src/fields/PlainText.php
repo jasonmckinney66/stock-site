@@ -193,7 +193,7 @@ class PlainText extends Field implements PreviewableFieldInterface, SortableFiel
 
         if ($this->byteLimit) {
             $bytes = $this->byteLimit;
-        } else if ($this->charLimit) {
+        } elseif ($this->charLimit) {
             $bytes = $this->charLimit * 4;
         } else {
             return Schema::TYPE_TEXT;
@@ -221,7 +221,6 @@ class PlainText extends Field implements PreviewableFieldInterface, SortableFiel
     protected function inputHtml($value, ElementInterface $element = null): string
     {
         return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input', [
-            'id' => $this->getInputId(),
             'name' => $this->handle,
             'value' => $value,
             'field' => $this,

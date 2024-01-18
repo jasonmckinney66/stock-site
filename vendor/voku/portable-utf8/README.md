@@ -162,21 +162,21 @@ The API from the "UTF8"-Class is written as small static methods that will match
 ## Class methods
 
 <p id="voku-php-readme-class-methods"></p><table><tr><td><a href="#accessstring-str-int-pos-string-encoding-string">access</a>
-</td><td><a href="#add_bom_to_stringstring-str-string">add_bom_to_string</a>
+</td><td><a href="#add_bom_to_stringstring-str-non-empty-string">add_bom_to_string</a>
 </td><td><a href="#array_change_key_casearray-array-int-case-string-encoding-string">array_change_key_case</a>
 </td><td><a href="#betweenstring-str-string-start-string-end-int-offset-string-encoding-string">between</a>
 </td></tr><tr><td><a href="#binary_to_strstring-bin-string">binary_to_str</a>
-</td><td><a href="#bom-string">bom</a>
-</td><td><a href="#callbackcallable-callback-string-str-string">callback</a>
+</td><td><a href="#bom-non-empty-string">bom</a>
+</td><td><a href="#callbackcallablestring-string-callback-string-str-string">callback</a>
 </td><td><a href="#char_atstring-str-int-index-string-encoding-string">char_at</a>
 </td></tr><tr><td><a href="#charsstring-str-string">chars</a>
 </td><td><a href="#checkforsupport-truenull">checkForSupport</a>
 </td><td><a href="#chrint-code_point-string-encoding-stringnull">chr</a>
-</td><td><a href="#chr_mapcallable-callback-string-str-string">chr_map</a>
+</td><td><a href="#chr_mapcallablestring-string-callback-string-str-string">chr_map</a>
 </td></tr><tr><td><a href="#chr_size_liststring-str-int">chr_size_list</a>
 </td><td><a href="#chr_to_decimalstring-char-int">chr_to_decimal</a>
 </td><td><a href="#chr_to_hexintstring-char-string-prefix-string">chr_to_hex</a>
-</td><td><a href="#chunk_splitstring-body-int-chunk_length-string-end-string">chunk_split</a>
+</td><td><a href="#chunk_splitstring-str-int-chunk_length-string-end-string">chunk_split</a>
 </td></tr><tr><td><a href="#cleanstring-str-bool-remove_bom-bool-normalize_whitespace-bool-normalize_msword-bool-keep_non_breaking_space-bool-replace_diamond_question_mark-bool-remove_invisible_characters-bool-remove_invisible_characters_url_encoded-string">clean</a>
 </td><td><a href="#cleanupstring-str-string">cleanup</a>
 </td><td><a href="#codepointsstringstring-arg-bool-use_u_style-intstring">codepoints</a>
@@ -198,8 +198,8 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#filterarrayobjectstring-var-int-normalization_form-string-leading_combining-mixed">filter</a>
 </td><td><a href="#filter_inputint-type-string-variable_name-int-filter-intintnull-options-mixed">filter_input</a>
 </td></tr><tr><td><a href="#filter_input_arrayint-type-arraynull-definition-bool-add_empty-arraystringmixedfalsenull">filter_input_array</a>
-</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-intintnull-options-mixed">filter_var</a>
-</td><td><a href="#filter_var_arrayarray-data-arrayintnull-definition-bool-add_empty-arraystringmixedfalsenull">filter_var_array</a>
+</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-intint-options-mixed">filter_var</a>
+</td><td><a href="#filter_var_arrayarray-data-arrayint-definition-bool-add_empty-arraystringmixedfalsenull">filter_var_array</a>
 </td><td><a href="#finfo_loaded-bool">finfo_loaded</a>
 </td></tr><tr><td><a href="#first_charstring-str-int-n-string-encoding-string">first_char</a>
 </td><td><a href="#fits_insidestring-str-int-box_size-bool">fits_inside</a>
@@ -207,218 +207,221 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#fix_utf8stringstring-str-stringstring">fix_utf8</a>
 </td></tr><tr><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
 </td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
+</td><td><a href="#geturlparamfromarraystring-param-array-data-mixed">getUrlParamFromArray</a>
 </td><td><a href="#get_file_typestring-str-array-fallback">get_file_type</a>
-</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
-</td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-string">get_unique_string</a>
+</td></tr><tr><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
+</td><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-non-empty-string">get_unique_string</a>
 </td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
 </td><td><a href="#has_uppercasestring-str-bool">has_uppercase</a>
-</td><td><a href="#has_whitespacestring-str-bool">has_whitespace</a>
-</td></tr><tr><td><a href="#hex_to_chrstring-hexdec-falsestring">hex_to_chr</a>
+</td></tr><tr><td><a href="#has_whitespacestring-str-bool">has_whitespace</a>
+</td><td><a href="#hex_to_chrstring-hexdec-string">hex_to_chr</a>
 </td><td><a href="#hex_to_intstring-hexdec-falseint">hex_to_int</a>
 </td><td><a href="#html_encodestring-str-bool-keep_ascii_chars-string-encoding-string">html_encode</a>
-</td><td><a href="#html_entity_decodestring-str-intnull-flags-string-encoding-string">html_entity_decode</a>
-</td></tr><tr><td><a href="#html_escapestring-str-string-encoding-string">html_escape</a>
+</td></tr><tr><td><a href="#html_entity_decodestring-str-intnull-flags-string-encoding-string">html_entity_decode</a>
+</td><td><a href="#html_escapestring-str-string-encoding-string">html_escape</a>
 </td><td><a href="#html_stripe_empty_tagsstring-str-string">html_stripe_empty_tags</a>
 </td><td><a href="#htmlentitiesstring-str-int-flags-string-encoding-bool-double_encode-string">htmlentities</a>
-</td><td><a href="#htmlspecialcharsstring-str-int-flags-string-encoding-bool-double_encode-string">htmlspecialchars</a>
-</td></tr><tr><td><a href="#iconv_loaded-bool">iconv_loaded</a>
+</td></tr><tr><td><a href="#htmlspecialcharsstring-str-int-flags-string-encoding-bool-double_encode-string">htmlspecialchars</a>
+</td><td><a href="#iconv_loaded-bool">iconv_loaded</a>
 </td><td><a href="#int_to_hexint-int-string-prefix-string">int_to_hex</a>
 </td><td><a href="#intlchar_loaded-bool">intlChar_loaded</a>
-</td><td><a href="#intl_loaded-bool">intl_loaded</a>
-</td></tr><tr><td><a href="#is_alphastring-str-bool">is_alpha</a>
+</td></tr><tr><td><a href="#intl_loaded-bool">intl_loaded</a>
+</td><td><a href="#is_alphastring-str-bool">is_alpha</a>
 </td><td><a href="#is_alphanumericstring-str-bool">is_alphanumeric</a>
 </td><td><a href="#is_asciistring-str-bool">is_ascii</a>
-</td><td><a href="#is_base64stringnull-str-bool-empty_string_is_valid-bool">is_base64</a>
-</td></tr><tr><td><a href="#is_binaryintstring-input-bool-strict-bool">is_binary</a>
+</td></tr><tr><td><a href="#is_base64stringnull-str-bool-empty_string_is_valid-bool">is_base64</a>
+</td><td><a href="#is_binaryintstring-input-bool-strict-bool">is_binary</a>
 </td><td><a href="#is_binary_filestring-file-bool">is_binary_file</a>
 </td><td><a href="#is_blankstring-str-bool">is_blank</a>
-</td><td><a href="#is_bomstring-str-bool">is_bom</a>
-</td></tr><tr><td><a href="#is_emptyarrayfloatintstring-str-bool">is_empty</a>
+</td></tr><tr><td><a href="#is_bomstring-str-bool">is_bom</a>
+</td><td><a href="#is_emptyarrayfloatintstring-str-bool">is_empty</a>
 </td><td><a href="#is_hexadecimalstring-str-bool">is_hexadecimal</a>
 </td><td><a href="#is_htmlstring-str-bool">is_html</a>
-</td><td><a href="#is_jsonstring-str-bool-only_array_or_object_results_are_valid-bool">is_json</a>
-</td></tr><tr><td><a href="#is_lowercasestring-str-bool">is_lowercase</a>
+</td></tr><tr><td><a href="#is_jsonstring-str-bool-only_array_or_object_results_are_valid-bool">is_json</a>
+</td><td><a href="#is_lowercasestring-str-bool">is_lowercase</a>
 </td><td><a href="#is_printablestring-str-bool-ignore_control_characters-bool">is_printable</a>
 </td><td><a href="#is_punctuationstring-str-bool">is_punctuation</a>
-</td><td><a href="#is_serializedstring-str-bool">is_serialized</a>
-</td></tr><tr><td><a href="#is_uppercasestring-str-bool">is_uppercase</a>
+</td></tr><tr><td><a href="#is_serializedstring-str-bool">is_serialized</a>
+</td><td><a href="#is_uppercasestring-str-bool">is_uppercase</a>
 </td><td><a href="#is_urlstring-url-bool-disallow_localhost-bool">is_url</a>
 </td><td><a href="#is_utf8intstringstringnull-str-bool-strict-bool">is_utf8</a>
-</td><td><a href="#is_utf16string-str-bool-check_if_string_is_binary-falseint">is_utf16</a>
-</td></tr><tr><td><a href="#is_utf32string-str-bool-check_if_string_is_binary-falseint">is_utf32</a>
+</td></tr><tr><td><a href="#is_utf16string-str-bool-check_if_string_is_binary-falseint">is_utf16</a>
+</td><td><a href="#is_utf32string-str-bool-check_if_string_is_binary-falseint">is_utf32</a>
 </td><td><a href="#json_decodestring-json-bool-assoc-int-depth-int-options-mixed">json_decode</a>
 </td><td><a href="#json_encodemixed-value-int-options-int-depth-falsestring">json_encode</a>
-</td><td><a href="#json_loaded-bool">json_loaded</a>
-</td></tr><tr><td><a href="#lcfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">lcfirst</a>
+</td></tr><tr><td><a href="#json_loaded-bool">json_loaded</a>
+</td><td><a href="#lcfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">lcfirst</a>
 </td><td><a href="#lcwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">lcwords</a>
 </td><td><a href="#levenshteinstring-str1-string-str2-int-insertioncost-int-replacementcost-int-deletioncost-int">levenshtein</a>
-</td><td><a href="#ltrimstring-str-stringnull-chars-string">ltrim</a>
-</td></tr><tr><td><a href="#maxstringstring-arg-stringnull">max</a>
+</td></tr><tr><td><a href="#ltrimstring-str-stringnull-chars-string">ltrim</a>
+</td><td><a href="#maxstringstring-arg-stringnull">max</a>
 </td><td><a href="#max_chr_widthstring-str-int">max_chr_width</a>
 </td><td><a href="#mbstring_loaded-bool">mbstring_loaded</a>
-</td><td><a href="#minstringstring-arg-stringnull">min</a>
-</td></tr><tr><td><a href="#normalize_encodingmixed-encoding-mixed-fallback-mixedstring">normalize_encoding</a>
+</td></tr><tr><td><a href="#minstringstring-arg-stringnull">min</a>
+</td><td><a href="#normalize_encodingmixed-encoding-mixed-fallback-mixedstring">normalize_encoding</a>
 </td><td><a href="#normalize_line_endingstring-str-stringstring-replacer-string">normalize_line_ending</a>
 </td><td><a href="#normalize_mswordstring-str-string">normalize_msword</a>
-</td><td><a href="#normalize_whitespacestring-str-bool-keep_non_breaking_space-bool-keep_bidi_unicode_controls-bool-normalize_control_characters-string">normalize_whitespace</a>
-</td></tr><tr><td><a href="#ordstring-chr-string-encoding-int">ord</a>
+</td></tr><tr><td><a href="#normalize_whitespacestring-str-bool-keep_non_breaking_space-bool-keep_bidi_unicode_controls-bool-normalize_control_characters-string">normalize_whitespace</a>
+</td><td><a href="#ordstring-chr-string-encoding-int">ord</a>
 </td><td><a href="#parse_strstring-str-array-result-bool-clean_utf8-bool">parse_str</a>
 </td><td><a href="#pcre_utf8_support-bool">pcre_utf8_support</a>
-</td><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-string">range</a>
-</td></tr><tr><td><a href="#rawurldecodestring-str-bool-multi_decode-string">rawurldecode</a>
+</td></tr><tr><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-liststring">range</a>
+</td><td><a href="#rawurldecodestring-str-bool-multi_decode-string">rawurldecode</a>
 </td><td><a href="#regex_replacestring-str-string-pattern-string-replacement-string-options-string-delimiter-string">regex_replace</a>
 </td><td><a href="#remove_bomstring-str-string">remove_bom</a>
-</td><td><a href="#remove_duplicatesstring-str-stringstring-what-string">remove_duplicates</a>
-</td></tr><tr><td><a href="#remove_htmlstring-str-string-allowable_tags-string">remove_html</a>
+</td></tr><tr><td><a href="#remove_duplicatesstring-str-stringstring-what-string">remove_duplicates</a>
+</td><td><a href="#remove_htmlstring-str-string-allowable_tags-string">remove_html</a>
 </td><td><a href="#remove_html_breaksstring-str-string-replacement-string">remove_html_breaks</a>
-</td><td><a href="#remove_invisible_charactersstring-str-bool-url_encoded-string-replacement-bool-keep_basic_control_characters-string">remove_invisible_characters</a>
+</td><td><a href="#remove_ileftstring-str-string-substring-string-encoding-string">remove_ileft</a>
+</td></tr><tr><td><a href="#remove_invisible_charactersstring-str-bool-url_encoded-string-replacement-bool-keep_basic_control_characters-string">remove_invisible_characters</a>
+</td><td><a href="#remove_irightstring-str-string-substring-string-encoding-string">remove_iright</a>
 </td><td><a href="#remove_leftstring-str-string-substring-string-encoding-string">remove_left</a>
-</td></tr><tr><td><a href="#remove_rightstring-str-string-substring-string-encoding-string">remove_right</a>
-</td><td><a href="#replacestring-str-string-search-string-replacement-bool-case_sensitive-string">replace</a>
+</td><td><a href="#remove_rightstring-str-string-substring-string-encoding-string">remove_right</a>
+</td></tr><tr><td><a href="#replacestring-str-string-search-string-replacement-bool-case_sensitive-string">replace</a>
 </td><td><a href="#replace_allstring-str-string-search-stringstring-replacement-bool-case_sensitive-string">replace_all</a>
 </td><td><a href="#replace_diamond_question_markstring-str-string-replacement_char-bool-process_invalid_utf8_chars-string">replace_diamond_question_mark</a>
-</td></tr><tr><td><a href="#rtrimstring-str-stringnull-chars-string">rtrim</a>
-</td><td><a href="#showsupportbool-useecho-stringvoid">showSupport</a>
+</td><td><a href="#rtrimstring-str-stringnull-chars-string">rtrim</a>
+</td></tr><tr><td><a href="#showsupportbool-useecho-stringvoid">showSupport</a>
 </td><td><a href="#single_chr_html_encodestring-char-bool-keep_ascii_chars-string-encoding-string">single_chr_html_encode</a>
 </td><td><a href="#spaces_to_tabsstring-str-int-tab_length-string">spaces_to_tabs</a>
-</td></tr><tr><td><a href="#str_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_camelize</a>
-</td><td><a href="#str_capitalize_namestring-str-string">str_capitalize_name</a>
+</td><td><a href="#str_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_camelize</a>
+</td></tr><tr><td><a href="#str_capitalize_namestring-str-string">str_capitalize_name</a>
 </td><td><a href="#str_containsstring-haystack-string-needle-bool-case_sensitive-bool">str_contains</a>
 </td><td><a href="#str_contains_allstring-haystack-scalar-needles-bool-case_sensitive-bool">str_contains_all</a>
-</td></tr><tr><td><a href="#str_contains_anystring-haystack-scalar-needles-bool-case_sensitive-bool">str_contains_any</a>
-</td><td><a href="#str_dasherizestring-str-string-encoding-string">str_dasherize</a>
+</td><td><a href="#str_contains_anystring-haystack-scalar-needles-bool-case_sensitive-bool">str_contains_any</a>
+</td></tr><tr><td><a href="#str_dasherizestring-str-string-encoding-string">str_dasherize</a>
 </td><td><a href="#str_delimitstring-str-string-delimiter-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_delimit</a>
 </td><td><a href="#str_detect_encodingstring-str-falsestring">str_detect_encoding</a>
-</td></tr><tr><td><a href="#str_ends_withstring-haystack-string-needle-bool">str_ends_with</a>
-</td><td><a href="#str_ends_with_anystring-str-string-substrings-bool">str_ends_with_any</a>
-</td><td><a href="#str_ensure_leftstring-str-string-substring-string">str_ensure_left</a>
+</td><td><a href="#str_ends_withstring-haystack-string-needle-bool">str_ends_with</a>
+</td></tr><tr><td><a href="#str_ends_with_anystring-str-string-substrings-bool">str_ends_with_any</a>
+</td><td><a href="#str_ensure_leftstring-str-string-substring">str_ensure_left</a>
 </td><td><a href="#str_ensure_rightstring-str-string-substring-string">str_ensure_right</a>
-</td></tr><tr><td><a href="#str_humanizestring-str-string">str_humanize</a>
-</td><td><a href="#str_iends_withstring-haystack-string-needle-bool">str_iends_with</a>
+</td><td><a href="#str_humanizestring-str-string">str_humanize</a>
+</td></tr><tr><td><a href="#str_iends_withstring-haystack-string-needle-bool">str_iends_with</a>
 </td><td><a href="#str_iends_with_anystring-str-string-substrings-bool">str_iends_with_any</a>
 </td><td><a href="#str_insertstring-str-string-substring-int-index-string-encoding-string">str_insert</a>
-</td></tr><tr><td><a href="#str_ireplacestringstring-search-stringstring-replacement-stringstring-subject-int-count-stringstring">str_ireplace</a>
-</td><td><a href="#str_ireplace_beginningstring-str-string-search-string-replacement-string">str_ireplace_beginning</a>
+</td><td><a href="#str_ireplacestringstring-search-stringstring-replacement-stringstring-subject-int-count-stringstring">str_ireplace</a>
+</td></tr><tr><td><a href="#str_ireplace_beginningstring-str-string-search-string-replacement-string">str_ireplace_beginning</a>
 </td><td><a href="#str_ireplace_endingstring-str-string-search-string-replacement-string">str_ireplace_ending</a>
 </td><td><a href="#str_istarts_withstring-haystack-string-needle-bool">str_istarts_with</a>
-</td></tr><tr><td><a href="#str_istarts_with_anystring-str-scalar-substrings-bool">str_istarts_with_any</a>
-</td><td><a href="#str_isubstr_after_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_first_separator</a>
+</td><td><a href="#str_istarts_with_anystring-str-scalar-substrings-bool">str_istarts_with_any</a>
+</td></tr><tr><td><a href="#str_isubstr_after_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_first_separator</a>
 </td><td><a href="#str_isubstr_after_last_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_last_separator</a>
 </td><td><a href="#str_isubstr_before_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_first_separator</a>
-</td></tr><tr><td><a href="#str_isubstr_before_last_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_last_separator</a>
-</td><td><a href="#str_isubstr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_first</a>
+</td><td><a href="#str_isubstr_before_last_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_last_separator</a>
+</td></tr><tr><td><a href="#str_isubstr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_first</a>
 </td><td><a href="#str_isubstr_laststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_last</a>
 </td><td><a href="#str_last_charstring-str-int-n-string-encoding-string">str_last_char</a>
-</td></tr><tr><td><a href="#str_limitstring-str-int-length-string-str_add_on-string-encoding-string">str_limit</a>
-</td><td><a href="#str_limit_after_wordstring-str-int-length-string-str_add_on-string-encoding-string">str_limit_after_word</a>
+</td><td><a href="#str_limitstring-str-int-length-string-str_add_on-string-encoding-string">str_limit</a>
+</td></tr><tr><td><a href="#str_limit_after_wordstring-str-int-length-string-str_add_on-string-encoding-string">str_limit_after_word</a>
 </td><td><a href="#str_longest_common_prefixstring-str1-string-str2-string-encoding-string">str_longest_common_prefix</a>
 </td><td><a href="#str_longest_common_substringstring-str1-string-str2-string-encoding-string">str_longest_common_substring</a>
-</td></tr><tr><td><a href="#str_longest_common_suffixstring-str1-string-str2-string-encoding-string">str_longest_common_suffix</a>
-</td><td><a href="#str_matches_patternstring-str-string-pattern-bool">str_matches_pattern</a>
+</td><td><a href="#str_longest_common_suffixstring-str1-string-str2-string-encoding-string">str_longest_common_suffix</a>
+</td></tr><tr><td><a href="#str_matches_patternstring-str-string-pattern-bool">str_matches_pattern</a>
 </td><td><a href="#str_obfuscatestring-str-float-percent-string-obfuscatechar-string-keepchars-string">str_obfuscate</a>
 </td><td><a href="#str_offset_existsstring-str-int-offset-string-encoding-bool">str_offset_exists</a>
-</td></tr><tr><td><a href="#str_offset_getstring-str-int-index-string-encoding-string">str_offset_get</a>
-</td><td><a href="#str_padstring-str-int-pad_length-string-pad_string-intstring-pad_type-string-encoding-string">str_pad</a>
+</td><td><a href="#str_offset_getstring-str-int-index-string-encoding-string">str_offset_get</a>
+</td></tr><tr><td><a href="#str_padstring-str-int-pad_length-string-pad_string-intstring-pad_type-string-encoding-string">str_pad</a>
 </td><td><a href="#str_pad_bothstring-str-int-length-string-pad_str-string-encoding-string">str_pad_both</a>
 </td><td><a href="#str_pad_leftstring-str-int-length-string-pad_str-string-encoding-string">str_pad_left</a>
-</td></tr><tr><td><a href="#str_pad_rightstring-str-int-length-string-pad_str-string-encoding-string">str_pad_right</a>
-</td><td><a href="#str_repeatstring-str-int-multiplier-string">str_repeat</a>
+</td><td><a href="#str_pad_rightstring-str-int-length-string-pad_str-string-encoding-string">str_pad_right</a>
+</td></tr><tr><td><a href="#str_repeatstring-str-int-multiplier-string">str_repeat</a>
 </td><td><a href="#str_replace_beginningstring-str-string-search-string-replacement-string">str_replace_beginning</a>
 </td><td><a href="#str_replace_endingstring-str-string-search-string-replacement-string">str_replace_ending</a>
-</td></tr><tr><td><a href="#str_replace_firststring-search-string-replace-string-subject-string">str_replace_first</a>
-</td><td><a href="#str_replace_laststring-search-string-replace-string-subject-string">str_replace_last</a>
+</td><td><a href="#str_replace_firststring-search-string-replace-string-subject-string">str_replace_first</a>
+</td></tr><tr><td><a href="#str_replace_laststring-search-string-replace-string-subject-string">str_replace_last</a>
 </td><td><a href="#str_shufflestring-str-string-encoding-string">str_shuffle</a>
 </td><td><a href="#str_slicestring-str-int-start-intnull-end-string-encoding-falsestring">str_slice</a>
-</td></tr><tr><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
-</td><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
-</td><td><a href="#str_splitintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
-</td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split_array</a>
-</td></tr><tr><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
-</td><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
+</td><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
+</td></tr><tr><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
+</td><td><a href="#str_splitintstring-str-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-liststring">str_split</a>
+</td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-listliststring">str_split_array</a>
+</td><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
+</td></tr><tr><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
 </td><td><a href="#str_starts_with_anystring-str-scalar-substrings-bool">str_starts_with_any</a>
 </td><td><a href="#str_substr_after_first_separatorstring-str-string-separator-string-encoding-string">str_substr_after_first_separator</a>
-</td></tr><tr><td><a href="#str_substr_after_last_separatorstring-str-string-separator-string-encoding-string">str_substr_after_last_separator</a>
-</td><td><a href="#str_substr_before_first_separatorstring-str-string-separator-string-encoding-string">str_substr_before_first_separator</a>
+</td><td><a href="#str_substr_after_last_separatorstring-str-string-separator-string-encoding-string">str_substr_after_last_separator</a>
+</td></tr><tr><td><a href="#str_substr_before_first_separatorstring-str-string-separator-string-encoding-string">str_substr_before_first_separator</a>
 </td><td><a href="#str_substr_before_last_separatorstring-str-string-separator-string-encoding-string">str_substr_before_last_separator</a>
 </td><td><a href="#str_substr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_first</a>
-</td></tr><tr><td><a href="#str_substr_laststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_last</a>
-</td><td><a href="#str_surroundstring-str-string-substring-string">str_surround</a>
+</td><td><a href="#str_substr_laststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_last</a>
+</td></tr><tr><td><a href="#str_surroundstring-str-string-substring-string">str_surround</a>
 </td><td><a href="#str_titleizestring-str-stringnull-ignore-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool-use_trim_first-stringnull-word_define_chars-string">str_titleize</a>
 </td><td><a href="#str_titleize_for_humansstring-str-string-ignore-string-encoding-string">str_titleize_for_humans</a>
-</td></tr><tr><td><a href="#str_to_binarystring-str-falsestring">str_to_binary</a>
-</td><td><a href="#str_to_linesstring-str-bool-remove_empty_values-intnull-remove_short_values-string">str_to_lines</a>
-</td><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-string">str_to_words</a>
+</td><td><a href="#str_to_binarystring-str-falsestring">str_to_binary</a>
+</td></tr><tr><td><a href="#str_to_linesstring-str-bool-remove_empty_values-intnull-remove_short_values-string">str_to_lines</a>
+</td><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-liststring">str_to_words</a>
 </td><td><a href="#str_truncatestring-str-int-length-string-substring-string-encoding-string">str_truncate</a>
-</td></tr><tr><td><a href="#str_truncate_safestring-str-int-length-string-substring-string-encoding-bool-ignore_do_not_split_words_for_one_word-string">str_truncate_safe</a>
-</td><td><a href="#str_underscoredstring-str-string">str_underscored</a>
+</td><td><a href="#str_truncate_safestring-str-int-length-string-substring-string-encoding-bool-ignore_do_not_split_words_for_one_word-string">str_truncate_safe</a>
+</td></tr><tr><td><a href="#str_underscoredstring-str-string">str_underscored</a>
 </td><td><a href="#str_upper_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_upper_camelize</a>
 </td><td><a href="#str_word_countstring-str-int-format-string-char_list-intstring">str_word_count</a>
-</td></tr><tr><td><a href="#strcasecmpstring-str1-string-str2-string-encoding-int">strcasecmp</a>
-</td><td><a href="#strcmpstring-str1-string-str2-int">strcmp</a>
+</td><td><a href="#strcasecmpstring-str1-string-str2-string-encoding-int">strcasecmp</a>
+</td></tr><tr><td><a href="#strcmpstring-str1-string-str2-int">strcmp</a>
 </td><td><a href="#strcspnstring-str-string-char_list-int-offset-intnull-length-string-encoding-int">strcspn</a>
 </td><td><a href="#stringintintstringstring-intorhex-string">string</a>
-</td></tr><tr><td><a href="#string_has_bomstring-str-bool">string_has_bom</a>
-</td><td><a href="#strip_tagsstring-str-stringnull-allowable_tags-bool-clean_utf8-string">strip_tags</a>
+</td><td><a href="#string_has_bomstring-str-bool">string_has_bom</a>
+</td></tr><tr><td><a href="#strip_tagsstring-str-stringnull-allowable_tags-bool-clean_utf8-string">strip_tags</a>
 </td><td><a href="#strip_whitespacestring-str-string">strip_whitespace</a>
 </td><td><a href="#striposstring-haystack-string-needle-int-offset-string-encoding-bool-clean_utf8-falseint">stripos</a>
-</td></tr><tr><td><a href="#stripos_in_bytestring-haystack-string-needle-int-offset-falseint">stripos_in_byte</a>
-</td><td><a href="#stristrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">stristr</a>
+</td><td><a href="#stripos_in_bytestring-haystack-string-needle-int-offset-falseint">stripos_in_byte</a>
+</td></tr><tr><td><a href="#stristrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">stristr</a>
 </td><td><a href="#strlenstring-str-string-encoding-bool-clean_utf8-falseint">strlen</a>
 </td><td><a href="#strlen_in_bytestring-str-int">strlen_in_byte</a>
-</td></tr><tr><td><a href="#strnatcasecmpstring-str1-string-str2-string-encoding-int">strnatcasecmp</a>
-</td><td><a href="#strnatcmpstring-str1-string-str2-int">strnatcmp</a>
+</td><td><a href="#strnatcasecmpstring-str1-string-str2-string-encoding-int">strnatcasecmp</a>
+</td></tr><tr><td><a href="#strnatcmpstring-str1-string-str2-int">strnatcmp</a>
 </td><td><a href="#strncasecmpstring-str1-string-str2-int-len-string-encoding-int">strncasecmp</a>
 </td><td><a href="#strncmpstring-str1-string-str2-int-len-string-encoding-int">strncmp</a>
-</td></tr><tr><td><a href="#strpbrkstring-haystack-string-char_list-falsestring">strpbrk</a>
-</td><td><a href="#strposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strpos</a>
+</td><td><a href="#strpbrkstring-haystack-string-char_list-falsestring">strpbrk</a>
+</td></tr><tr><td><a href="#strposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strpos</a>
 </td><td><a href="#strpos_in_bytestring-haystack-string-needle-int-offset-falseint">strpos_in_byte</a>
 </td><td><a href="#strrchrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strrchr</a>
-</td></tr><tr><td><a href="#strrevstring-str-string-encoding-string">strrev</a>
-</td><td><a href="#strrichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strrichr</a>
+</td><td><a href="#strrevstring-str-string-encoding-string">strrev</a>
+</td></tr><tr><td><a href="#strrichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strrichr</a>
 </td><td><a href="#strriposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strripos</a>
 </td><td><a href="#strripos_in_bytestring-haystack-string-needle-int-offset-falseint">strripos_in_byte</a>
-</td></tr><tr><td><a href="#strrposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strrpos</a>
-</td><td><a href="#strrpos_in_bytestring-haystack-string-needle-int-offset-falseint">strrpos_in_byte</a>
+</td><td><a href="#strrposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strrpos</a>
+</td></tr><tr><td><a href="#strrpos_in_bytestring-haystack-string-needle-int-offset-falseint">strrpos_in_byte</a>
 </td><td><a href="#strspnstring-str-string-mask-int-offset-intnull-length-string-encoding-falseint">strspn</a>
 </td><td><a href="#strstrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strstr</a>
-</td></tr><tr><td><a href="#strstr_in_bytestring-haystack-string-needle-bool-before_needle-falsestring">strstr_in_byte</a>
-</td><td><a href="#strtocasefoldstring-str-bool-full-bool-clean_utf8-string-encoding-stringnull-lang-bool-lower-string">strtocasefold</a>
+</td><td><a href="#strstr_in_bytestring-haystack-string-needle-bool-before_needle-falsestring">strstr_in_byte</a>
+</td></tr><tr><td><a href="#strtocasefoldstring-str-bool-full-bool-clean_utf8-string-encoding-stringnull-lang-bool-lower-string">strtocasefold</a>
 </td><td><a href="#strtolowerstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">strtolower</a>
 </td><td><a href="#strtoupperstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">strtoupper</a>
-</td></tr><tr><td><a href="#strtrstring-str-stringstring-from-stringstring-to-string">strtr</a>
-</td><td><a href="#strwidthstring-str-string-encoding-bool-clean_utf8-int">strwidth</a>
+</td><td><a href="#strtrstring-str-stringstring-from-stringstring-to-string">strtr</a>
+</td></tr><tr><td><a href="#strwidthstring-str-string-encoding-bool-clean_utf8-int">strwidth</a>
 </td><td><a href="#substrstring-str-int-offset-intnull-length-string-encoding-bool-clean_utf8-falsestring">substr</a>
 </td><td><a href="#substr_comparestring-str1-string-str2-int-offset-intnull-length-bool-case_insensitivity-string-encoding-int">substr_compare</a>
-</td></tr><tr><td><a href="#substr_countstring-haystack-string-needle-int-offset-intnull-length-string-encoding-bool-clean_utf8-falseint">substr_count</a>
-</td><td><a href="#substr_count_in_bytestring-haystack-string-needle-int-offset-intnull-length-falseint">substr_count_in_byte</a>
+</td><td><a href="#substr_countstring-haystack-string-needle-int-offset-intnull-length-string-encoding-bool-clean_utf8-falseint">substr_count</a>
+</td></tr><tr><td><a href="#substr_count_in_bytestring-haystack-string-needle-int-offset-intnull-length-falseint">substr_count_in_byte</a>
 </td><td><a href="#substr_count_simplestring-str-string-substring-bool-case_sensitive-string-encoding-int">substr_count_simple</a>
 </td><td><a href="#substr_ileftstring-haystack-string-needle-string">substr_ileft</a>
-</td></tr><tr><td><a href="#substr_in_bytestring-str-int-offset-intnull-length-falsestring">substr_in_byte</a>
-</td><td><a href="#substr_irightstring-haystack-string-needle-string">substr_iright</a>
+</td><td><a href="#substr_in_bytestring-str-int-offset-intnull-length-falsestring">substr_in_byte</a>
+</td></tr><tr><td><a href="#substr_irightstring-haystack-string-needle-string">substr_iright</a>
 </td><td><a href="#substr_leftstring-haystack-string-needle-string">substr_left</a>
 </td><td><a href="#substr_replacestringstring-str-stringstring-replacement-intint-offset-intintnull-length-string-encoding-stringstring">substr_replace</a>
-</td></tr><tr><td><a href="#substr_rightstring-haystack-string-needle-string-encoding-string">substr_right</a>
-</td><td><a href="#swapcasestring-str-string-encoding-bool-clean_utf8-string">swapCase</a>
+</td><td><a href="#substr_rightstring-haystack-string-needle-string-encoding-string">substr_right</a>
+</td></tr><tr><td><a href="#swapcasestring-str-string-encoding-bool-clean_utf8-string">swapCase</a>
 </td><td><a href="#symfony_polyfill_used-bool">symfony_polyfill_used</a>
 </td><td><a href="#tabs_to_spacesstring-str-int-tab_length-string">tabs_to_spaces</a>
-</td></tr><tr><td><a href="#titlecasestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">titlecase</a>
-</td><td><a href="#to_asciistring-str-string-unknown-bool-strict-string">to_ascii</a>
+</td><td><a href="#titlecasestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">titlecase</a>
+</td></tr><tr><td><a href="#to_asciistring-str-string-unknown-bool-strict-string">to_ascii</a>
 </td><td><a href="#to_booleanboolfloatintstring-str-bool">to_boolean</a>
 </td><td><a href="#to_filenamestring-str-bool-use_transliterate-string-fallback_char-string">to_filename</a>
-</td></tr><tr><td><a href="#to_intstring-str-intnull">to_int</a>
-</td><td><a href="#to_iso8859stringstring-str-stringstring">to_iso8859</a>
+</td><td><a href="#to_intstring-str-intnull">to_int</a>
+</td></tr><tr><td><a href="#to_iso8859stringstring-str-stringstring">to_iso8859</a>
 </td><td><a href="#to_stringfloatintobjectstringnull-input-stringnull">to_string</a>
 </td><td><a href="#to_utf8stringstring-str-bool-decode_html_entity_to_utf8-stringstring">to_utf8</a>
-</td></tr><tr><td><a href="#to_utf8_stringstring-str-bool-decode_html_entity_to_utf8-string">to_utf8_string</a>
-</td><td><a href="#trimstring-str-stringnull-chars-string">trim</a>
+</td><td><a href="#to_utf8_stringstring-str-bool-decode_html_entity_to_utf8-string">to_utf8_string</a>
+</td></tr><tr><td><a href="#trimstring-str-stringnull-chars-string">trim</a>
 </td><td><a href="#ucfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">ucfirst</a>
 </td><td><a href="#ucwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-string">ucwords</a>
-</td></tr><tr><td><a href="#urldecodestring-str-bool-multi_decode-string">urldecode</a>
-</td><td><a href="#utf8_decodestring-str-bool-keep_utf8_chars-string">utf8_decode</a>
+</td><td><a href="#urldecodestring-str-bool-multi_decode-string">urldecode</a>
+</td></tr><tr><td><a href="#utf8_decodestring-str-bool-keep_utf8_chars-string">utf8_decode</a>
 </td><td><a href="#utf8_encodestring-str-string">utf8_encode</a>
 </td><td><a href="#whitespace_table-string">whitespace_table</a>
-</td></tr><tr><td><a href="#words_limitstring-str-int-limit-string-str_add_on-string">words_limit</a>
-</td><td><a href="#wordwrapstring-str-int-width-string-break-bool-cut-string">wordwrap</a>
+</td><td><a href="#words_limitstring-str-int-limit-string-str_add_on-string">words_limit</a>
+</td></tr><tr><td><a href="#wordwrapstring-str-int-width-string-break-bool-cut-string">wordwrap</a>
 </td><td><a href="#wordwrap_per_linestring-str-int-width-string-break-bool-cut-bool-add_final_break-stringnull-delimiter-string">wordwrap_per_line</a>
 </td><td><a href="#ws-string">ws</a>
 </td></tr></table>
@@ -439,7 +442,7 @@ EXAMPLE: <code>UTF8::access('fòô', 1); // 'ò'</code>
 
 --------
 
-## add_bom_to_string(string $str): string
+## add_bom_to_string(string $str): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 Prepends UTF-8 BOM character to the string and returns the whole string.
 
@@ -451,7 +454,7 @@ EXAMPLE: <code>UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'</co
 - `string $str <p>The input string.</p>`
 
 **Return:**
-- `string <p>The output string that contains BOM.</p>`
+- `non-empty-string <p>The output string that contains BOM.</p>`
 
 --------
 
@@ -504,7 +507,7 @@ EXAMPLE: <code>UTF8::binary_to_str('11110000100111111001100010000011'); // '😃
 
 --------
 
-## bom(): string
+## bom(): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns the UTF-8 Byte Order Mark Character.
 
@@ -516,16 +519,16 @@ EXAMPLE: <code>UTF8::bom(); // "\xEF\xBB\xBF"</code>
 __nothing__
 
 **Return:**
-- `string <p>UTF-8 Byte Order Mark.</p>`
+- `non-empty-string <p>UTF-8 Byte Order Mark.</p>`
 
 --------
 
-## callback(callable $callback, string $str): string[]
+## callback(callable(string): string $callback, string $str): string[]
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `callable $callback`
+- `callable(string): string $callback`
 - `string $str`
 
 **Return:**
@@ -539,7 +542,7 @@ Returns the character at $index, with indexes starting at 0.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $index <p>Position of the character.</p>`
+- `int<1, max> $index <p>Position of the character.</p>`
 - `string $encoding [optional] <p>Default is UTF-8</p>`
 
 **Return:**
@@ -552,7 +555,7 @@ Returns the character at $index, with indexes starting at 0.
 Returns an array consisting of the characters in the string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 
 **Return:**
 - `string[] <p>An array of chars.</p>`
@@ -588,14 +591,14 @@ EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
 
 --------
 
-## chr_map(callable $callback, string $str): string[]
+## chr_map(callable(string): string $callback, string $str): string[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Applies callback to all characters of a string.
 
 EXAMPLE: <code>UTF8::chr_map([UTF8::class, 'strtolower'], 'Κόσμε'); // ['κ','ό', 'σ', 'μ', 'ε']</code>
 
 **Parameters:**
-- `callable $callback <p>The callback function.</p>`
+- `callable(string): string $callback`
 - `string $str <p>UTF-8 string to run callback on.</p>`
 
 **Return:**
@@ -615,7 +618,7 @@ Generates an array of byte length of each character of a Unicode string.
 EXAMPLE: <code>UTF8::chr_size_list('中文空白-test'); // [3, 3, 3, 3, 1, 1, 1, 1, 1]</code>
 
 **Parameters:**
-- `string $str <p>The original unicode string.</p>`
+- `T $str <p>The original unicode string.</p>`
 
 **Return:**
 - `int[] <p>An array of byte lengths of each character.</p>`
@@ -653,15 +656,15 @@ EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
 
 --------
 
-## chunk_split(string $body, int $chunk_length, string $end): string
+## chunk_split(string $str, int $chunk_length, string $end): string
 <a href="#voku-php-readme-class-methods">↑</a>
 Splits a string into smaller chunks and multiple lines, using the specified line ending character.
 
 EXAMPLE: <code>UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε"</code>
 
 **Parameters:**
-- `string $body <p>The original string to be split.</p>`
-- `int $chunk_length [optional] <p>The maximum character length of a chunk.</p>`
+- `T $str <p>The original string to be split.</p>`
+- `int<1, max> $chunk_length [optional] <p>The maximum character length of a chunk.</p>`
 - `string $end [optional] <p>The character(s) to be inserted at the end of each chunk.</p>`
 
 **Return:**
@@ -693,8 +696,8 @@ question mark e.g.: "�"</p>`
 - `bool $remove_invisible_characters [optional] <p>Set to false, if you not want to remove
 invisible characters e.g.: "\0"</p>`
 - `bool $remove_invisible_characters_url_encoded [optional] <p>Set to true, if you not want to remove
-invisible url encoded characters e.g.: "%%0B"<br> WARNING:
-maybe contains false-positives e.g. aa%%0Baa -> aaaa.
+invisible url encoded characters e.g.: "%0B"<br> WARNING:
+maybe contains false-positives e.g. aa%0Baa -> aaaa.
 </p>`
 
 **Return:**
@@ -718,7 +721,7 @@ EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 -
 
 ## codepoints(string|string[] $arg, bool $use_u_style): int[]|string[]
 <a href="#voku-php-readme-class-methods">↑</a>
-Accepts a string or a array of strings and returns an array of Unicode code points.
+Accepts a string or an array of chars and returns an array of Unicode code points.
 
 INFO: opposite to UTF8::string()
 
@@ -729,7 +732,7 @@ UTF8::codepoints('κöñ', true); // array('U+03ba', 'U+00f6', 'U+00f1')
 </code>
 
 **Parameters:**
-- `string|string[] $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
+- `T $arg <p>A UTF-8 encoded string or an array of such chars.</p>`
 - `bool $use_u_style <p>If True, will return code points in U+xxxx format,
 default, code points will be returned as integers.</p>`
 
@@ -763,7 +766,7 @@ Returns count of characters used in a string.
 EXAMPLE: <code>UTF8::count_chars('κaκbκc'); // array('κ' => 3, 'a' => 1, 'b' => 1, 'c' => 1)</code>
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
 - `bool $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use`
 
@@ -945,7 +948,7 @@ A empty string will trigger the autodetect anyway.</p>`
 - `string $to_charset [optional] <p>Set the output charset.</p>`
 - `string $transfer_encoding [optional] <p>Set the transfer encoding.</p>`
 - `string $linefeed [optional] <p>Set the used linefeed.</p>`
-- `int $indent [optional] <p>Set the max length indent.</p>`
+- `int<1, max> $indent [optional] <p>Set the max length indent.</p>`
 
 **Return:**
 - `false|string <p>An encoded MIME field on success,
@@ -955,7 +958,7 @@ or false if an error occurs during the encoding.</p>`
 
 ## extract_text(string $str, string $search, int|null $length, string $replacer_for_skipped_text, string $encoding): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
+Create an extract from a sentence, so if the search-string was found, it tries to center in the output.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -996,7 +999,7 @@ custom context, you can skip this parameter by &null;.
 - `int|null $offset [optional] <p>
 The offset where the reading starts.
 </p>`
-- `int|null $max_length [optional] <p>
+- `int<0, max>|null $max_length [optional] <p>
 Maximum length of data read. The default is to read until end
 of file is reached.
 </p>`
@@ -1125,7 +1128,7 @@ is not set and <b>NULL</b> if the filter fails.
 
 --------
 
-## filter_var(float|int|string|null $variable, int $filter, int|int[]|null $options): mixed
+## filter_var(float|int|string|null $variable, int $filter, int|int[] $options): mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1141,7 +1144,7 @@ Value to filter.
 The ID of the filter to apply. The
 manual page lists the available filters.
 </p>`
-- `int|int[]|null $options [optional] <p>
+- `int|int[] $options [optional] <p>
 Associative array of options or bitwise disjunction of flags. If filter
 accepts options, flags can be provided in "flags" field of array. For
 the "callback" filter, callable type should be passed. The
@@ -1188,7 +1191,7 @@ $var = filter_var('Doe, Jane Sue', FILTER_CALLBACK, array('options' => 'foo'));
 
 --------
 
-## filter_var_array(array $data, array|int|null $definition, bool $add_empty): array<string,mixed>|false|null
+## filter_var_array(array $data, array|int $definition, bool $add_empty): array<string,mixed>|false|null
 <a href="#voku-php-readme-class-methods">↑</a>
 "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1214,7 +1217,7 @@ UTF8::filter_var_array($data, $filters, true); // ['name' => 'Κόσμε', 'age'
 - `array<string, mixed> $data <p>
 An array with string keys containing the data to filter.
 </p>`
-- `array<string, mixed>|int|null $definition [optional] <p>
+- `array<string, mixed>|int $definition [optional] <p>
 An array defining the arguments. A valid key is a string
 containing a variable name and a valid value is either a
 filter type, or an
@@ -1259,8 +1262,8 @@ __nothing__
 Returns the first $n characters of the string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $n <p>Number of characters to retrieve from the start.</p>`
+- `T $str <p>The input string.</p>`
+- `int<1, max> $n <p>Number of characters to retrieve from the start.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -1346,6 +1349,21 @@ otherwise return <strong>null</strong>`
 
 --------
 
+## getUrlParamFromArray(string $param, array $data): mixed
+<a href="#voku-php-readme-class-methods">↑</a>
+Get data from an array via array like string.
+
+EXAMPLE: <code>$array['foo'][123] = 'lall'; UTF8::getUrlParamFromArray('foo[123]', $array); // 'lall'</code>
+
+**Parameters:**
+- `string $param`
+- `array<array-key, mixed> $data`
+
+**Return:**
+- `mixed`
+
+--------
+
 ## get_file_type(string $str, array $fallback): 
 <a href="#voku-php-readme-class-methods">↑</a>
 Warning: this method only works for some file-types (png, jpg)
@@ -1365,8 +1383,8 @@ Warning: this method only works for some file-types (png, jpg)
 
 
 **Parameters:**
-- `int $length <p>Length of the random string.</p>`
-- `string $possible_chars [optional] <p>Characters string for the random selection.</p>`
+- `int<1, max> $length <p>Length of the random string.</p>`
+- `T $possible_chars [optional] <p>Characters string for the random selection.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -1374,7 +1392,7 @@ Warning: this method only works for some file-types (png, jpg)
 
 --------
 
-## get_unique_string(int|string $extra_entropy, bool $use_md5): string
+## get_unique_string(int|string $extra_entropy, bool $use_md5): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -1383,7 +1401,7 @@ Warning: this method only works for some file-types (png, jpg)
 - `bool $use_md5 [optional] <p>Return the unique identifier as md5-hash? Default: true</p>`
 
 **Return:**
-- `string`
+- `non-empty-string`
 
 --------
 
@@ -1423,7 +1441,7 @@ Returns true if the string contains whitespace, false otherwise.
 
 --------
 
-## hex_to_chr(string $hexdec): false|string
+## hex_to_chr(string $hexdec): string
 <a href="#voku-php-readme-class-methods">↑</a>
 Converts a hexadecimal value into a UTF-8 character.
 
@@ -1435,7 +1453,7 @@ EXAMPLE: <code>UTF8::hex_to_chr('U+00a7'); // '§'</code>
 - `string $hexdec <p>The hexadecimal value.</p>`
 
 **Return:**
-- `false|string one single UTF-8 character`
+- `string <p>One single UTF-8 character.</p>`
 
 --------
 
@@ -1464,12 +1482,12 @@ INFO: opposite to UTF8::html_decode()
 EXAMPLE: <code>UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'</code>
 
 **Parameters:**
-- `string $str <p>The Unicode string to be encoded as numbered entities.</p>`
+- `T $str <p>The Unicode string to be encoded as numbered entities.</p>`
 - `bool $keep_ascii_chars [optional] <p>Keep ASCII chars.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `string HTML numbered entities`
+- `string <p>HTML numbered entities.</p>`
 
 --------
 
@@ -1490,7 +1508,7 @@ INFO: opposite to UTF8::html_encode()
 EXAMPLE: <code>UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The input string.
 </p>`
 - `int|null $flags [optional] <p>
@@ -1543,7 +1561,7 @@ Handle code as HTML 5.
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `string the decoded string`
+- `string <p>The decoded string.</p>`
 
 --------
 
@@ -1692,7 +1710,7 @@ INFO: Take a look at "UTF8::htmlentities()"
 EXAMPLE: <code>UTF8::htmlspecialchars('<白-öäü>'); // '&lt;白-öäü&gt;'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The string being converted.
 </p>`
 - `int $flags [optional] <p>
@@ -1788,13 +1806,12 @@ encode existing html entities, the default is to convert everything.
 </p>`
 
 **Return:**
-- `string the converted string.
-</p>
+- `string <p>The converted string.</p>
 <p>
 If the input <i>string</i> contains an invalid code unit
 sequence within the given <i>encoding</i> an empty string
 will be returned, unless either the <b>ENT_IGNORE</b> or
-<b>ENT_SUBSTITUTE</b> flags are set`
+<b>ENT_SUBSTITUTE</b> flags are set.</p>`
 
 --------
 
@@ -1972,7 +1989,7 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 empty() does not generate a warning if the variable does not exist.
 
 **Parameters:**
-- `array|float|int|string $str`
+- `array<array-key, mixed>|float|int|string $str`
 
 **Return:**
 - `bool <p>Whether or not $str is empty().</p>`
@@ -2205,7 +2222,7 @@ is deeper than the recursion limit.</p>`
 (PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
 Returns the JSON representation of a value.
 
-EXAMPLE: <code>UTF8::json_enocde(array(1, '¥', 'ä')); // '[1,"\u00a5","\u00e4"]'</code>
+EXAMPLE: <code>UTF8::json_encode(array(1, '¥', 'ä')); // '[1,"\u00a5","\u00e4"]'</code>
 
 **Parameters:**
 - `mixed $value <p>
@@ -2225,7 +2242,7 @@ Bitmask consisting of <b>JSON_HEX_QUOT</b>,
 <b>JSON_HEX_AMP</b>,
 <b>JSON_HEX_APOS</b>,
 <b>JSON_NUMERIC_CHECK</b>,
-<b>JSON_PRETTY_PRint,
+<b>JSON_PRETTY_PRINT</b>,
 <b>JSON_UNESCAPED_SLASHES</b>,
 <b>JSON_FORCE_OBJECT</b>,
 <b>JSON_UNESCAPED_UNICODE</b>. The behaviour of these
@@ -2237,8 +2254,8 @@ Set the maximum depth. Must be greater than zero.
 </p>`
 
 **Return:**
-- `false|string A JSON encoded <strong>string</strong> on success or<br>
-<strong>FALSE</strong> on failure`
+- `false|string <p>A JSON encoded <strong>string</strong> on success or<br>
+<strong>FALSE</strong> on failure.</p>`
 
 --------
 
@@ -2270,7 +2287,7 @@ tr</p>`
 -> ß</p>`
 
 **Return:**
-- `string the resulting string`
+- `string <p>The resulting string.</p>`
 
 --------
 
@@ -2503,7 +2520,7 @@ __nothing__
 
 --------
 
-## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): string[]
+## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Create an array containing a range of UTF-8 characters.
 
@@ -2523,7 +2540,7 @@ step will default to 1.
 </p>`
 
 **Return:**
-- `string[]`
+- `list<string>`
 
 --------
 
@@ -2531,21 +2548,21 @@ step will default to 1.
 <a href="#voku-php-readme-class-methods">↑</a>
 Multi decode HTML entity + fix urlencoded-win1252-chars.
 
-EXAMPLE: <code>UTF8::rawurldecode('tes%%20öäü%%20\u00edtest+test'); // 'tes öäü ítest+test'</code>
+EXAMPLE: <code>UTF8::rawurldecode('tes%20öäü%20\u00edtest+test'); // 'tes öäü ítest+test'</code>
 
 e.g:
 'test+test'                     => 'test+test'
 'D&#252;sseldorf'               => 'Düsseldorf'
-'D%%FCsseldorf'                  => 'Düsseldorf'
+'D%FCsseldorf'                  => 'Düsseldorf'
 'D&#xFC;sseldorf'               => 'Düsseldorf'
-'D%%26%%23xFC%%3Bsseldorf'         => 'Düsseldorf'
+'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
 'DÃ¼sseldorf'                   => 'Düsseldorf'
-'D%%C3%%BCsseldorf'               => 'Düsseldorf'
-'D%%C3%%83%%C2%%BCsseldorf'         => 'Düsseldorf'
-'D%%25C3%%2583%%25C2%%25BCsseldorf' => 'Düsseldorf'
+'D%C3%BCsseldorf'               => 'Düsseldorf'
+'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
+'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $multi_decode <p>Decode as often as possible.</p>`
 
 **Return:**
@@ -2626,6 +2643,20 @@ Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
 
 --------
 
+## remove_ileft(string $str, string $substring, string $encoding): string
+<a href="#voku-php-readme-class-methods">↑</a>
+Returns a new string with the prefix $substring removed, if present and case-insensitive.
+
+**Parameters:**
+- `string $str <p>The input string.</p>`
+- `string $substring <p>The prefix to remove.</p>`
+- `string $encoding [optional] <p>Default: 'UTF-8'</p>`
+
+**Return:**
+- `string <p>A string without the prefix $substring.</p>`
+
+--------
+
 ## remove_invisible_characters(string $str, bool $url_encoded, string $replacement, bool $keep_basic_control_characters): string
 <a href="#voku-php-readme-class-methods">↑</a>
 Remove invisible characters from a string.
@@ -2640,7 +2671,7 @@ copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/C
 - `string $str <p>The input string.</p>`
 - `bool $url_encoded [optional] <p>
 Try to remove url encoded control character.
-WARNING: maybe contains false-positives e.g. aa%%0Baa -> aaaa.
+WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
 <br>
 Default: false
 </p>`
@@ -2649,6 +2680,20 @@ Default: false
 
 **Return:**
 - `string <p>A string without invisible chars.</p>`
+
+--------
+
+## remove_iright(string $str, string $substring, string $encoding): string
+<a href="#voku-php-readme-class-methods">↑</a>
+Returns a new string with the suffix $substring removed, if present and case-insensitive.
+
+**Parameters:**
+- `string $str`
+- `string $substring <p>The suffix to remove.</p>`
+- `string $encoding [optional] <p>Default: 'UTF-8'</p>`
+
+**Return:**
+- `string <p>A string having a $str without the suffix $substring.</p>`
 
 --------
 
@@ -2760,7 +2805,7 @@ Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
 EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 **Parameters:**
-- `string $char <p>The Unicode character to be encoded as numbered entity.</p>`
+- `T $char <p>The Unicode character to be encoded as numbered entity.</p>`
 - `bool $keep_ascii_chars <p>Set to <strong>true</strong> to keep ASCII chars.</>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -2774,8 +2819,8 @@ EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 
 **Parameters:**
-- `string $str`
-- `int $tab_length`
+- `T $str`
+- `int<1, max> $tab_length`
 
 **Return:**
 - `string`
@@ -2834,7 +2879,7 @@ $case_sensitive to false.
 ## str_contains_all(string $haystack, scalar[] $needles, bool $case_sensitive): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns true if the string contains all $needles, false otherwise. By
-default the comparison is case-sensitive, but can be made insensitive by
+default, the comparison is case-sensitive, but can be made insensitive by
 setting $case_sensitive to false.
 
 **Parameters:**
@@ -2886,8 +2931,13 @@ Delimiters are inserted before uppercase characters (with the exception
 of the first character of the string), and in place of spaces, dashes,
 and underscores. Alpha delimiters are not converted to lowercase.
 
+EXAMPLE: <code>
+UTF8::str_delimit('test case, '#'); // 'test#case'
+UTF8::str_delimit('test -case', '**'); // 'test**case'
+</code>
+
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `string $delimiter <p>Sequence used to separate parts of the string.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
@@ -2954,17 +3004,17 @@ Returns true if the string ends with any of $substrings, false otherwise.
 
 --------
 
-## str_ensure_left(string $str, string $substring): string
+## str_ensure_left(string $str, string $substring): 
 <a href="#voku-php-readme-class-methods">↑</a>
 Ensures that the string begins with $substring. If it doesn't, it's
 prepended.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `string $substring <p>The substring to add if not present.</p>`
+- `T $str <p>The input string.</p>`
+- `TSub $substring <p>The substring to add if not present.</p>`
 
 **Return:**
-- `string`
+- `TSub is non-empty-string ? non-empty-string : (T is non-empty-string ? non-empty-string : string`
 
 --------
 
@@ -2973,8 +3023,8 @@ prepended.
 Ensures that the string ends with $substring. If it doesn't, it's appended.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `string $substring <p>The substring to add if not present.</p>`
+- `T $str <p>The input string.</p>`
+- `TSub $substring <p>The substring to add if not present.</p>`
 
 **Return:**
 - `string`
@@ -3239,8 +3289,8 @@ Returns the last $n characters of the string.
 Limit the number of characters in a string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $length [optional] <p>Default: 100</p>`
+- `T $str <p>The input string.</p>`
+- `int<1, max> $length [optional] <p>Default: 100</p>`
 - `string $str_add_on [optional] <p>Default: …</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -3256,8 +3306,8 @@ Limit the number of characters in a string, but also after the next word.
 EXAMPLE: <code>UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô bàř'</code>
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $length [optional] <p>Default: 100</p>`
+- `T $str <p>The input string.</p>`
+- `int<1, max> $length [optional] <p>Default: 100</p>`
 - `string $str_add_on [optional] <p>Default: …</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -3368,7 +3418,7 @@ does not exist.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $index <p>The <strong>index</strong> from which to retrieve the char.</p>`
+- `int<1, max> $index <p>The <strong>index</strong> from which to retrieve the char.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -3453,10 +3503,10 @@ Repeat a string.
 EXAMPLE: <code>UTF8::str_repeat("°~\xf0\x90\x28\xbc", 2); // '°~ð(¼°~ð(¼'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The string to be repeated.
 </p>`
-- `int $multiplier <p>
+- `int<1, max> $multiplier <p>
 Number of time the input string should be
 repeated.
 </p>
@@ -3536,7 +3586,7 @@ INFO: uses random algorithm which is weak for cryptography purposes
 EXAMPLE: <code>UTF8::str_shuffle('fòô bàř fòô'); // 'àòôřb ffòô '</code>
 
 **Parameters:**
-- `string $str <p>The input string</p>`
+- `T $str <p>The input string</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -3592,15 +3642,15 @@ EXAMPLE: <code>UTF8::str_sort('  -ABC-中文空白-  '); // '    ---ABC中文白
 
 --------
 
-## str_split(int|string $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[]
+## str_split(int|string $str, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string to an array of unicode characters.
 
 EXAMPLE: <code>UTF8::str_split('中文空白'); // array('中', '文', '空', '白')</code>
 
 **Parameters:**
-- `int|string $input <p>The string or int to split into array.</p>`
-- `int $length [optional] <p>Max character length of each array
+- `int|string $str <p>The string or int to split into array.</p>`
+- `int<1, max> $length [optional] <p>Max character length of each array
 element.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
 string.</p>`
@@ -3608,11 +3658,11 @@ string.</p>`
 "mb_substr"</p>`
 
 **Return:**
-- `string[] <p>An array containing chunks of chars from the input.</p>`
+- `list<string> <p>An array containing chunks of chars from the input.</p>`
 
 --------
 
-## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[][]
+## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): list<list<string>>
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string to an array of Unicode characters.
 
@@ -3622,15 +3672,15 @@ UTF8::str_split_array(['中文空白', 'test'], 2); // [['中文', '空白'], ['
 
 **Parameters:**
 - `int[]|string[] $input <p>The string[] or int[] to split into array.</p>`
-- `int $length [optional] <p>Max character length of each array
-lement.</p>`
+- `int<1, max> $length [optional] <p>Max character length of each array
+element.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
 string.</p>`
 - `bool $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
 "mb_substr"</p>`
 
 **Return:**
-- `string[][] <p>An array containing chunks of the input.</p>`
+- `list<list<string>> <p>An array containing chunks of the input.</p>`
 
 --------
 
@@ -3774,8 +3824,8 @@ Gets the substring after (or before via "$before_needle") the last occurrence of
 Surrounds $str with the given substring.
 
 **Parameters:**
-- `string $str`
-- `string $substring <p>The substring to add to both sides.</p>`
+- `T $str`
+- `TSub $substring <p>The substring to add to both sides.</p>`
 
 **Return:**
 - `string <p>A string with the substring both prepended and appended.</p>`
@@ -3857,7 +3907,7 @@ EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
 
 --------
 
-## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): string[]
+## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string into an array of words.
 
@@ -3870,7 +3920,7 @@ EXAMPLE: <code>UTF8::str_to_words('中文空白 oöäü#s', '#') // array('', '�
 - `int|null $remove_short_values <p>The min. string length or null to disable</p>`
 
 **Return:**
-- `string[]`
+- `list<string>`
 
 --------
 
@@ -3971,7 +4021,7 @@ UTF8::str_word_count('中文空白 öäü ab#c', 2, '#'); // array(0 => '中文�
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $format [optional] <p>
+- `0|1|2 $format [optional] <p>
 <strong>0</strong> => return a number of words (default)<br>
 <strong>1</strong> => return an array of words<br>
 <strong>2</strong> => return an array of words with word-offset as key
@@ -4841,9 +4891,9 @@ Get part of a string process in bytes.
 - `int|null $length [optional] <p>The maximum length of the returned string.</p>`
 
 **Return:**
-- `false|string The portion of <i>str</i> specified by the <i>offset</i> and
+- `false|string <p>The portion of <i>str</i> specified by the <i>offset</i> and
 <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
-characters long, <b>FALSE</b> will be returned.`
+characters long, <b>FALSE</b> will be returned.</p>`
 
 --------
 
@@ -5113,7 +5163,7 @@ case.</li>
 EXAMPLE: <code>UTF8::to_utf8_string("\u0063\u0061\u0074"); // 'cat'</code>
 
 **Parameters:**
-- `string $str <p>Any string.</p>`
+- `T $str <p>Any string.</p>`
 - `bool $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>`
 
 **Return:**
@@ -5184,21 +5234,21 @@ word.</p>`
 <a href="#voku-php-readme-class-methods">↑</a>
 Multi decode HTML entity + fix urlencoded-win1252-chars.
 
-EXAMPLE: <code>UTF8::urldecode('tes%%20öäü%%20\u00edtest+test'); // 'tes öäü ítest test'</code>
+EXAMPLE: <code>UTF8::urldecode('tes%20öäü%20\u00edtest+test'); // 'tes öäü ítest test'</code>
 
 e.g:
 'test+test'                     => 'test test'
 'D&#252;sseldorf'               => 'Düsseldorf'
-'D%%FCsseldorf'                  => 'Düsseldorf'
+'D%FCsseldorf'                  => 'Düsseldorf'
 'D&#xFC;sseldorf'               => 'Düsseldorf'
-'D%%26%%23xFC%%3Bsseldorf'         => 'Düsseldorf'
+'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
 'DÃ¼sseldorf'                   => 'Düsseldorf'
-'D%%C3%%BCsseldorf'               => 'Düsseldorf'
-'D%%C3%%83%%C2%%BCsseldorf'         => 'Düsseldorf'
-'D%%25C3%%2583%%25C2%%25BCsseldorf' => 'Düsseldorf'
+'D%C3%BCsseldorf'               => 'Düsseldorf'
+'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
+'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $multi_decode <p>Decode as often as possible.</p>`
 
 **Return:**
@@ -5256,7 +5306,7 @@ EXAMPLE: <code>UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'</
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $limit <p>The limit of words as integer.</p>`
+- `int<1, max> $limit <p>The limit of words as integer.</p>`
 - `string $str_add_on <p>Replacement for the striped string.</p>`
 
 **Return:**
@@ -5272,7 +5322,7 @@ EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); 
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $width [optional] <p>The column width.</p>`
+- `int<1, max> $width [optional] <p>The column width.</p>`
 - `string $break [optional] <p>The line is broken using the optional break parameter.</p>`
 - `bool $cut [optional] <p>
 If the cut is set to true, the string is
@@ -5292,7 +5342,7 @@ Line-Wrap the string after $limit, but split the string by "$delimiter" before .
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $width [optional] <p>The column width.</p>`
+- `int<1, max> $width [optional] <p>The column width.</p>`
 - `string $break [optional] <p>The line is broken using the optional break parameter.</p>`
 - `bool $cut [optional] <p>
 If the cut is set to true, the string is
@@ -5303,7 +5353,7 @@ a word that is larger than the given width, it is broken apart.
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `string|null $delimiter [optional] <p>
+- `non-empty-string|null $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 

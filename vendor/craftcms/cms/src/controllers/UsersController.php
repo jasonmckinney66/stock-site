@@ -162,8 +162,8 @@ class UsersController extends Controller
         $user = Craft::$app->getUsers()->getUserByUsernameOrEmail($loginName);
 
         if (!$user || $user->password === null) {
-            // Delay again to match $user->authenticate()'s delay
-            Craft::$app->getSecurity()->validatePassword('p@ss1w0rd', '$2y$13$nj9aiBeb7RfEfYP3Cum6Revyu14QelGGxwcnFUKXIrQUitSodEPRi');
+            // Match $user->authenticate()'s delay
+            $this->_hashCheck();
             return $this->_handleLoginFailure(User::AUTH_INVALID_CREDENTIALS);
         }
 
@@ -468,16 +468,24 @@ class UsersController extends Controller
             }
         }
 
+        // keep track of how long email sending takes
+        $time = microtime(true);
+
         if (!empty($user) && !Craft::$app->getUsers()->sendPasswordResetEmail($user)) {
             $errors[] = Craft::t('app', 'There was a problem sending the password reset email.');
         }
 
-        if (!empty($errors) && Craft::$app->getConfig()->getGeneral()->preventUserEnumeration) {
-            $list = implode("\n", array_map(function(string $error) {
-                return sprintf('- %s', $error);
-            }, $errors));
-            Craft::warning(sprintf("Password reset email not sent:\n%s", $list), __METHOD__);
-            $errors = [];
+        if (Craft::$app->getConfig()->getGeneral()->preventUserEnumeration) {
+            // Randomly delay the response
+            $this->_randomlyDelayResponse(microtime(true) - $time);
+
+            if (!empty($errors)) {
+                $list = implode("\n", array_map(function(string $error) {
+                    return sprintf('- %s', $error);
+                }, $errors));
+                Craft::warning(sprintf("Password reset email not sent:\n%s", $list), __METHOD__);
+                $errors = [];
+            }
         }
 
         if (empty($errors)) {
@@ -640,7 +648,7 @@ class UsersController extends Controller
                     'email' => $user->unverifiedEmail,
                 ]);
             }
-        } else if ($pending) {
+        } elseif ($pending) {
             // No unverified email so just get on with activating their account
             $usersService->activateUser($user);
         }
@@ -714,7 +722,7 @@ class UsersController extends Controller
                     ->id($userId === 'current' ? $userSession->getId() : $userId)
                     ->anyStatus()
                     ->one();
-            } else if ($edition === Craft::Pro) {
+            } elseif ($edition === Craft::Pro) {
                 // Registering a new user
                 $user = new User();
             }
@@ -773,6 +781,7 @@ class UsersController extends Controller
                     }
                     break;
                 case User::STATUS_SUSPENDED:
+                    $statusLabel = Craft::t('app', 'Suspended');
                     if (Craft::$app->getUsers()->canSuspend($currentUser, $user)) {
                         $statusActions[] = [
                             'action' => 'users/unsuspend-user',
@@ -871,10 +880,12 @@ class UsersController extends Controller
         if (!$isNewUser) {
             if ($isCurrentUser) {
                 $title = Craft::t('app', 'My Account');
-            } else if ($name = trim($user->getName())) {
+            } elseif ($name = trim($user->getName())) {
                 $title = Craft::t('app', '{user}’s Account', ['user' => $name]);
             } else {
-                $title = Craft::t('app', 'Edit User');
+                $title = Craft::t('app', 'Edit {type}', [
+                    'type' => User::displayName(),
+                ]);
             }
         } else {
             $title = Craft::t('app', 'Register a new user');
@@ -1121,7 +1132,7 @@ JS;
         // Handle secure properties (email and password)
         // ---------------------------------------------------------------------
 
-        $sendVerificationEmail = false;
+        $sendActivationEmail = false;
 
         // Are they allowed to set the email address?
         if ($isNewUser || $isCurrentUser || $canAdministrateUsers) {
@@ -1135,23 +1146,23 @@ JS;
             if ($newEmail) {
                 // Should we be sending a verification email now?
                 // Even if verification isn't required, send one out on account creation if we don't have a password yet
-                $sendVerificationEmail = (
+                $sendActivationEmail = (
                     (
                         $requireEmailVerification && (
                             $isPublicRegistration ||
                             ($isCurrentUser && !$canAdministrateUsers) ||
-                            $this->request->getBodyParam('sendVerificationEmail')
+                            ($this->request->getBodyParam('sendActivationEmail') ?? $this->request->getBodyParam('sendVerificationEmail'))
                         )
                     ) ||
                     (
                         !$requireEmailVerification && $isNewUser && (
                             ($isPublicRegistration && $generalConfig->deferPublicRegistrationPassword) ||
-                            $this->request->getBodyParam('sendVerificationEmail')
+                            ($this->request->getBodyParam('sendActivationEmail') ?? $this->request->getBodyParam('sendVerificationEmail'))
                         )
                     )
                 );
 
-                if ($sendVerificationEmail) {
+                if ($sendActivationEmail) {
                     $user->unverifiedEmail = $newEmail;
                 } else {
                     // Clear out the unverified email if there is one,
@@ -1159,7 +1170,7 @@ JS;
                     $user->unverifiedEmail = null;
                 }
 
-                if (!$sendVerificationEmail || $isNewUser) {
+                if (!$sendActivationEmail || $isNewUser) {
                     $user->email = $newEmail;
                 }
             }
@@ -1195,7 +1206,7 @@ JS;
         // Is the site set to use email addresses as usernames?
         if ($generalConfig->useEmailAsUsername) {
             $user->username = $user->email;
-        } else {
+        } elseif ($isNewUser || $currentUser->admin || $isCurrentUser) {
             $user->username = $this->request->getBodyParam('username', ($user->username ?: $user->email));
         }
 
@@ -1245,10 +1256,9 @@ JS;
         }
 
         // Manually validate the user so we can pass $clearErrors=false
-        if (
-            !$user->validate(null, false) ||
-            !Craft::$app->getElements()->saveElement($user, false)
-        ) {
+        $success = $user->validate(null, false) && Craft::$app->getElements()->saveElement($user, false);
+
+        if (!$success) {
             Craft::info('User not saved due to validation error.', __METHOD__);
 
             if ($isPublicRegistration) {
@@ -1269,7 +1279,9 @@ JS;
                 ]);
             }
 
-            $this->setFailFlash(Craft::t('app', 'Couldn’t save user.'));
+            $this->setFailFlash(Craft::t('app', 'Couldn’t save {type}.', [
+                'type' => User::lowerDisplayName(),
+            ]));
 
             // Send the account back to the template
             Craft::$app->getUrlManager()->setRouteParams([
@@ -1285,27 +1297,30 @@ JS;
             Craft::$app->getUsers()->activateUser($user);
         }
 
-        // Save their preferences too
-        $preferences = [
-            'language' => $this->request->getBodyParam('preferredLanguage', $user->getPreference('language')),
-            'locale' => $this->request->getBodyParam('preferredLocale', $user->getPreference('locale')) ?: null,
-            'weekStartDay' => $this->request->getBodyParam('weekStartDay', $user->getPreference('weekStartDay')),
-            'alwaysShowFocusRings' => (bool)$this->request->getBodyParam('alwaysShowFocusRings', $user->getPreference('alwaysShowFocusRings')),
-            'useShapes' => (bool)$this->request->getBodyParam('useShapes', $user->getPreference('useShapes')),
-            'underlineLinks' => (bool)$this->request->getBodyParam('underlineLinks', $user->getPreference('underlineLinks')),
-        ];
+        if ($isCurrentUser) {
+            // Save their preferences too
+            $preferences = [
+                'language' => $this->request->getBodyParam('preferredLanguage', $user->getPreference('language')),
+                'locale' => $this->request->getBodyParam('preferredLocale', $user->getPreference('locale')) ?: null,
+                'weekStartDay' => $this->request->getBodyParam('weekStartDay', $user->getPreference('weekStartDay')),
+                'alwaysShowFocusRings' => (bool)$this->request->getBodyParam('alwaysShowFocusRings', $user->getPreference('alwaysShowFocusRings')),
+                'useShapes' => (bool)$this->request->getBodyParam('useShapes', $user->getPreference('useShapes')),
+                'underlineLinks' => (bool)$this->request->getBodyParam('underlineLinks', $user->getPreference('underlineLinks')),
+            ];
 
-        if ($user->admin) {
-            $preferences = array_merge($preferences, [
-                'showFieldHandles' => (bool)$this->request->getBodyParam('showFieldHandles', $user->getPreference('showFieldHandles')),
-                'enableDebugToolbarForSite' => (bool)$this->request->getBodyParam('enableDebugToolbarForSite', $user->getPreference('enableDebugToolbarForSite')),
-                'enableDebugToolbarForCp' => (bool)$this->request->getBodyParam('enableDebugToolbarForCp', $user->getPreference('enableDebugToolbarForCp')),
-                'showExceptionView' => (bool)$this->request->getBodyParam('showExceptionView', $user->getPreference('showExceptionView')),
-                'profileTemplates' => (bool)$this->request->getBodyParam('profileTemplates', $user->getPreference('profileTemplates')),
-            ]);
+            if ($user->admin) {
+                $preferences = array_merge($preferences, [
+                    'showFieldHandles' => (bool)$this->request->getBodyParam('showFieldHandles', $user->getPreference('showFieldHandles')),
+                    'enableDebugToolbarForSite' => (bool)$this->request->getBodyParam('enableDebugToolbarForSite', $user->getPreference('enableDebugToolbarForSite')),
+                    'enableDebugToolbarForCp' => (bool)$this->request->getBodyParam('enableDebugToolbarForCp', $user->getPreference('enableDebugToolbarForCp')),
+                    'showExceptionView' => (bool)$this->request->getBodyParam('showExceptionView', $user->getPreference('showExceptionView')),
+                    'profileTemplates' => (bool)$this->request->getBodyParam('profileTemplates', $user->getPreference('profileTemplates')),
+                ]);
+            }
+
+            Craft::$app->getUsers()->saveUserPreferences($user, $preferences);
+            Craft::$app->updateTargetLanguage();
         }
-
-        Craft::$app->getUsers()->saveUserPreferences($user, $preferences);
 
         // Is this the current user, and did their username just change?
         // todo: remove comment when WI-51866 is fixed
@@ -1323,7 +1338,7 @@ JS;
             if ($isPublicRegistration) {
                 // Assign them to the default user group
                 Craft::$app->getUsers()->assignUserToDefaultGroup($user);
-            } else if ($currentUser) {
+            } elseif ($currentUser) {
                 // Fire an 'afterBeforeGroupsAndPermissions' event
                 if ($this->hasEventHandlers(self::EVENT_BEFORE_ASSIGN_GROUPS_AND_PERMISSIONS)) {
                     $this->trigger(self::EVENT_BEFORE_ASSIGN_GROUPS_AND_PERMISSIONS, new UserEvent([
@@ -1332,8 +1347,8 @@ JS;
                 }
 
                 // Assign user groups and permissions if the current user is allowed to do that
-                $this->_saveUserPermissions($user, $currentUser);
                 $this->_saveUserGroups($user, $currentUser);
+                $this->_saveUserPermissions($user, $currentUser);
 
                 // Fire an 'afterAssignGroupsAndPermissions' event
                 if ($this->hasEventHandlers(self::EVENT_AFTER_ASSIGN_GROUPS_AND_PERMISSIONS)) {
@@ -1345,7 +1360,7 @@ JS;
         }
 
         // Do we need to send a verification email out?
-        if ($sendVerificationEmail && !$user->suspended) {
+        if ($sendActivationEmail && !$user->suspended) {
             // Temporarily set the unverified email on the User so the verification email goes to the
             // right place
             $originalEmail = $user->email;
@@ -1388,7 +1403,9 @@ JS;
             }
             $this->setSuccessFlash($default);
         } else {
-            $this->setSuccessFlash(Craft::t('app', 'User saved.'));
+            $this->setSuccessFlash(Craft::t('app', '{type} saved.', [
+                'type' => User::displayName(),
+            ]));
         }
 
         // Is this public registration, and is the user going to be activated automatically?
@@ -1500,7 +1517,7 @@ JS;
             $this->_noUserExists();
         }
 
-        // Only allow activation emails to be send to pending users.
+        // Only allow activation emails to be sent to pending users.
         /** @var User $user */
         if ($user->getStatus() !== User::STATUS_PENDING) {
             throw new BadRequestHttpException('Activation emails can only be sent to pending users');
@@ -1599,9 +1616,17 @@ JS;
     {
         $this->requirePostRequest();
 
-        $userIds = $this->request->getRequiredBodyParam('userId');
+        $userId = $this->request->getRequiredBodyParam('userId');
 
-        if ($userIds !== (string)Craft::$app->getUser()->getIdentity()->id) {
+        if (is_array($userId)) {
+            $userId = array_map(function($id) {
+                return (int)$id;
+            }, $userId);
+        } else {
+            $userId = (int)$userId;
+        }
+
+        if ($userId !== (int)Craft::$app->getUser()->getIdentity()->id) {
             $this->requirePermission('deleteUsers');
         }
 
@@ -1610,7 +1635,7 @@ JS;
         foreach (Craft::$app->getSections()->getAllSections() as $section) {
             $entryCount = Entry::find()
                 ->sectionId($section->id)
-                ->authorId($userIds)
+                ->authorId($userId)
                 ->site('*')
                 ->unique()
                 ->anyStatus()
@@ -1626,6 +1651,7 @@ JS;
 
         // Fire a 'defineUserContentSummary' event
         $event = new DefineUserContentSummaryEvent([
+            'userId' => $userId,
             'contentSummary' => $summary,
         ]);
         $this->trigger(self::EVENT_DEFINE_CONTENT_SUMMARY, $event);
@@ -1679,11 +1705,15 @@ JS;
         $user->inheritorOnDelete = $transferContentTo;
 
         if (!Craft::$app->getElements()->deleteElement($user)) {
-            $this->setFailFlash(Craft::t('app', 'Couldn’t delete the user.'));
+            $this->setFailFlash(Craft::t('app', 'Couldn’t delete {type}.', [
+                'type' => User::lowerDisplayName(),
+            ]));
             return null;
         }
 
-        $this->setSuccessFlash(Craft::t('app', 'User deleted.'));
+        $this->setSuccessFlash(Craft::t('app', '{type} deleted.', [
+            'type' => User::displayName(),
+        ]));
         return $this->redirectToPostedUrl();
     }
 
@@ -1776,9 +1806,6 @@ JS;
      */
     private function _handleLoginFailure(string $authError = null, User $user = null)
     {
-        // Delay randomly between 0 and 1.5 seconds.
-        usleep(random_int(0, 1500000));
-
         $message = UserHelper::getLoginFailureMessage($authError, $user);
 
         // Fire a 'loginFailure' event
@@ -1944,7 +1971,7 @@ JS;
             move_uploaded_file($photo->tempName, $fileLocation);
             $filename = $photo->name;
             $newPhoto = true;
-        } else if (($photo = $this->request->getBodyParam('photo')) && is_array($photo)) {
+        } elseif (($photo = $this->request->getBodyParam('photo')) && is_array($photo)) {
             // base64-encoded photo
             $matches = [];
 
@@ -2251,6 +2278,7 @@ JS;
      * @param string[] $errors
      * @param string|null $loginName
      * @return Response|null
+     * @throws \Exception
      */
     private function _handleSendPasswordResetError(array $errors, string $loginName = null)
     {
@@ -2287,6 +2315,20 @@ JS;
         return $view->renderTemplate('users/_photo', [
             'user' => $user,
         ], $templateMode);
+    }
+
+    private function _hashCheck()
+    {
+        Craft::$app->getSecurity()->validatePassword('p@ss1w0rd', '$2y$13$nj9aiBeb7RfEfYP3Cum6Revyu14QelGGxwcnFUKXIrQUitSodEPRi');
+    }
+
+    private function _randomlyDelayResponse(float $maxOffset = 0)
+    {
+        // Delay randomly between 0.5 and 1.5 seconds.
+        $max = 1500000 - (int)($maxOffset * 1000000);
+        if ($max > 500000) {
+            usleep(random_int(500000, $max));
+        }
     }
 
     /**

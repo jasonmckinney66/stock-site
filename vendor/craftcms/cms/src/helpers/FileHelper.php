@@ -8,11 +8,13 @@
 namespace craft\helpers;
 
 use Craft;
+use craft\errors\SiteNotFoundException;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use UnexpectedValueException;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
@@ -42,6 +44,9 @@ class FileHelper extends \yii\helpers\FileHelper
      */
     public static function normalizePath($path, $ds = DIRECTORY_SEPARATOR)
     {
+        // Remove any file protocol wrappers
+        $path = StringHelper::removeLeft($path, 'file://');
+
         // Is this a UNC network share path?
         $isUnc = (strpos($path, '//') === 0 || strpos($path, '\\\\') === 0);
 
@@ -160,6 +165,13 @@ class FileHelper extends \yii\helpers\FileHelper
         // Replace any control characters in the name with a space.
         $filename = preg_replace("/\\x{00a0}/iu", ' ', $filename);
 
+        // https://github.com/craftcms/cms/issues/12741
+        // Remove soft hyphens (00ad), no break (0083),
+        // zero width space (200b), zero width non-joiner (200c), zero width joiner (200d),
+        // invisible times (2062), invisible comma (2063), invisible plus (2064),
+        // zero width non-brak space (feff) in the name
+        $filename = preg_replace('/\\x{00ad}|\\x{0083}|\\x{200b}|\\x{200c}|\\x{200d}|\\x{2062}|\\x{2063}|\\x{2064}|\\x{feff}/iu', '', $filename);
+
         // Strip any characters not allowed.
         $filename = str_replace($disallowedChars, '', strip_tags($filename));
 
@@ -171,7 +183,17 @@ class FileHelper extends \yii\helpers\FileHelper
         // Nuke any trailing or leading .-_
         $filename = trim($filename, '.-_');
 
-        $filename = $asciiOnly ? StringHelper::toAscii($filename) : $filename;
+        if ($asciiOnly) {
+            try {
+                // Always use the primary site language, so file paths/names are normalized
+                // to ASCII consistently regardless of who is logged in.
+                $language = Craft::$app->getSites()->getPrimarySite()->language;
+            } catch (SiteNotFoundException $e) {
+                $language = Craft::$app->language;
+            }
+
+            $filename = StringHelper::toAscii($filename, $language);
+        }
 
         if ($separator !== null) {
             $qSeparator = preg_quote($separator, '/');
@@ -479,7 +501,15 @@ class FileHelper extends \yii\helpers\FileHelper
             $path = $dir . DIRECTORY_SEPARATOR . $file;
             if (static::filterPath($path, $options)) {
                 if (is_dir($path)) {
-                    static::removeDirectory($path, $options);
+                    try {
+                        static::removeDirectory($path, $options);
+                    } catch (UnexpectedValueException $e) {
+                        // Ignore if the folder has already been removed.
+                        if (strpos($e->getMessage(), 'No such file or directory') === false) {
+                            Craft::warning("Tried to remove " . $path . ", but it doesn't exist.");
+                            throw $e;
+                        }
+                    }
                 } else {
                     static::unlink($path);
                 }
@@ -547,7 +577,7 @@ class FileHelper extends \yii\helpers\FileHelper
                 if (!is_dir($refPath) || static::hasAnythingChanged($path, $refPath)) {
                     return true;
                 }
-            } else if (!is_file($refPath) || filemtime($path) > filemtime($refPath)) {
+            } elseif (!is_file($refPath) || filemtime($path) > filemtime($refPath)) {
                 return true;
             }
         }
@@ -712,28 +742,63 @@ class FileHelper extends \yii\helpers\FileHelper
      * Return a file extension for the given MIME type.
      *
      * @param $mimeType
+     * @param $preferShort
+     * @param $magicFile
      * @return string
      * @throws InvalidArgumentException if no known extensions exist for the given MIME type.
      * @since 3.5.15
      */
-    public static function getExtensionByMimeType($mimeType): string
+    public static function getExtensionByMimeType($mimeType, $preferShort = false, $magicFile = null): string
     {
-        $extensions = FileHelper::getExtensionsByMimeType($mimeType);
+        // cover the ambiguous, web-friendly MIME types up front
+        switch (strtolower($mimeType)) {
+            case 'application/msword': return 'doc';
+            case 'application/x-yaml': return 'yml';
+            case 'application/xml': return 'xml';
+            case 'audio/mp4': return 'm4a';
+            case 'audio/mpeg': return 'mp3';
+            case 'audio/ogg': return 'ogg';
+            case 'image/heic': return 'heic';
+            case 'image/jpeg': return 'jpg';
+            case 'image/svg+xml': return 'svg';
+            case 'image/tiff': return 'tif';
+            case 'text/calendar': return 'ics';
+            case 'text/html': return 'html';
+            case 'text/markdown': return 'md';
+            case 'text/plain': return 'txt';
+            case 'video/mp4': return 'mp4';
+            case 'video/mpeg': return 'mpg';
+            case 'video/quicktime': return 'mov';
+        }
+
+        $extensions = self::getExtensionsByMimeType($mimeType);
 
         if (empty($extensions)) {
             throw new InvalidArgumentException("No file extensions are known for the MIME Type $mimeType.");
         }
 
-        $extension = reset($extensions);
+        return reset($extensions);
+    }
 
-        // Manually correct for some types.
-        switch ($extension) {
-            case 'svgz':
-                return 'svg';
-            case 'jpe':
-                return 'jpg';
+    /**
+     * Returns a unique version of a filename with `uniqid()`, ensuring the result is at most 255 characters.
+     *
+     * @param string $baseName The original filename, or just a file extension prefixed with a `.`.
+     * @return string
+     * @since 3.8.3
+     */
+    public static function uniqueName(string $baseName)
+    {
+        $name = pathinfo($baseName, PATHINFO_FILENAME);
+        $ext = pathinfo($baseName, PATHINFO_EXTENSION);
+        if ($ext !== '') {
+            $ext = ".$ext";
         }
-
-        return $extension;
+        $extLength = strlen($ext);
+        $maxLength = 232; // 255 - 23 (entropy chars)
+        if (strlen($name) + $extLength > $maxLength) {
+            $name = substr($name, 0, $maxLength - $extLength);
+        }
+        return uniqid($name, true) . $ext;
     }
 }

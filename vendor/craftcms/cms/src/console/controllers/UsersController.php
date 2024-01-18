@@ -193,7 +193,7 @@ class UsersController extends Controller
 
         if ($this->password) {
             $user->newPassword = $this->password;
-        } else if ($this->interactive) {
+        } elseif ($this->interactive) {
             if ($this->confirm('Set a password for this user?', false)) {
                 $user->newPassword = $this->passwordPrompt([
                     'validator' => $this->createAttributeValidator($user, 'newPassword'),
@@ -324,7 +324,7 @@ class UsersController extends Controller
             }
 
             $user->inheritorOnDelete = $inheritor;
-        } else if ($this->interactive) {
+        } elseif ($this->interactive) {
             $this->deleteContent = $this->confirm("Delete user “{$user->username}” and their content?");
 
             if (!$this->deleteContent) {
@@ -372,7 +372,7 @@ class UsersController extends Controller
                 $this->stderr('Unable to set new password on user: ' . $user->getFirstError('newPassword') . PHP_EOL, Console::FG_RED);
                 return ExitCode::UNSPECIFIED_ERROR;
             }
-        } else if ($this->interactive) {
+        } elseif ($this->interactive) {
             $this->passwordPrompt([
                 'validator' => $this->createAttributeValidator($user, 'newPassword'),
             ]);
@@ -434,6 +434,37 @@ class UsersController extends Controller
         $this->stdout('Logging all users out ... ');
         Db::truncateTable(Table::SESSIONS);
         $this->stdout("done\n", Console::FG_GREEN);
+        return ExitCode::OK;
+    }
+
+    /**
+     * Unlocks a user's account.
+     *
+     * @param string $user The ID, username, or email address of the user account.
+     * @return int
+     * @since 3.8.0
+     */
+    public function actionUnlock(string $user): int
+    {
+        try {
+            $user = $this->_user($user);
+        } catch (InvalidArgumentException $e) {
+            $this->stderr($e->getMessage() . PHP_EOL, Console::FG_RED) . PHP_EOL;
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        if (!$user->locked) {
+            $this->stdout("User “{$user->username}” is not locked." . PHP_EOL);
+            return ExitCode::OK;
+        }
+
+        $this->stdout('Unlocking the user ...' . PHP_EOL);
+        if (!Craft::$app->getUsers()->unlockUser($user)) {
+            $this->stderr("Failed to unlock user “{$user->username}”." . PHP_EOL, Console::FG_RED);
+            return ExitCode::UNSPECIFIED_ERROR;
+        };
+
+        $this->stdout("User “{$user->username}” unlocked." . PHP_EOL, Console::FG_GREEN);
         return ExitCode::OK;
     }
 

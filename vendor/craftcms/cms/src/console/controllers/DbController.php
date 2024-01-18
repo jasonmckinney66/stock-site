@@ -80,7 +80,7 @@ class DbController extends Controller
 
             if (is_dir($path)) {
                 $path .= DIRECTORY_SEPARATOR . basename($db->getBackupFilePath());
-            } else if ($this->zip) {
+            } elseif ($this->zip) {
                 $path = preg_replace('/\.zip$/', '', $path);
             }
         } else {
@@ -185,6 +185,10 @@ class DbController extends Controller
             $this->stdout('Deleting the temp directory ... ');
             FileHelper::removeDirectory($tempDir);
             $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
+        }
+
+        if ($this->interactive && $this->confirm('Clear data caches?', true)) {
+            $this->run('clear-caches/data');
         }
 
         return ExitCode::OK;

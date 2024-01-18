@@ -18,7 +18,6 @@ use craft\errors\InvalidSubpathException;
 use craft\errors\UserNotFoundException;
 use craft\errors\VolumeException;
 use craft\events\ConfigEvent;
-use craft\events\FieldEvent;
 use craft\events\UserAssignGroupEvent;
 use craft\events\UserEvent;
 use craft\events\UserGroupsAssignEvent;
@@ -443,7 +442,7 @@ class Users extends Component
      * @param string $fileLocation the local image path on server
      * @param string|null $filename name of the file to use, defaults to filename of `$fileLocation`
      * @throws ImageException if the file provided is not a manipulatable image
-     * @throws VolumeException if the user photo Volume is not provided or is invalid
+     * @throws VolumeException if the user photo volume is not provided or is invalid
      */
     public function saveUserPhoto(string $fileLocation, User $user, string $filename = null)
     {
@@ -812,18 +811,13 @@ class Users extends Component
             return false;
         }
 
-        $transaction = Craft::$app->getDb()->beginTransaction();
-        try {
-            $userRecord = $this->_getUserRecordById($user->id);
-            $userRecord->suspended = true;
-            $user->suspended = true;
-            $userRecord->save();
+        $userRecord = $this->_getUserRecordById($user->id);
+        $userRecord->suspended = true;
+        $user->suspended = true;
+        $userRecord->save();
 
-            $transaction->commit();
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
+        // Destroy all sessions for this user
+        Db::delete(Table::SESSIONS, ['userId' => $user->id]);
 
         // Fire an 'afterSuspendUser' event
         if ($this->hasEventHandlers(self::EVENT_AFTER_SUSPEND_USER)) {
@@ -989,6 +983,7 @@ class Users extends Component
         $elementsService = Craft::$app->getElements();
 
         foreach (Db::each($query) as $user) {
+            /** @var User $user */
             $elementsService->deleteElement($user);
             Craft::info("Just deleted pending user {$user->username} ({$user->id}), because they took too long to activate their account.", __METHOD__);
         }
@@ -1165,7 +1160,7 @@ class Users extends Component
         $layout->id = $fieldsService->getLayoutByType(User::class)->id;
         $layout->type = User::class;
         $layout->uid = key($data);
-        $fieldsService->saveLayout($layout);
+        $fieldsService->saveLayout($layout, false);
 
         // Invalidate user caches
         Craft::$app->getElements()->invalidateCachesForElementType(User::class);
@@ -1255,39 +1250,10 @@ class Users extends Component
     }
 
     /**
-     * Prune a deleted field from user group layout.
-     *
-     * @param FieldEvent $event
+     * @deprecated in 3.7.51. Unused fields will be pruned automatically as field layouts are resaved.
      */
-    public function pruneDeletedField(FieldEvent $event)
+    public function pruneDeletedField()
     {
-        $field = $event->field;
-        $fieldUid = $field->uid;
-
-        $projectConfig = Craft::$app->getProjectConfig();
-        $fieldLayouts = $projectConfig->get(self::CONFIG_USERLAYOUT_KEY);
-
-        // Engage stealth mode
-        $projectConfig->muteEvents = true;
-
-        // Prune the user field layout.
-        if (is_array($fieldLayouts)) {
-            foreach ($fieldLayouts as $layoutUid => $layout) {
-                if (!empty($layout['tabs'])) {
-                    foreach ($layout['tabs'] as $tabUid => $tab) {
-                        $projectConfig->remove(self::CONFIG_USERLAYOUT_KEY . '.' . $layoutUid . '.tabs.' . $tabUid . '.fields.' . $fieldUid, 'Prune deleted field');
-                    }
-                }
-            }
-        }
-
-        // Nuke all the layout fields from the DB
-        Db::delete(Table::FIELDLAYOUTFIELDS, [
-            'fieldId' => $field->id,
-        ]);
-
-        // Allow events again
-        $projectConfig->muteEvents = false;
     }
 
     /**

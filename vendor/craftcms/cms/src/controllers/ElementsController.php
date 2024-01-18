@@ -14,6 +14,7 @@ use craft\elements\Category;
 use craft\errors\InvalidTypeException;
 use craft\fieldlayoutelements\BaseField;
 use craft\helpers\ArrayHelper;
+use craft\helpers\Component;
 use craft\helpers\Cp;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\ElementHelper;
@@ -67,7 +68,7 @@ class ElementsController extends BaseElementsController
 
         if (is_array($sourceKeys)) {
             $sourceKeys = array_flip($sourceKeys);
-            $allSources = Craft::$app->getElementIndexes()->getSources($elementType);
+            $allSources = Craft::$app->getElementIndexes()->getSources($elementType, $context);
             $sources = [];
             $nextHeading = null;
 
@@ -75,7 +76,7 @@ class ElementsController extends BaseElementsController
                 if (isset($source['heading'])) {
                     // Queue the heading up to be included only if one of the following sources were requested
                     $nextHeading = $source;
-                } else if (isset($sourceKeys[$source['key']])) {
+                } elseif (isset($sourceKeys[$source['key']])) {
                     if ($nextHeading !== null) {
                         $sources[] = $nextHeading;
                         $nextHeading = null;
@@ -95,7 +96,7 @@ class ElementsController extends BaseElementsController
                 }
             }
         } else {
-            $sources = Craft::$app->getElementIndexes()->getSources($elementType);
+            $sources = Craft::$app->getElementIndexes()->getSources($elementType, $context);
         }
 
         // Figure out if we should be showing the sidebar
@@ -163,7 +164,7 @@ class ElementsController extends BaseElementsController
         }
 
         // Configure the element
-        Craft::configure($element, $params);
+        Craft::configure($element, Component::cleanseConfig($params));
         $element->setFieldValuesFromRequest($namespace . '.fields');
 
         // Now save it
@@ -385,7 +386,7 @@ class ElementsController extends BaseElementsController
         }
 
         // Populate it with any posted attributes
-        Craft::configure($element, $attributes);
+        Craft::configure($element, Component::cleanseConfig($attributes));
         $element->siteId = $siteId;
 
         return $element;

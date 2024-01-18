@@ -55,7 +55,7 @@ use yii\base\InvalidConfigException;
 class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragmentFieldInterface
 {
     /**
-     * @event SectionEvent The event that is triggered before a section is saved.
+     * @event BlockTypesEvent The event that is triggered when setting the field’s block types
      * @since 3.1.27
      */
     const EVENT_SET_FIELD_BLOCK_TYPES = 'setFieldBlockTypes';
@@ -93,7 +93,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
      */
     public static function valueType(): string
     {
-        return MatrixBlockQuery::class;
+        return sprintf('\\%s|\\%s[]', MatrixBlockQuery::class, MatrixBlock::class);
     }
 
     /**
@@ -156,6 +156,10 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         if (array_key_exists('localizeBlocks', $config)) {
             $config['propagationMethod'] = $config['localizeBlocks'] ? 'none' : 'all';
             unset($config['localizeBlocks']);
+        }
+
+        if (isset($config['blockTypes']) && $config['blockTypes'] === '') {
+            $config['blockTypes'] = [];
         }
 
         parent::__construct($config);
@@ -405,8 +409,8 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         $placeholderKey = StringHelper::randomString(10);
         $view->registerJs(
             'new Craft.MatrixConfigurator(' .
-            Json::encode($fieldTypeInfo, JSON_UNESCAPED_UNICODE) . ', ' .
-            Json::encode($view->getNamespace(), JSON_UNESCAPED_UNICODE) . ', ' .
+            Json::encode($fieldTypeInfo) . ', ' .
+            Json::encode($view->getNamespace()) . ', ' .
             Json::encode($view->namespaceInputName("blockTypes[__BLOCK_TYPE_{$placeholderKey}__][fields][__FIELD_{$placeholderKey}__][typesettings]")) . ', ' .
             Json::encode($placeholderKey) .
             ');'
@@ -515,7 +519,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         // error or we're loading an entry revision.
         if ($value === '') {
             $query->setCachedResult([]);
-        } else if ($element && is_array($value)) {
+        } elseif ($element && is_array($value)) {
             $query->setCachedResult($this->_createBlocksFromSerializedData($value, $element));
         }
 
@@ -716,7 +720,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
 
         $js = 'var matrixInput = new Craft.MatrixInput(' .
             '"' . $view->namespaceInputId($id) . '", ' .
-            Json::encode($blockTypeInfo, JSON_UNESCAPED_UNICODE) . ', ' .
+            Json::encode($blockTypeInfo) . ', ' .
             '"' . $view->namespaceInputName($this->handle) . '", ' .
             Json::encode($settings) .
             ');';
@@ -751,15 +755,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
             [
                 'validateBlocks',
                 'on' => [Element::SCENARIO_ESSENTIALS, Element::SCENARIO_DEFAULT, Element::SCENARIO_LIVE],
-            ],
-            [
-                ArrayValidator::class,
-                'min' => $this->minBlocks ?: null,
-                'max' => $this->maxBlocks ?: null,
-                'tooFew' => Craft::t('app', '{attribute} should contain at least {min, number} {min, plural, one{block} other{blocks}}.'),
-                'tooMany' => Craft::t('app', '{attribute} should contain at most {max, number} {max, plural, one{block} other{blocks}}.'),
                 'skipOnEmpty' => false,
-                'on' => Element::SCENARIO_LIVE,
             ],
         ];
     }
@@ -782,7 +778,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
     {
         /** @var MatrixBlockQuery $value */
         $value = $element->getFieldValue($this->handle);
-        $blocks = $value->all();
+        $blocks = $value->getCachedResult() ?? (clone $value)->status(null)->limit(null)->all();
         $allBlocksValidate = true;
         $scenario = $element->getScenario();
 
@@ -804,6 +800,29 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         if (!$allBlocksValidate) {
             // Just in case the blocks weren't already cached
             $value->setCachedResult($blocks);
+        }
+
+        if (
+            $element->getScenario() === Element::SCENARIO_LIVE &&
+            ($this->minBlocks || $this->maxBlocks)
+        ) {
+            $arrayValidator = new ArrayValidator([
+                'min' => $this->minBlocks ?: null,
+                'max' => $this->maxBlocks ?: null,
+                'tooFew' => $this->minBlocks ? Craft::t('app', '{attribute} should contain at least {min, number} {min, plural, one{block} other{blocks}}.', [
+                    'attribute' => Craft::t('site', $this->name),
+                    'min' => $this->minBlocks, // Need to pass this in now
+                ]) : null,
+                'tooMany' => $this->maxBlocks ? Craft::t('app', '{attribute} should contain at most {max, number} {max, plural, one{block} other{blocks}}.', [
+                    'attribute' => Craft::t('site', $this->name),
+                    'max' => $this->maxBlocks, // Need to pass this in now
+                ]) : null,
+                'skipOnEmpty' => false,
+            ]);
+
+            if (!$arrayValidator->validate($blocks, $error)) {
+                $element->addError($this->handle, $error);
+            }
         }
     }
 
@@ -955,7 +974,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
             // Ensure the block type has a UID
             if ($blockType->getIsNew()) {
                 $blockType->uid = StringHelper::UUID();
-            } else if (!$blockType->uid) {
+            } elseif (!$blockType->uid) {
                 $blockType->uid = Db::uidById(DbTable::MATRIXBLOCKTYPES, $blockType->id);
             }
 
@@ -1032,9 +1051,9 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         if ($element->duplicateOf !== null) {
             $matrixService->duplicateBlocks($this, $element->duplicateOf, $element, true);
             $resetValue = true;
-        } else if ($element->isFieldDirty($this->handle) || !empty($element->newSiteIds)) {
+        } elseif ($element->isFieldDirty($this->handle) || !empty($element->newSiteIds)) {
             $matrixService->saveField($this, $element);
-        } else if ($element->mergingCanonicalChanges) {
+        } elseif ($element->mergingCanonicalChanges) {
             $matrixService->mergeCanonicalChanges($this, $element);
             $resetValue = true;
         }
@@ -1247,7 +1266,7 @@ class Matrix extends Field implements EagerLoadingFieldInterface, GqlInlineFragm
         foreach ($newSortOrder as $blockId) {
             if (isset($newBlockData[$blockId])) {
                 $blockData = $newBlockData[$blockId];
-            } else if (
+            } elseif (
                 isset(Elements::$duplicatedElementSourceIds[$blockId]) &&
                 isset($newBlockData[Elements::$duplicatedElementSourceIds[$blockId]])
             ) {

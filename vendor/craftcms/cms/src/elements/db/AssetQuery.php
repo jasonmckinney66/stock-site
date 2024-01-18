@@ -207,6 +207,13 @@ class AssetQuery extends ElementQuery
     public $includeSubfolders = false;
 
     /**
+     * @var string|null The folder path that resulting assets must live within
+     * @used-by folderPath()
+     * @since 3.7.39
+     */
+    public $folderPath;
+
+    /**
      * @var string|array|null The asset transform indexes that should be eager-loaded, if they exist
      * ---
      * ```php{4}
@@ -268,15 +275,20 @@ class AssetQuery extends ElementQuery
      *     ->all();
      * ```
      *
-     * @param string|string[]|VolumeInterface|null $value The property value
+     * @param string|string[]|VolumeInterface|VolumeInterface[]|null $value The property value
      * @return static self reference
      * @uses $volumeId
      */
     public function volume($value)
     {
-        if ($value instanceof VolumeInterface) {
-            $this->volumeId = [$value->id];
-        } else if ($value !== null) {
+        if (Db::normalizeParam($value, function($item) {
+            if (is_string($item)) {
+                $item = Craft::$app->getVolumes()->getVolumeByHandle($item);
+            }
+            return $item instanceof VolumeInterface ? $item->id : null;
+        })) {
+            $this->volumeId = $value;
+        } elseif ($value !== null) {
             $this->volumeId = (new Query())
                 ->select(['id'])
                 ->from([Table::VOLUMES])
@@ -436,7 +448,7 @@ class AssetQuery extends ElementQuery
     {
         if ($value instanceof User) {
             $this->uploaderId = $value->id;
-        } else if (is_numeric($value)) {
+        } elseif (is_numeric($value)) {
             $this->uploaderId = $value;
         } else {
             throw new InvalidArgumentException('Invalid uploader value');
@@ -738,6 +750,46 @@ class AssetQuery extends ElementQuery
     }
 
     /**
+     * Narrows the query results based on the folders the assets belong to, per the folders’ paths.
+     *
+     * Possible values include:
+     *
+     * | Value | Fetches assets…
+     * | - | -
+     * | `foo/` | in a `foo/` folder (excluding nested folders).
+     * | `foo/*` | in a `foo/` folder (including nested folders).
+     * | `'not foo/*'` | not in a `foo/` folder (including nested folders).
+     * | `['foo/*', 'bar/*']` | in a `foo/` or `bar/` folder (including nested folders).
+     * | `['not', 'foo/*', 'bar/*']` | not in a `foo/` or `bar/` folder (including nested folders).
+     *
+     * ---
+     *
+     * ```twig
+     * {# Fetch assets in the foo/ folder or its nested folders #}
+     * {% set {elements-var} = {twig-method}
+     *   .folderPath('foo/*')
+     *   .all() %}
+     * ```
+     *
+     * ```php
+     * // Fetch assets in the foo/ folder or its nested folders
+     * ${elements-var} = {php-method}
+     *     ->folderPath('foo/*')
+     *     ->all();
+     * ```
+     *
+     * @param mixed $value The property value
+     * @return self self reference
+     * @uses $folderPath
+     * @since 3.7.39
+     */
+    public function folderPath($value): self
+    {
+        $this->folderPath = $value;
+        return $this;
+    }
+
+    /**
      * Causes the query to return matching assets eager-loaded with image transform indexes.
      *
      * This can improve performance when displaying several image transforms at once, if the transforms
@@ -862,6 +914,10 @@ class AssetQuery extends ElementQuery
             $this->subQuery->andWhere($folderCondition);
         }
 
+        if ($this->folderPath) {
+            $this->subQuery->andWhere(Db::parseParam('volumeFolders.path', $this->folderPath));
+        }
+
         if (self::_supportsUploaderParam() && $this->uploaderId) {
             $this->subQuery->andWhere(['uploaderId' => $this->uploaderId]);
         }
@@ -913,9 +969,9 @@ class AssetQuery extends ElementQuery
 
         if (empty($this->volumeId)) {
             $this->volumeId = is_array($this->volumeId) ? [] : null;
-        } else if (is_numeric($this->volumeId)) {
+        } elseif (is_numeric($this->volumeId)) {
             $this->volumeId = [$this->volumeId];
-        } else if (!is_array($this->volumeId) || !ArrayHelper::isNumeric($this->volumeId)) {
+        } elseif (!is_array($this->volumeId) || !ArrayHelper::isNumeric($this->volumeId)) {
             $this->volumeId = (new Query())
                 ->select(['id'])
                 ->from([Table::VOLUMES])

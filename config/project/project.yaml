@@ -1,4 +1,4 @@
-dateModified: 1654468294
+dateModified: 1705548156
 email:
   fromEmail: j@jasonmckinney.com
   fromName: Stock-Site
@@ -430,7 +430,7 @@ plugins:
   feed-me:
     edition: standard
     enabled: true
-    schemaVersion: 4.4.0
+    schemaVersion: 4.4.1
   position-fieldtype:
     edition: standard
     enabled: true
@@ -456,7 +456,7 @@ system:
   live: true
   name: Stock-Site
   retryDuration: null
-  schemaVersion: 3.7.33
+  schemaVersion: 3.8.0.1
   timeZone: America/Los_Angeles
 users:
   allowPublicRegistration: false

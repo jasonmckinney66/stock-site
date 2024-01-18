@@ -26,6 +26,7 @@ use craft\search\SearchQuery;
 use craft\search\SearchQueryTerm;
 use craft\search\SearchQueryTermGroup;
 use yii\base\Component;
+use yii\base\InvalidArgumentException;
 use yii\db\Expression;
 use yii\db\Schema;
 
@@ -240,6 +241,34 @@ class Search extends Component
     }
 
     /**
+     * Normalizes a `search` param into a [[SearchQuery]] object.
+     *
+     * @param string|array|SearchQuery $searchQuery
+     * @return SearchQuery
+     * @since 3.8.0
+     */
+    public function normalizeSearchQuery($searchQuery): SearchQuery
+    {
+        if ($searchQuery instanceof SearchQuery) {
+            return $searchQuery;
+        }
+
+        if (is_string($searchQuery)) {
+            return new SearchQuery($searchQuery, Craft::$app->getConfig()->getGeneral()->defaultSearchTermOptions);
+        }
+
+        if (is_array($searchQuery)) {
+            $options = $searchQuery;
+            $searchQuery = $options['query'];
+            unset($options['query']);
+            $options = array_merge(Craft::$app->getConfig()->getGeneral()->defaultSearchTermOptions, $options);
+            return new SearchQuery($searchQuery, $options);
+        }
+
+        throw new InvalidArgumentException('Invalid search query.');
+    }
+
+    /**
      * Filters a list of element IDs by a given search query.
      *
      * @param ElementQuery|null $elementQuery
@@ -263,15 +292,7 @@ class Search extends Component
                 ->limit(null);
         }
 
-        if (is_string($searchQuery)) {
-            $searchQuery = new SearchQuery($searchQuery, Craft::$app->getConfig()->getGeneral()->defaultSearchTermOptions);
-        } else if (is_array($searchQuery)) {
-            $options = $searchQuery;
-            $searchQuery = $options['query'];
-            unset($options['query']);
-            $options = array_merge(Craft::$app->getConfig()->getGeneral()->defaultSearchTermOptions, $options);
-            $searchQuery = new SearchQuery($searchQuery, $options);
-        }
+        $searchQuery = $this->normalizeSearchQuery($searchQuery);
 
         // Fire a 'beforeSearch' event
         if ($this->hasEventHandlers(self::EVENT_BEFORE_SEARCH)) {
@@ -321,7 +342,7 @@ class Search extends Component
                     'elementId' => $elementQuery->select(['elements.id']),
                 ])
                 ->cache(true, new ElementQueryTagDependency($elementQuery));
-        } else if (!empty($elementIds)) {
+        } elseif (!empty($elementIds)) {
             $query->andWhere(['elementId' => $elementIds]);
         }
 
@@ -511,7 +532,7 @@ SQL;
             if (trim($keywords) === trim($haystack)) {
                 $mod = 100;
             } // Don't scale up for substring matches
-            else if ($term->subLeft || $term->subRight) {
+            elseif ($term->subLeft || $term->subRight) {
                 $mod = 10;
             } else {
                 $mod = 50;
@@ -595,7 +616,7 @@ SQL;
             if ($sql) {
                 $where[] = $sql;
             } // No SQL but keywords, save them for later
-            else if ($keywords !== null && $keywords !== '') {
+            elseif ($keywords !== null && $keywords !== '') {
                 if ($inclusive && $db->getIsMysql()) {
                     $keywords = '+' . $keywords;
                 }
@@ -906,7 +927,7 @@ SQL;
     {
         $ftVal = explode(' ', $val);
         $ftVal = implode(' & ', $ftVal);
-        $likeVal = !$exact ? '%' . $val . '%' : $val;
+        $likeVal = !$exact ? '%' . $val . '%' : " $val ";
 
         $db = Craft::$app->getDb();
 

@@ -136,7 +136,7 @@ class MigrateController extends BaseMigrateController
      * Note that the values setting via options are not available
      * until [[beforeAction()]] is being called.
      *
-     * @param string $actionID the action id of the current request
+     * @param string $actionID the action ID of the current request
      * @return string[] the names of the options valid for the action
      */
     public function options($actionID)
@@ -208,7 +208,7 @@ class MigrateController extends BaseMigrateController
 
             if ($this->plugin) {
                 $this->track = "plugin:$this->plugin";
-            } else if ($this->track && preg_match('/^plugin:([\w\-]+)$/', $this->track, $match)) {
+            } elseif ($this->track && preg_match('/^plugin:([\w\-]+)$/', $this->track, $match)) {
                 $this->plugin = $match[1];
             }
 
@@ -278,7 +278,7 @@ class MigrateController extends BaseMigrateController
 
         $file = $this->migrationPath . DIRECTORY_SEPARATOR . $name . '.php';
 
-        if ($this->confirm("Create new migration '$file'?")) {
+        if ($this->confirm("Create new migration '$file'?", true)) {
             $templateFile = Craft::getAlias($this->templateFile);
 
             if ($templateFile === false) {
@@ -395,7 +395,7 @@ class MigrateController extends BaseMigrateController
             // Update version info
             if ($track === MigrationManager::TRACK_CRAFT) {
                 Craft::$app->getUpdates()->updateCraftVersionInfo();
-            } else if ($track !== MigrationManager::TRACK_CONTENT) {
+            } elseif ($track !== MigrationManager::TRACK_CONTENT) {
                 Craft::$app->getPlugins()->updatePluginVersionInfo($plugins[substr($track, 7)]);
             }
         }
@@ -442,7 +442,7 @@ class MigrateController extends BaseMigrateController
             // Update any schema versions.
             if ($this->track === MigrationManager::TRACK_CRAFT) {
                 Craft::$app->getUpdates()->updateCraftVersionInfo();
-            } else if ($this->plugin) {
+            } elseif ($this->plugin) {
                 Craft::$app->getPlugins()->updatePluginVersionInfo($this->plugin);
             }
 

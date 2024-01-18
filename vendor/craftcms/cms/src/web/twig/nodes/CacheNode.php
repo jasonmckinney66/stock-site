@@ -52,7 +52,7 @@ class CacheNode extends Node
                 ->raw(' || !(')
                 ->subcompile($conditions)
                 ->raw(')');
-        } else if ($ignoreConditions) {
+        } elseif ($ignoreConditions) {
             $compiler
                 ->raw(' || (')
                 ->subcompile($ignoreConditions)
@@ -84,7 +84,7 @@ class CacheNode extends Node
             ->indent()
             ->write("if (!\$ignoreCache{$n}) {\n")
             ->indent()
-            ->write("\$cacheService->startTemplateCache(true);\n")
+            ->write("\$cacheService->startTemplateCache(true, $global);\n")
             ->outdent()
             ->write("}\n")
             ->write("ob_start();\n")

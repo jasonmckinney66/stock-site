@@ -9,14 +9,12 @@ namespace craft\fields;
 
 use Craft;
 use craft\base\ElementInterface;
-use craft\db\Table as DbTable;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\db\TagQuery;
 use craft\elements\Tag;
 use craft\gql\arguments\elements\Tag as TagArguments;
 use craft\gql\interfaces\elements\Tag as TagInterface;
 use craft\gql\resolvers\elements\Tag as TagResolver;
-use craft\helpers\Db;
 use craft\helpers\Gql;
 use craft\helpers\Gql as GqlHelper;
 use craft\models\GqlSchema;
@@ -61,7 +59,7 @@ class Tags extends BaseRelationField
      */
     public static function valueType(): string
     {
-        return TagQuery::class;
+        return sprintf('\\%s|\\%s[]', TagQuery::class, Tag::class);
     }
 
     /**
@@ -92,7 +90,7 @@ class Tags extends BaseRelationField
             $value = $value
                 ->anyStatus()
                 ->all();
-        } else if (!is_array($value)) {
+        } elseif (!is_array($value)) {
             $value = [];
         }
 
@@ -109,6 +107,7 @@ class Tags extends BaseRelationField
                     'targetSiteId' => $this->targetSiteId($element),
                     'sourceElementId' => $element !== null ? $element->id : null,
                     'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),
+                    'allowSelfRelations' => (bool)$this->allowSelfRelations,
                 ]);
         }
 
@@ -145,15 +144,21 @@ class Tags extends BaseRelationField
     public function getEagerLoadingGqlConditions()
     {
         $allowedEntities = Gql::extractAllowedEntitiesFromSchema();
-        $allowedTagGroupUids = $allowedEntities['taggroups'] ?? [];
+        $tagGroupUids = $allowedEntities['taggroups'] ?? [];
 
-        if (empty($allowedTagGroupUids)) {
+        if (empty($tagGroupUids)) {
             return false;
         }
 
-        $tagGroupIds = Db::idsByUids(DbTable::TAGGROUPS, $allowedTagGroupUids);
+        $tagsService = Craft::$app->getTags();
+        $tagGroupIds = array_filter(array_map(function(string $uid) use ($tagsService) {
+            $tagGroup = $tagsService->getTagGroupByUid($uid);
+            return $tagGroup->id ?? null;
+        }, $tagGroupUids));
 
-        return ['groupId' => array_values($tagGroupIds)];
+        return [
+            'groupId' => $tagGroupIds,
+        ];
     }
 
     /**

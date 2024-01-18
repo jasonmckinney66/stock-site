@@ -199,12 +199,17 @@ class Fields extends Component
     /**
      * @var
      */
-    private $_layoutsById;
+    private $_layoutsById = [];
 
     /**
      * @var
      */
-    private $_layoutsByType;
+    private $_layoutsByType = [];
+
+    /**
+     * @var
+     */
+    private $_allLayoutsByType = [];
 
     /**
      * @var array
@@ -652,12 +657,29 @@ class Fields extends Component
     /**
      * Returns all fields that have a column in the content table.
      *
+     * @param string|string[]|false|null $context The field context(s) to fetch fields from. Defaults to [[\craft\services\Content::$fieldContext]].
+     * Set to `false` to get all fields regardless of context.
      * @return FieldInterface[] The fields
      */
-    public function getFieldsWithContent(): array
+    public function getFieldsWithContent($context = null): array
     {
-        return ArrayHelper::where($this->getAllFields(), function(FieldInterface $field) {
+        return ArrayHelper::where($this->getAllFields($context), function(FieldInterface $field) {
             return $field::hasContentColumn();
+        }, true, true, false);
+    }
+
+    /**
+     * Returns all fields that don’t have a column in the content table.
+     *
+     * @param string|string[]|false|null $context The field context(s) to fetch fields from. Defaults to [[\craft\services\Content::$fieldContext]].
+     * Set to `false` to get all fields regardless of context.
+     * @return FieldInterface[] The fields
+     * @since 3.7.60
+     */
+    public function getFieldsWithoutContent($context = null): array
+    {
+        return ArrayHelper::where($this->getAllFields($context), function(FieldInterface $field) {
+            return !$field::hasContentColumn();
         }, true, true, false);
     }
 
@@ -869,7 +891,7 @@ class Fields extends Component
             if (empty($field->uid)) {
                 $field->uid = StringHelper::UUID();
             }
-        } else if (!$field->uid) {
+        } elseif (!$field->uid) {
             $field->uid = Db::uidById(Table::FIELDS, $field->id);
         }
 
@@ -1087,7 +1109,7 @@ class Fields extends Component
      */
     public function getLayoutById(int $layoutId)
     {
-        if ($this->_layoutsById !== null && array_key_exists($layoutId, $this->_layoutsById)) {
+        if (array_key_exists($layoutId, $this->_layoutsById)) {
             return $this->_layoutsById[$layoutId];
         }
 
@@ -1110,14 +1132,12 @@ class Fields extends Component
         $response = [];
 
         // Don't re-fetch any layouts we've already memoized
-        if (isset($this->_layoutsById)) {
-            foreach ($layoutIds as $key => $id) {
-                if (array_key_exists($id, $this->_layoutsById)) {
-                    if ($this->_layoutsById[$id] !== null) {
-                        $response[$id] = $this->_layoutsById[$id];
-                    }
-                    unset($layoutIds[$key]);
+        foreach ($layoutIds as $key => $id) {
+            if (array_key_exists($id, $this->_layoutsById)) {
+                if ($this->_layoutsById[$id] !== null) {
+                    $response[$id] = $this->_layoutsById[$id];
                 }
+                unset($layoutIds[$key]);
             }
         }
 
@@ -1146,7 +1166,7 @@ class Fields extends Component
      */
     public function getLayoutByType(string $type): FieldLayout
     {
-        if ($this->_layoutsByType !== null && array_key_exists($type, $this->_layoutsByType)) {
+        if (isset($this->_layoutsByType[$type])) {
             return $this->_layoutsByType[$type];
         }
 
@@ -1177,17 +1197,19 @@ class Fields extends Component
      */
     public function getLayoutsByType(string $type): array
     {
-        $results = $this->_createLayoutQuery()
-            ->andWhere(['type' => $type])
-            ->all();
+        if (!isset($this->_allLayoutsByType[$type])) {
+            $results = $this->_createLayoutQuery()
+                ->andWhere(['type' => $type])
+                ->all();
 
-        $layouts = [];
+            $this->_allLayoutsByType[$type] = [];
 
-        foreach ($results as $result) {
-            $layouts[] = new FieldLayout($result);
+            foreach ($results as $result) {
+                $this->_allLayoutsByType[$type][] = new FieldLayout($result);
+            }
         }
 
-        return $layouts;
+        return $this->_allLayoutsByType[$type];
     }
 
     /**
@@ -1640,6 +1662,9 @@ class Fields extends Component
 
         $this->_layoutsByType[$layout->type] = $this->_layoutsById[$layout->id] = $layout;
 
+        // Clear caches
+        unset($this->_allLayoutsByType[$layout->type]);
+
         return true;
     }
 
@@ -1691,6 +1716,11 @@ class Fields extends Component
             ]));
         }
 
+        // Clear caches
+        unset($this->_layoutsById[$layout->id]);
+        unset($this->_layoutsByType[$layout->type]);
+        unset($this->_allLayoutsByType[$layout->type]);
+
         return true;
     }
 
@@ -1705,6 +1735,11 @@ class Fields extends Component
         $affectedRows = Craft::$app->getDb()->createCommand()
             ->softDelete(Table::FIELDLAYOUTS, ['type' => $type])
             ->execute();
+
+        // Clear caches
+        $this->_layoutsById = [];
+        $this->_layoutsByType = [];
+        $this->_allLayoutsByType = [];
 
         return (bool)$affectedRows;
     }
@@ -1722,6 +1757,11 @@ class Fields extends Component
             ->restore(Table::FIELDLAYOUTS, ['id' => $id])
             ->execute();
 
+        // Clear caches
+        $this->_layoutsById = [];
+        $this->_layoutsByType = [];
+        $this->_allLayoutsByType = [];
+
         return (bool)$affectedRows;
     }
 
@@ -1735,8 +1775,8 @@ class Fields extends Component
     {
         $fieldVersion = Craft::$app->getInfo()->fieldVersion;
 
-        // If it doesn't start with `2@`, then it needs to be updated
-        if ($fieldVersion === null || strpos($fieldVersion, '2@') !== 0) {
+        // If it doesn't start with `3@`, then it needs to be updated
+        if ($fieldVersion === null || strpos($fieldVersion, '3@') !== 0) {
             return null;
         }
 
@@ -1754,7 +1794,7 @@ class Fields extends Component
         class_exists(CustomFieldBehavior::class);
 
         $info = Craft::$app->getInfo();
-        $info->fieldVersion = '2@' . StringHelper::randomString(10);
+        $info->fieldVersion = '3@' . StringHelper::randomString(10);
         Craft::$app->saveInfo($info, ['fieldVersion']);
     }
 
@@ -1786,6 +1826,10 @@ class Fields extends Component
 
             $class = $data['type'];
 
+            // Track whether we should remove the field’s search indexes after save
+            $searchable = $data['searchable'] ?? false;
+            $deleteSearchIndexes = !$isNewField && !$searchable && $fieldRecord->searchable;
+
             // Create/alter the content table column(s)
             $contentService = Craft::$app->getContent();
             $oldHandle = !$isNewField ? $fieldRecord->getOldHandle() : null;
@@ -1800,13 +1844,13 @@ class Fields extends Component
                         [$key, $type] = explode(':', $type, 2);
                         $oldColumn = !$isNewField ? ElementHelper::fieldColumn($this->oldFieldColumnPrefix, $oldHandle, $oldColumnSuffix, $i !== 0 ? $key : null) : null;
                         $newColumn = ElementHelper::fieldColumn(null, $data['handle'], $data['columnSuffix'] ?? null, $i !== 0 ? $key : null);
-                        $this->_updateColumn($db, $transaction, $contentService->contentTable, $oldColumn, $newColumn, $type);
+                        $this->updateColumn($db, $transaction, $contentService->contentTable, $oldColumn, $newColumn, $type);
                         $newColumns[$newColumn] = true;
                     }
                 } else {
                     $oldColumn = !$isNewField ? ElementHelper::fieldColumn($this->oldFieldColumnPrefix, $oldHandle, $oldColumnSuffix) : null;
-                    $newColumn = ElementHelper::fieldColumn(null, $data['handle'], $data['columnSuffix'] ?? null);;
-                    $this->_updateColumn($db, $transaction, $contentService->contentTable, $oldColumn, $newColumn, $columnType);
+                    $newColumn = ElementHelper::fieldColumn(null, $data['handle'], $data['columnSuffix'] ?? null);
+                    $this->updateColumn($db, $transaction, $contentService->contentTable, $oldColumn, $newColumn, $columnType);
                     $newColumns[$newColumn] = true;
                 }
             }
@@ -1814,7 +1858,8 @@ class Fields extends Component
             // Drop any unneeded columns for this field
             $db->getSchema()->refresh();
 
-            if (!$isNewField) {
+            // don't drop the field content column if the field is missing
+            if (!$isNewField && $class !== MissingField::class) {
                 $this->_dropOldFieldColumns($oldHandle, $oldColumnSuffix, $newColumns);
 
                 if ($data['handle'] !== $oldHandle || ($data['columnSuffix'] ?? null) !== $oldColumnSuffix) {
@@ -1838,7 +1883,7 @@ class Fields extends Component
             $fieldRecord->context = $context;
             $fieldRecord->columnSuffix = $data['columnSuffix'] ?? null;
             $fieldRecord->instructions = $data['instructions'];
-            $fieldRecord->searchable = $data['searchable'] ?? false;
+            $fieldRecord->searchable = $searchable;
             $fieldRecord->translationMethod = $data['translationMethod'];
             $fieldRecord->translationKeyFormat = $data['translationKeyFormat'];
             $fieldRecord->type = $data['type'];
@@ -1849,7 +1894,6 @@ class Fields extends Component
             $transaction->commit();
         } catch (\Throwable $e) {
             $transaction->rollBack();
-
             throw $e;
         }
 
@@ -1886,11 +1930,21 @@ class Fields extends Component
             ]));
         }
 
+        // If we just dropped `searchable`, delete the field’s search indexes immediately.
+        if ($deleteSearchIndexes) {
+            Db::delete(Table::SEARCHINDEX, [
+                'attribute' => 'field',
+                'fieldId' => $field->id,
+            ]);
+        }
+
         // Invalidate all element caches
         Craft::$app->getElements()->invalidateAllCaches();
     }
 
     /**
+     * Adds/updates a field’s content table column.
+     *
      * @param Connection $db
      * @param Transaction $transaction
      * @param string $table
@@ -1898,8 +1952,9 @@ class Fields extends Component
      * @param string $newName
      * @param string $type
      * @return void
+     * @since 3.7.39
      */
-    private function _updateColumn(Connection $db, Transaction &$transaction, string $table, ?string $oldName, string $newName, string $type): void
+    protected function updateColumn(Connection $db, Transaction &$transaction, string $table, ?string $oldName, string $newName, string $type): void
     {
         // Clear the schema cache
         $db->getSchema()->refresh();
@@ -2039,7 +2094,7 @@ class Fields extends Component
      */
     private function _createLayoutQuery(): Query
     {
-        $query = (new Query)
+        $query = (new Query())
             ->select([
                 'id',
                 'type',
@@ -2096,7 +2151,7 @@ class Fields extends Component
 
         if (is_numeric($criteria)) {
             $query->where(['id' => $criteria]);
-        } else if (\is_string($criteria)) {
+        } elseif (\is_string($criteria)) {
             $query->where(['uid' => $criteria]);
         }
 

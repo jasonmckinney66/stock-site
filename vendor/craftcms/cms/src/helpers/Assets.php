@@ -31,7 +31,7 @@ class Assets
     const INDEX_SKIP_ITEMS_PATTERN = '/.*(Thumbs\.db|__MACOSX|__MACOSX\/|__MACOSX\/.*|\.DS_STORE)$/i';
 
     /**
-     * @event SetElementTableAttributeHtmlEvent The event that is triggered when defining an asset’s filename.
+     * @event SetAssetFilenameEvent The event that is triggered when defining an asset’s filename.
      */
     const EVENT_SET_FILENAME = 'setFilename';
 
@@ -183,16 +183,22 @@ class Assets
      */
     public static function filename2Title(string $filename): string
     {
-        return StringHelper::upperCaseFirst(implode(' ', StringHelper::toWords($filename, false, true)));
+        $title = StringHelper::upperCaseFirst(implode(' ', StringHelper::toWords($filename, false, true)));
+
+        if (strlen($title) > 255) {
+            $title = rtrim(substr($title, 255), ' ');
+        }
+
+        return $title;
     }
 
     /**
-     * Mirror a folder structure on a Volume.
+     * Mirrors a folder structure on a volume.
      *
      * @param VolumeFolder $sourceParentFolder Folder who's children folder structure should be mirrored.
      * @param VolumeFolder $destinationFolder The destination folder
-     * @param array $targetTreeMap map of relative path => existing folder id
-     * @return array map of original folder id => new folder id
+     * @param array $targetTreeMap map of relative path => existing folder ID
+     * @return array map of original folder ID => new folder ID
      */
     public static function mirrorFolderStructure(VolumeFolder $sourceParentFolder, VolumeFolder $destinationFolder, array $targetTreeMap = []): array
     {
@@ -226,11 +232,11 @@ class Assets
     }
 
     /**
-     * Create an Asset transfer list based on a list of Assets and an array of
-     * changing folder ids.
+     * Create an asset transfer list based on a list of assets and an array of
+     * changing folder IDs.
      *
      * @param array $assets List of assets
-     * @param array $folderIdChanges A map of folder id changes
+     * @param array $folderIdChanges A map of folder ID changes
      * @return array
      */
     public static function fileTransferList(array $assets, array $folderIdChanges): array
@@ -269,9 +275,10 @@ class Assets
     }
 
     /**
-     * Sorts a folder tree by Volume sort order.
+     * Sorts a folder tree by the volume sort order.
      *
      * @param VolumeFolder[] &$tree array passed by reference of the sortable folders.
+     * @deprecated in 3.8.0
      */
     public static function sortFolderTree(array &$tree)
     {
@@ -377,7 +384,7 @@ class Assets
         if (self::$_fileKinds === null) {
             self::$_fileKinds = [
                 Asset::KIND_ACCESS => [
-                    'label' => Craft::t('app', 'Access'),
+                    'label' => 'Access',
                     'extensions' => [
                         'accdb',
                         'accde',
@@ -463,7 +470,7 @@ class Assets
                     ],
                 ],
                 Asset::KIND_EXCEL => [
-                    'label' => Craft::t('app', 'Excel'),
+                    'label' => 'Excel',
                     'extensions' => [
                         'xls',
                         'xlsm',
@@ -473,14 +480,14 @@ class Assets
                     ],
                 ],
                 Asset::KIND_HTML => [
-                    'label' => Craft::t('app', 'HTML'),
+                    'label' => 'HTML',
                     'extensions' => [
                         'htm',
                         'html',
                     ],
                 ],
                 Asset::KIND_ILLUSTRATOR => [
-                    'label' => Craft::t('app', 'Illustrator'),
+                    'label' => 'Illustrator',
                     'extensions' => [
                         'ai',
                     ],
@@ -491,6 +498,8 @@ class Assets
                         'avif',
                         'bmp',
                         'gif',
+                        'heic',
+                        'heif',
                         'jfif',
                         'jp2',
                         'jpe',
@@ -510,38 +519,38 @@ class Assets
                     ],
                 ],
                 Asset::KIND_JAVASCRIPT => [
-                    'label' => Craft::t('app', 'JavaScript'),
+                    'label' => 'JavaScript',
                     'extensions' => [
                         'js',
                     ],
                 ],
                 Asset::KIND_JSON => [
-                    'label' => Craft::t('app', 'JSON'),
+                    'label' => 'JSON',
                     'extensions' => [
                         'json',
                     ],
                 ],
                 Asset::KIND_PDF => [
-                    'label' => Craft::t('app', 'PDF'),
+                    'label' => 'PDF',
                     'extensions' => [
                         'pdf',
                     ],
                 ],
                 Asset::KIND_PHOTOSHOP => [
-                    'label' => Craft::t('app', 'Photoshop'),
+                    'label' => 'Photoshop',
                     'extensions' => [
                         'psb',
                         'psd',
                     ],
                 ],
                 Asset::KIND_PHP => [
-                    'label' => Craft::t('app', 'PHP'),
+                    'label' => 'PHP',
                     'extensions' => [
                         'php',
                     ],
                 ],
                 Asset::KIND_POWERPOINT => [
-                    'label' => Craft::t('app', 'PowerPoint'),
+                    'label' => 'PowerPoint',
                     'extensions' => [
                         'potx',
                         'pps',
@@ -568,6 +577,7 @@ class Assets
                         'avi',
                         'fla',
                         'flv',
+                        'hevc',
                         'm1s',
                         'm2s',
                         'm2t',
@@ -590,7 +600,7 @@ class Assets
                     ],
                 ],
                 Asset::KIND_WORD => [
-                    'label' => Craft::t('app', 'Word'),
+                    'label' => 'Word',
                     'extensions' => [
                         'doc',
                         'docm',
@@ -601,7 +611,7 @@ class Assets
                     ],
                 ],
                 Asset::KIND_XML => [
-                    'label' => Craft::t('app', 'XML'),
+                    'label' => 'XML',
                     'extensions' => [
                         'xml',
                     ],
@@ -625,7 +635,7 @@ class Assets
     }
 
     /**
-     * Return an image path to use in Image Editor for an Asset by id and size.
+     * Return an image path to use in the Image Editor for an asset by its ID and size.
      *
      * @param integer $assetId
      * @param integer $size

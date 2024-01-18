@@ -1,6 +1,23 @@
 Yii2 Queue Extension Change Log
 ===============================
 
+2.3.6 October 03, 2023
+----------------------
+
+- Bug #373: Fixed error if payload in Redis is null (sanwv, magarzon)
+- Enh #372: Add ability to configure keepalive and heartbeat for AMQP and AMQP interop (vyachin)
+- Enh #464: Delete property `maxPriority` (skolkin-worker)
+- Enh #486: `SignalLoop::$exitSignals` now includes `SIGQUIT` (rhertogh)
+- Enh #487: Add ability to push message with headers for AMQP interop driver (s1lver)
+
+
+2.3.5 November 18, 2022
+-----------------------
+
+- Enh #457: Upgraded `jeremeamia/superclosure` library to `opis/closure`, adding the possibility to have closures as properties of the jobs (mp1509)
+- Enh #459: Added the ability to sets of flags for the AMQP queue and exchange (s1lver)
+
+
 2.3.4 March 31, 2022
 --------------------
 

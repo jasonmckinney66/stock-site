@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\queue\redis;
@@ -149,6 +149,10 @@ class Queue extends CliQueue
         }
 
         $payload = $this->redis->hget("$this->channel.messages", $id);
+        if (null === $payload) {
+            return null;
+        }
+
         list($ttr, $message) = explode(';', $payload, 2);
         $this->redis->zadd("$this->channel.reserved", time() + $ttr, $id);
         $attempt = $this->redis->hincrby("$this->channel.attempts", $id, 1);

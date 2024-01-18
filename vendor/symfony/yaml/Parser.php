@@ -43,7 +43,7 @@ class Parser
      * Parses a YAML file into a PHP value.
      *
      * @param string $filename The path to the YAML file to be parsed
-     * @param int    $flags    A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param int    $flags    A bit field of Yaml::PARSE_* constants to customize the YAML parser behavior
      *
      * @return mixed
      *
@@ -72,7 +72,7 @@ class Parser
      * Parses a YAML string to a PHP value.
      *
      * @param string $value A YAML string
-     * @param int    $flags A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param int    $flags A bit field of Yaml::PARSE_* constants to customize the YAML parser behavior
      *
      * @return mixed
      *
@@ -88,7 +88,7 @@ class Parser
 
         $mbEncoding = null;
 
-        if (2 /* MB_OVERLOAD_STRING */ & (int) ini_get('mbstring.func_overload')) {
+        if (2 /* MB_OVERLOAD_STRING */ & (int) \ini_get('mbstring.func_overload')) {
             $mbEncoding = mb_internal_encoding();
             mb_internal_encoding('UTF-8');
         }
@@ -199,9 +199,8 @@ class Parser
                             || self::preg_match('#^(?P<key>'.Inline::REGEX_QUOTED_STRING.'|[^ \'"\{\[].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $this->trimTag($values['value']), $matches)
                         )
                     ) {
-                        // this is a compact notation element, add to next block and parse
                         $block = $values['value'];
-                        if ($this->isNextLineIndented()) {
+                        if ($this->isNextLineIndented() || isset($matches['value']) && '>-' === $matches['value']) {
                             $block .= "\n".$this->getNextEmbedBlock($this->getCurrentLineIndentation() + \strlen($values['leadspaces']) + 1);
                         }
 
@@ -711,7 +710,7 @@ class Parser
      * Parses a YAML value.
      *
      * @param string $value   A YAML value
-     * @param int    $flags   A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param int    $flags   A bit field of Yaml::PARSE_* constants to customize the YAML parser behavior
      * @param string $context The parser context (either sequence or mapping)
      *
      * @return mixed
@@ -949,6 +948,10 @@ class Parser
         } while (!$EOF && ($this->isCurrentLineEmpty() || $this->isCurrentLineComment()));
 
         if ($EOF) {
+            for ($i = 0; $i < $movements; ++$i) {
+                $this->moveToPreviousLine();
+            }
+
             return false;
         }
 
@@ -982,7 +985,7 @@ class Parser
      */
     private function isCurrentLineComment(): bool
     {
-        //checking explicitly the first char of the trim is faster than loops or strpos
+        // checking explicitly the first char of the trim is faster than loops or strpos
         $ltrimmedLine = '' !== $this->currentLine && ' ' === $this->currentLine[0] ? ltrim($this->currentLine, ' ') : $this->currentLine;
 
         return '' !== $ltrimmedLine && '#' === $ltrimmedLine[0];
