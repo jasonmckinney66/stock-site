@@ -1,4 +1,4 @@
-dateModified: 1705548156
+dateModified: 1705636020
 email:
   fromEmail: j@jasonmckinney.com
   fromName: Stock-Site
@@ -415,6 +415,10 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 1.0.0
+  aws-s3:
+    edition: standard
+    enabled: true
+    schemaVersion: '1.2'
   contact-form:
     edition: standard
     enabled: true
@@ -447,10 +451,6 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 1.0.0
-  snitch:
-    edition: standard
-    enabled: true
-    schemaVersion: 2.1.0
 system:
   edition: solo
   live: true

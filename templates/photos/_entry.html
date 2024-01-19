@@ -30,7 +30,7 @@
             {% endfor %}
           </div>
           <div class="d-grid gap-2">
-            <a href="{% set image = entry.photo.one() %}{{ image.getUrl() }}" class="btn btn-primary" download>Download</a>
+            <a href="{% set image = entry.photo.one() ?? null %}{% if image %}{{ image.getUrl() }}{% endif %}" class="btn btn-primary" download>Download</a>
           </div>
           <a href="/photos/{{ category.slug }}" class="d-block my-4 link text-decoration-none">&#8249; Back</a>
         </div>
@@ -38,20 +38,20 @@
       
       <div class="col-lg-9 content">
         {% set image = entry.photo.one() %}
-        {% if image and image.extension == 'jpg' %}
-          {% set outputWidths = [375, 1024, 1200] %}
-          {% set aspectRatio = (2/3) %}
-          <picture>
-          {% if craft.app.images.supportsWebP %}
-            <source srcset="{{ m.srcsetwebp(image, outputWidths, aspectRatio) }}" type="image/webp">
+        {% if image|length %}
+          {% if image.extension == 'svg' %}
+            {{ svg(image, sanitize=false, namespace=false)|attr({style: 'width: 100%'})|prepend('<title>' ~ image.title ~ '</title>', 'replace') }}
+          {% else %}
+            <picture>
+              {% set webpTransform = { format: 'webp', mode: 'fit', quality: 80 } %}
+              {% set jpgTransform = { format: 'jpg', mode: 'fit', quality: 80 } %}
+              <source type="image/webp" srcset="{{ image.getSrcSet([812, 1650, 1740], webpTransform) }}">
+              <source type="image/jpeg" srcset="{{ image.getSrcSet([812, 1650, 1740], jpgTransform) }}">
+              <img class="w-100 h-auto" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.title }}">
+            </picture>
           {% endif %}
-            <source srcset="{{ m.srcset(image, outputWidths, aspectRatio) }}" type="image/jpeg">
-            <img src="{{ image.getUrl('fullWidthImages') }}" class="w-100" alt="{{ image.title }}" sizes="100vw" loading="lazy">
-          </picture>
-        {% elseif image and image.extension == 'svg' %}
-          {{ svg(image)|attr({style: 'width: 100%'}) }}
-        {% elseif image and image.extension == 'png' %}
-          <img width="100%" src="{{ image.getUrl('fullWidthImages') }}" alt="{{ image.title }}" loading="lazy">
+        {% else %}
+          <img src="/assets/images/placeholder-full-width-inline.jpg" class="w-100 h-auto" width="1740" height="auto" alt="placeholder">
         {% endif %}
         <div class="my-4">
           {{ entry.photoDescription }}
