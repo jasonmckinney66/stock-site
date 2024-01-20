@@ -3,13 +3,7 @@
 {% block bodyClass %}photos-single{% endblock %}
 {% block content %}
 
-<div class="text-white d-flex align-items-center mx-3">
-  <div class="container">
-    <p>&nbsp;</p>
-  </div>
-</div>
-
-<section class="mb-4">
+<section class="mb-4 mt-5">
   <div class="container">
     <div class="row align-items-stretch gx-lg-5">
       <div class="col-lg-3">
@@ -42,7 +36,7 @@
           {% if image.extension == 'svg' %}
             {{ svg(image, sanitize=false, namespace=false)|attr({style: 'width: 100%'})|prepend('<title>' ~ image.title ~ '</title>', 'replace') }}
           {% else %}
-            <picture>
+            <picture class="animate delay-1 fade-in">
               {% set webpTransform = { format: 'webp', mode: 'fit', quality: 80 } %}
               {% set jpgTransform = { format: 'jpg', mode: 'fit', quality: 80 } %}
               <source type="image/webp" srcset="{{ image.getSrcSet([812, 1650, 1740], webpTransform) }}">
@@ -58,18 +52,19 @@
         </div>
 
         <!-- author-->
-        <div class="p-4 mt-4 position-relative">
+        <div class="p-4 mt-5 position-relative d-sm-none d-md-block">
           <div class="row tape bg-warning shadow-sm p-4">
             {% for author in entry.photographer.all() %}
-              <div class="col-8">
+              <div class="col-sm-12 col-md-8">
                 <p class="lead">{{ author.title }}</h3>
                 <p>{{ author.staffBio }}</h3>
               </div>
-              <div class="col-4">
+              <div class="col-sm-12 col-md-4">
+                <span class="paper-clip"></span>
                 {% set image = author.staffPhoto.one() ?? null %}
                 {% if image %}
                   {% set authorThumb = { mode: 'crop', width: 320, height: 320, quality: 80, position: 'center-center' } %}
-                  <img src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}" class="border border-white rounded">
+                  <img src="{{ image.getUrl(authorThumb) }}" alt="{{ image.title }}" class="border border-5 border-white shadow-sm rounded">
                 {% else %}
                   <img src="/assets/images/profile.png" alt="Profile Image">
                 {% endif %}
@@ -82,6 +77,6 @@
   </div>
 </section>
 
-{#{% include "_recommend" %}#}
+{% include "_recommend" %}
 
 {% endblock %}

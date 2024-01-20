@@ -1,9 +1,9 @@
 {% import '_macros' as m %}
-<section class="my-5">
+<section class="my-5 recommend">
 	<div class="container">
 		<div class="row justify-content-center mb-5">
 			<div class="col text-center">
-					<p class="h3">You may also be interested in:</p>
+					<p class="h3 mb-0">You may also like:</p>
 			</div>
 		</div>
 		{% set section = entry.getSection().handle %}
@@ -12,10 +12,10 @@
 			<div class="row row-cols-1 row-cols-lg-1 row-cols-xl-3 gx-5 gy-3">
 				{% for entry in entries.all() %}
 					<div class="col">
-						<div href="{{ entry.url }}" class="card text-decoration-none h-100 shadow">
+						<div href="{{ entry.url }}" class="card text-decoration-none h-100">
 							<div class="col">
 								
-								{% set image = entry.listingImage.one() ?? null %}
+								{% set image = entry.photo.one() ?? null %}
 								{% if image and image.extension == 'jpg' %}
 									{% set outputWidths = [385] %}
 									{% set aspectRatio = (9/21) %}
@@ -30,15 +30,16 @@
 								{% elseif image and image.extension == 'svg' %}
 									{{ svg(image)|attr({style: 'width: 100%'}) }}
 								{% elseif image and image.extension == 'png' %}
-									<img src="{{ image.getUrl() }}" class="img-fluid rounded-start" alt="{{ image.title }}" loading="lazy">
+									<img src="{{ image.getUrl() }}" class="img-fluid rounded-start shadow" alt="{{ image.title }}" loading="lazy">
 								{% endif %}
 									</a>
 
 									<div class="card-body p-4">
-										<p>{{ entry.section.name|upper }}</p>
-										<p class="h3"><a href="{{ entry.url }}" class="text-decoration-none">{{ entry.title }}</a></p>
-										<p>{{ entry.excerpt|truncate(100, '...') }}</p>
-										<a href="{{ entry.url }}" class="link">Read More</a>
+										<p class="h3"><a href="{{ entry.url }}" class="text-decoration-none text-dark">{{ entry.title }}</a></p>
+										{% if entry.excerpt|length %}
+											<p>{{ entry.excerpt|truncate(100, '...') }}</p>
+										{% endif %}
+										<a href="{{ entry.url }}" class="link">View Photo</a>
 									</div>
 
 							</div><!-- close column -->
