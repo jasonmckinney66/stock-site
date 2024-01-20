@@ -40,15 +40,20 @@ h1 {
                 <div class="col box masonry-brick">
                     <a href="{{ entry.url }}" class="card bg-dark text-white text-decoration-none h-100 shadow-lg ">
                     {% set image = entry.photo[0] ?? null %}
-                    {% if image %}
-                        {% set outputWidths = [388, 366] %}
-                        {% set aspectRatio = (2/3) %}
-                        <picture>
-                            {% if craft.app.images.supportsWebP %}
-                                <source srcset="{{ m.cardWebp(image, outputWidths, aspectRatio) }}" type="image/webp">
-                            {% endif %}
-                            <img width="100%" src="{{ m.cardJpg(image) }}" alt="{{ image.title }}">
-                        </picture>
+                    {% if image|length %}
+                        {% if image.extension == 'svg' %}
+                            {{ svg(image, sanitize=false, namespace=false)|attr({style: 'width: 100%'})|prepend('<title>' ~ image.title ~ '</title>', 'replace') }}
+                        {% else %}
+                            <picture>
+                                {% set webpTransform = { format: 'webp', mode: 'fit', quality: 60 } %}
+                                {% set jpgTransform = { format: 'jpg', mode: 'fit', quality: 60 } %}
+                                <source type="image/webp" srcset="{{ image.getSrcSet([250, 400], webpTransform) }}">
+                                <source type="image/jpeg" srcset="{{ image.getSrcSet([250, 400], jpgTransform) }}">
+                                <img class="w-100 h-auto" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.title }}">
+                            </picture>
+                        {% endif %}
+                    {% else %}
+                        <img src="/assets/images/placeholder-card-img.jpg" class="w-100 h-auto" width="400" height="auto" alt="placeholder">
                     {% endif %}
                     <div class="card-img-overlay text-center p-4 p-lg-5 roContent">
                         <h3 class="widont card-text">{{ entry.title }}</h3>

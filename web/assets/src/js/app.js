@@ -272,17 +272,16 @@ if (($('body').hasClass('categories')) || ($('body').hasClass('tags'))) {
   $(".view").hide();
   $("#in").fadeIn("slow");
   
-  // Initialize Masonry
-  var $containter = $('#container-one');
-  $containter.imagesLoaded( function(){
-    $containter.masonry({
-        itemSelector: '.box',
-        isAnimated: !Modernizr.csstransitions,
-        isFitWidth: true
-    });
-  });
-  
   $(window).on("load", function() {
+    // Initialize Masonry
+    var $containter = $('#container-one');
+    $containter.imagesLoaded( function(){
+      $containter.masonry({
+          itemSelector: '.box',
+          isAnimated: !Modernizr.csstransitions,
+          isFitWidth: true
+      });
+    });
     $("#in").hide();
     $("#grid").fadeIn("slow");
   });
