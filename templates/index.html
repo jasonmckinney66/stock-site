@@ -5,7 +5,7 @@
 
 {% set blocks = entry.hero.all() %}
 {% if blocks|length %}
-  <section class="position-relative header-hm zindex-1 overflow-hidden mb-5 view">
+  <section class="position-relative header-hm zindex-1 overflow-hidden mb-5 view" style="display: none;">
   {% for block in blocks %}
 
     {% set randos = craft.entries.section('photos') %}
@@ -31,17 +31,17 @@
 
     <div class="text-white d-flex align-items-center header-hm gradient-mask">
       <div class="container">
-        <div class=" rowmd-flex align-items-center">
+        <div class="row md-flex align-items-center">
           <div class="d-flex justify-content-center animate delay-1 fade-in">
             <a class="navbar-brand" href="/">
               <img src="/assets/images/logo.svg" alt="logo" width="200">
             </a>
           </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 g-5 justify-content-center">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3 justify-content-center">
           <div class="col animate delay-2 fade-in">
-            <h1 class="text-center">{{ block.customHeaderText }}</h1>
-            <p class="text-center">{{ block.subtitleText }}</p>
+            <h1 class="text-center text-muted">{{ block.customHeaderText }}</h1>
+            <p class="text-center text-muted">{{ block.subtitleText }}</p>
             <form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}" style="background-color: transparent; margin-top: auto; padding-top: 1em;">
               <input id="searchField" type="search" name="q" class="form-control mx-2" placeholder="Enter Keyword">
               <button type="submit" class="btn btn-primary" value="Search"> Search </button>
@@ -60,9 +60,9 @@
   <canvas class="sonic" height="70" width="120"></canvas>
 </div>
 
-<section class="pt-2 mb-5">
-  {% include "_contentBlocks" %}
+<section class="pt-2 mb-5 view" style="display: none;">
   <div class="container">
+    {% include "_contentBlocks" %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 view mt-3 g-5 justify-content-center">
       {% set myCategoryQuery = craft.categories().group('photos').orderBy('lft ASC') %}
       {% set categories = myCategoryQuery.all() %}
