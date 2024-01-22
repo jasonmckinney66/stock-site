@@ -20678,6 +20678,10 @@ textarea.form-control-lg {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+a {
+  color: #d25b5b;
+}
+
 .sticky-offset {
   top: 112px !important;
 }

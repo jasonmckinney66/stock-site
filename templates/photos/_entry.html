@@ -6,7 +6,7 @@
 <section class="mb-4 mt-5">
   <div class="container">
     <div class="row align-items-stretch gx-lg-5">
-      <div class="col-lg-3">
+      <div class="col-lg-3 order-2 order-md-1">
         <div class="sticky-lg-top sticky-offset">
           <p class="h6 text-secondary text-uppercase">
             {% set category = entry.photoCategory.one() %}
@@ -30,7 +30,7 @@
         </div>
       </div>
       
-      <div class="col-lg-9 content">
+      <div class="col-lg-9 content order-1 order-md-2">
         {% set image = entry.photo.one() %}
         {% if image|length %}
           {% if image.extension == 'svg' %}
@@ -52,7 +52,7 @@
         </div>
 
         <!-- author-->
-        <div class="p-4 mt-5 position-relative d-sm-none d-md-block">
+        <div class="p-4 mt-5 position-relative d-none d-md-block">
           <div class="row tape bg-warning shadow-sm p-4">
             {% for author in entry.photographer.all() %}
               <div class="col-sm-12 col-md-8">

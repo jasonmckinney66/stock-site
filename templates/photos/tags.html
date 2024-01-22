@@ -37,7 +37,7 @@ h1 {
 <section id="grid" class="mb-5" style="display: none;">
     <div class="container-fluid postition-relative">
         <!-- listings -->
-        <div id="container-one" class="row masonry row-cols-1 row-cols-md-2 row-cols-lg-4 mt-3 g-5">
+        <div id="container-one" class="row masonry row-cols-1 row-cols-md-2 row-cols-lg-4 m-auto mt-3 g-5">
             {% set entries = craft.entries.relatedTo(tag).all() %}
             {% for entry in entries %}
                 <div class="col box masonry-brick">

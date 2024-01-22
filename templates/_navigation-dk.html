@@ -5,12 +5,12 @@
 		<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="navbar navbar-expand">
+		<div class="navbar navbar-expand mb-0">
 			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 				{% set navItems = craft.globalSets.handle('theNav').one.navItems %}
 				{% for item in navItems.all() %}
-					<li class="nav-item">
-						<a href="{{ item.parentPage.one.url() }}" class="nav-link {% if item.parentPage.one.slug in craft.app.request.segments %} active{% endif %}" {% if item.parentPage.one.slug in craft.app.request.segments %}aria-current="page"{% endif %}>{{ item.parentPage.one }}</a>
+					<li class="nav-item mb-0">
+						<a href="{{ item.parentPage.one.url() }}" class="nav-link mb-0 pb-0{% if item.parentPage.one.slug in craft.app.request.segments %} active{% endif %}" {% if item.parentPage.one.slug in craft.app.request.segments %}aria-current="page"{% endif %}>{{ item.parentPage.one }}</a>
 					</li>
 				{% endfor %}
 			</ul>
@@ -49,7 +49,7 @@
 		<div class="col-9 col-md-4">
 			<form class="headerSearch" id="headerSearch" action="{{ url('search/results') }}">
 				<input id="searchField" type="search" name="q" class="form-control mx-2" placeholder="Enter Keyword">
-				<button type="submit" class="btn btn-outline-primary" value="Search"> Search </button>
+				<button type="submit" class="btn btn-primary" value="Search"> Search </button>
 				<a class="btn-close headerSearch-close search-close" aria-label="Close"></a>
 			</form>
 		</div>
