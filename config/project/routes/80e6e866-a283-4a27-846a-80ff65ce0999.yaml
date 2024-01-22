@@ -1,0 +1,9 @@
+siteUid: null
+sortOrder: 1
+template: photos/tags.html
+uriParts:
+  - photos/tags/
+  -
+    - slug
+    - '[^\/]+'
+uriPattern: 'photos/tags/<slug:[^\/]+>'

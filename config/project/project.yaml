@@ -1,4 +1,4 @@
-dateModified: 1705636020
+dateModified: 1705861735
 email:
   fromEmail: j@jasonmckinney.com
   fromName: Stock-Site
@@ -288,6 +288,7 @@ meta:
     b0c37d0b-37be-4763-9be3-c51e2f2f4f9e: 'Article Author' # Article Author
     b0c46030-dbdc-4654-b80d-74d0a463931f: 'Bottom Margin' # Bottom Margin
     b1a0bc24-a457-4750-8bb3-5c717ab39319: 'Stand Alone Pages' # Stand Alone Pages
+    b1d62582-4a65-4104-a1f4-56e8c6237183: Default # Default
     b4c5a1b0-a66b-4d20-9e43-0a6af22c6d84: 'Bottom Margin' # Bottom Margin
     b5da3204-07ba-4f35-b727-d5b8eb467480: Sections # Sections
     b6b8dbc4-2d12-4e15-8097-782a64cc656c: 'Stat Figure 4' # Stat Figure 4
@@ -378,6 +379,7 @@ meta:
     eba99648-c3a4-4d78-bf85-49e715335d9e: 'Bottom Margin' # Bottom Margin
     ec85ab9c-36c8-471b-9ff6-87d378205fd9: 'Card 3 Text' # Card 3 Text
     ec68321d-edd8-4c40-a6fb-b0dcf843e44a: CSP # CSP
+    edd4d8dc-af0e-4139-8a23-3979112999d1: Tags # Tags
     ee202e8b-5e1b-489d-988a-e0404a9931ab: 'In Panel' # In Panel
     eecf68ee-3d44-4575-83d3-2e19a9db4439: 'Bottom Margin' # Bottom Margin
     efe0df4a-f295-4411-8aec-3257b3ea64ed: 'Top Margin' # Top Margin

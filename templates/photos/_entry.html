@@ -20,7 +20,7 @@
             <p>Size: {{ entry.photoSize }}</p>
             {% set tags = entry.photoTags.all() %}
             {% for tag in tags %}
-              <a href="{{ url('blog/tags/'~tag.id) }}" class="btn btn-secondary btn-sm m-1">{{ tag.title }}</a>
+              <a href="{{ url('photos/tags/'~tag.slug) }}" class="btn btn-secondary btn-sm m-1">{{ tag.title }}</a>
             {% endfor %}
           </div>
           <div class="d-grid gap-2">

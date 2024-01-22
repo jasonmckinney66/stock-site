@@ -8,7 +8,10 @@ h1 {
 }
 {% endcss %}
 {% set requestedSlug = craft.app.request.segments|last %}
-{% set category = craft.categories().slug(requestedSlug|literal).one() %}
+
+
+{% set tag = craft.tags.slug( craft.app.request.getSegment(3) ).one() %}
+
 <section>
     <div class="container header-sm mb-0">
         <div class="row my-5">
@@ -21,7 +24,7 @@ h1 {
         <div class="row">
             <div class="col-12 text-center">
                 <div class="delay-2 fade-in">
-                    <h1 class="text-gray-light bg-gray-dark d-inline px-3">{{ category }}</h1>
+                    <h1 class="text-gray-light bg-gray-dark d-inline px-3">{{ tag }}</h1>
                 </div>
             </div>
         </div>
@@ -34,8 +37,8 @@ h1 {
 <section id="grid" class="mb-5" style="display: none;">
     <div class="container-fluid postition-relative">
         <!-- listings -->
-        <div id="container-one" class="row masonry row-cols-1 row-cols-md-2 row-cols-lg-4 m-auto mt-3 g-4">
-            {% set entries = craft.entries().section('photos').relatedTo(category).all()%}
+        <div id="container-one" class="row masonry row-cols-1 row-cols-md-2 row-cols-lg-4 mt-3 g-5">
+            {% set entries = craft.entries.relatedTo(tag).all() %}
             {% for entry in entries %}
                 <div class="col box masonry-brick">
                     <a href="{{ entry.url }}" class="card bg-dark text-white text-decoration-none h-100 shadow-lg ">
@@ -49,7 +52,7 @@ h1 {
                                 {% set jpgTransform = { format: 'jpg', mode: 'fit', quality: 60 } %}
                                 <source type="image/webp" srcset="{{ image.getSrcSet([250, 400], webpTransform) }}">
                                 <source type="image/jpeg" srcset="{{ image.getSrcSet([250, 400], jpgTransform) }}">
-                                <img class="w-100 h-auto" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.title }}">
+                                <img class="w-100 h-auto" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.title }}" loading="lazy">
                             </picture>
                         {% endif %}
                     {% else %}

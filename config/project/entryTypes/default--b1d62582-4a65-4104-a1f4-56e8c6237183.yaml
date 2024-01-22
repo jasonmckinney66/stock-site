@@ -1,0 +1,78 @@
+fieldLayouts:
+  a27449e5-fa3f-4f3b-ba29-364870826413:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 50
+          -
+            fieldUid: f0371057-ddfa-466d-ac78-30d104002367 # Custom Title
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: 0a56cb8e-474d-4321-91fa-db48fb788547 # Content Blocks
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: 7ba24811-4e11-4b9d-8a69-a5a888914bdb # Custom CSS
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+          -
+            fieldUid: caa9d107-0b2e-4b62-8b80-4ecbf233be5a # Custom Scripts
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 50
+        name: Settings
+        sortOrder: 2
+handle: default
+hasTitleField: true
+name: Default
+section: edd4d8dc-af0e-4139-8a23-3979112999d1 # Tags
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
