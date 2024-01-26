@@ -52,8 +52,8 @@
         </div>
 
         <!-- author-->
-        <div class="p-4 mt-5 position-relative d-none d-md-block">
-          <div class="row tape bg-warning shadow-sm p-4">
+        <div class="p-4 mt-5 d-none d-md-block">
+          <div class="row position-relative tape bg-warning shadow-sm p-4">
             {% for author in entry.photographer.all() %}
               <div class="col-sm-12 col-md-8">
                 <p class="lead">{{ author.title }}</h3>

@@ -20973,7 +20973,7 @@ span.paper-clip {
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4117647059);
   position: absolute;
   right: 230px;
-  top: 40px;
+  top: -10px;
 }
 
 .tape::before, .tape::after {
@@ -20985,8 +20985,8 @@ span.paper-clip {
 }
 
 .tape:before {
-  left: -11px;
-  top: 16px;
+  left: -10px;
+  top: -10px;
   width: 45px;
   -webkit-transform: rotate(-12deg);
   -moz-transform: rotate(-12deg);
@@ -20995,8 +20995,8 @@ span.paper-clip {
 }
 
 .tape:after {
-  left: 760px;
-  top: 16px;
+  right: -10px;
+  top: -10px;
   width: 70px;
   -webkit-transform: rotate(20deg);
   -moz-transform: rotate(20deg);

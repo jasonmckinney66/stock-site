@@ -234,7 +234,7 @@ rotate: -10deg;
 box-shadow: 2px 2px 2px #00000069;
 position: absolute;
 right: 230px;
-top: 40px;
+top: -10px;
 }
 .tape::before, .tape::after {
   content: '';
@@ -244,8 +244,8 @@ top: 40px;
   height: 25px;
 }
 .tape:before {
-  left: -11px;
-  top: 16px;
+  left: -10px;
+  top: -10px;
   width: 45px;
   -webkit-transform: rotate(-12deg);
   -moz-transform: rotate(-12deg);
@@ -253,8 +253,8 @@ top: 40px;
   -ms-transform: rotate(-12deg);
 }
 .tape:after {
-  left: 760px;
-  top: 16px;
+  right: -10px;
+  top: -10px;
   width: 70px;
   -webkit-transform: rotate(20deg);
   -moz-transform: rotate(20deg);
